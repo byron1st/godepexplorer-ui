@@ -9,6 +9,7 @@
   "author": "byron1st",
   "license": "MIT",
   "devDependencies": {
+    "@types/vis": "^4.21.0",
     "electron": "1.7.10",
     "typescript": "^2.6.2"
   },
