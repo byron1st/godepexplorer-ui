@@ -22,5 +22,5 @@ function getDepsForPkg (pkgName: string) {
 }
 
 const visnetwork = document.getElementById('visnetwork')
-visfn.init(visnetwork)
+visfn.init(visnetwork, getDepsForPkg)
 getInitDir('github.com/hyperledger/fabric/peer')
