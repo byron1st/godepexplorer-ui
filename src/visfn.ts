@@ -27,17 +27,20 @@ interface Edge {
 }
 
 let htmlVisnetwork: HTMLElement
+let nodes: vis.DataSet<vis.Node>, edges: vis.DataSet<vis.Edge>, network: vis.Network
 
 export function init (visnetwork: HTMLElement) {
   htmlVisnetwork = visnetwork
+  nodes = new vis.DataSet([])
+  edges = new vis.DataSet([])
+  network = new vis.Network(htmlVisnetwork, { nodes, edges }, {})
 }
 
 export function buildInitDirGraph (initData: ResData) {
-  const nodes = new vis.DataSet(initData.nodes)
-  const edges = new vis.DataSet(initData.edges)
-  const network = new vis.Network(htmlVisnetwork, initData, { layout: { improvedLayout: false }})
+  nodes.update(initData.nodes)
+  edges.update(initData.edges)
 }
 
 export function addDepsToGraph (resData: ResData) {
-  
+
 }
