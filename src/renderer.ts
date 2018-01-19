@@ -1,40 +1,26 @@
-import * as vis from 'vis'
-import * as querystring from 'querystring'
-import * as http from 'http'
+import * as visfn from './visfn'
+import * as network from './network'
+
+function getInitDir (pkgName: string) {
+  const postData: network.PostData = { pkgName }
+
+  network.sendReqToGodepexplorer(postData, network.Path.DIR)
+  .then((rawData: string) => {
+    const resData: visfn.ResData = JSON.parse(rawData)
+    visfn.buildInitDirGraph(resData)
+  })
+}
+
+function getDepsForPkg (pkgName: string) {
+  const postData: network.PostData = { pkgName }
+
+  network.sendReqToGodepexplorer(postData, network.Path.DEP)
+  .then((rawData: string) => {
+    const resData: visfn.ResData = JSON.parse(rawData)
+    visfn.addDepsToGraph(resData)
+  })
+}
 
 const visnetwork = document.getElementById('visnetwork')
-
-const postData = {
-  pkgName: 'github.com/hyperledger/fabric/peer/chaincode'
-}
-
-const postOpts = {
-  host: 'localhost',
-  port: '1111',
-  path: '/dep',
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Content-Length': Buffer.byteLength(JSON.stringify(postData))
-  }
-}
-
-const postReq = http.request(postOpts, (response) => {
-  let resData = ''
-  response.setEncoding('utf8')
-  response.on('data', (chunk) => {
-    resData += chunk
-  })
-  response.on('end', () => {
-    buildGraph(JSON.parse(resData))
-  })
-})
-
-function buildGraph (resData: any) {
-  const nodes = new vis.DataSet(resData.nodes)
-  const edges = new vis.DataSet(resData.edges)
-  const network = new vis.Network(visnetwork, resData, { layout: {improvedLayout: false} })
-}
-
-postReq.write(JSON.stringify(postData))
-postReq.end()
+visfn.init(visnetwork)
+getInitDir('github.com/hyperledger/fabric/peer')
