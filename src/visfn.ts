@@ -51,16 +51,7 @@ export function buildInitDirGraph (initData: ResData) {
 }
 
 export function addDepsToGraph (resData: ResData) {
-  resData.nodes.forEach((node, id)=> {
-    try {
-      nodes.update(node)
-    } catch (e) {
-      console.log(e)
-      console.log(id)
-      console.log(node)
-    }
-  })
-
+  nodes.update(resData.nodes)
   edges.update(resData.edges.map(edge => {
     edge.arrows = 'to'
     return edge
