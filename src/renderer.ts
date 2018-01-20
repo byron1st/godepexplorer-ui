@@ -1,10 +1,10 @@
 import * as visfn from './visfn'
-import * as network from './network'
+import * as conn from './conn'
 
 function getInitDir (pkgName: string) {
-  const postData: network.PostData = { pkgName }
+  const postData: conn.PostData = { pkgName }
 
-  network.sendReqToGodepexplorer(postData, network.Path.DIR)
+  conn.sendReqToGodepexplorer(postData, conn.Path.DIR)
   .then((rawData: string) => {
     const resData: visfn.ResData = JSON.parse(rawData)
     visfn.buildInitDirGraph(resData)
@@ -12,9 +12,9 @@ function getInitDir (pkgName: string) {
 }
 
 function getDepsForPkg (pkgName: string) {
-  const postData: network.PostData = { pkgName }
+  const postData: conn.PostData = { pkgName }
 
-  network.sendReqToGodepexplorer(postData, network.Path.DEP)
+  conn.sendReqToGodepexplorer(postData, conn.Path.DEP)
   .then((rawData: string) => {
     const resData: visfn.ResData = JSON.parse(rawData)
     visfn.addDepsToGraph(resData)
