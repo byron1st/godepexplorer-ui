@@ -9,6 +9,8 @@
   "author": "byron1st",
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "^16.0.34",
+    "@types/react-dom": "^16.0.3",
     "@types/vis": "^4.21.0",
     "del": "^3.0.0",
     "electron": "1.7.10",
@@ -17,6 +19,8 @@
     "typescript": "^2.6.2"
   },
   "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "vis": "^4.21.0"
   }
 }
