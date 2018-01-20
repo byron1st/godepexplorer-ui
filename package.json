@@ -3,14 +3,17 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "gulp",
     "start": "npm run build && electron ./dist/main.js"
   },
   "author": "byron1st",
   "license": "MIT",
   "devDependencies": {
     "@types/vis": "^4.21.0",
+    "del": "^3.0.0",
     "electron": "1.7.10",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^4.0.0-alpha.1",
     "typescript": "^2.6.2"
   },
   "dependencies": {
