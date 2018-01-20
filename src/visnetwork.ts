@@ -2,7 +2,7 @@ import * as vis from 'vis'
 import * as visfn from './visfn'
 import * as conn from './conn'
 
-let htmlVisnetwork: HTMLElement
+let htmlVisnetwork: HTMLElement, htmlDetails: HTMLElement
 let nodes: vis.DataSet<visfn.Node>, edges: vis.DataSet<visfn.Edge>
 
 function getInitDir (pkgName: string) {
@@ -29,8 +29,25 @@ async function getDepsForPkg (params: any) {
   visfn.addDepsToGraph(resData)
 }
 
-export function init (htmlElement: HTMLElement) {
-  htmlVisnetwork = htmlElement
+function showDetails (params: any) {
+  const id: string = params.nodes[0]
+  if (id) {
+    const pkg = nodes.get(id)
+    htmlDetails.innerHTML = JSON.stringify(pkg, null, 4)
+  } else {
+    const edgeId = params.edges[0]
+    if (edgeId) {
+      const edge = edges.get(edgeId)
+      htmlDetails.innerHTML = JSON.stringify(edge, null, 4)
+    } else {
+      htmlDetails.innerHTML = ''
+    }
+  }
+}
+
+export function init (htmlElements: any) {
+  htmlVisnetwork = htmlElements.visnetwork
+  htmlDetails = htmlElements.details
   const data = visfn.init()
   nodes = data.nodes
   edges = data.edges
@@ -38,6 +55,7 @@ export function init (htmlElement: HTMLElement) {
   const visnetwork = new vis.Network(htmlVisnetwork, { nodes, edges }, {})
 
   visnetwork.on('doubleClick', getDepsForPkg)
+  visnetwork.on('click', showDetails)
 
   // TEST
   getInitDir('github.com/hyperledger/fabric/peer')
