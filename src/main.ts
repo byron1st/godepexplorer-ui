@@ -1,6 +1,6 @@
-import { app, BrowserWindow } from "electron"
-import * as path from "path"
-import * as url from "url"
+import { app, BrowserWindow } from 'electron'
+import * as path from 'path'
+import * as url from 'url'
 import * as os from 'os'
 import * as fs from 'fs'
 
@@ -13,8 +13,8 @@ function createWindow () {
   })
 
   mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, "index.html"),
-      protocol: "file:",
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
       slashes: true,
   }))
 
@@ -22,7 +22,7 @@ function createWindow () {
   BrowserWindow.addDevToolsExtension(reactDevToolPath)
   mainWindow.webContents.openDevTools()
 
-  mainWindow.on("closed", () => {
+  mainWindow.on('closed', () => {
     mainWindow = null
   })
 }
@@ -51,15 +51,15 @@ function getAppPath (appID: string): string {
   }
 }
 
-app.on("ready", createWindow)
+app.on('ready', createWindow)
 
-app.on("window-all-closed", () => {
+app.on('window-all-closed', () => {
   if (process.platform !== "darwin") {
     app.quit()
   }
 })
 
-app.on("activate", () => {
+app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
