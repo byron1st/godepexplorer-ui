@@ -5,7 +5,7 @@ export interface ResData {
   edges: Edge[]
 }
 
-interface Node extends vis.Node {
+export interface Node extends vis.Node {
   id: string
   label: string
   packagePath: string
@@ -17,7 +17,7 @@ interface Node extends vis.Node {
   funcSet: { [func: string]: boolean }
 }
 
-interface Edge extends vis.Edge {
+export interface Edge extends vis.Edge {
   id: string
   from: string
   to: string
@@ -28,21 +28,13 @@ interface Edge extends vis.Edge {
 }
 
 let htmlVisnetwork: HTMLElement
-let nodes: vis.DataSet<vis.Node>, edges: vis.DataSet<vis.Edge>, network: vis.Network
+let nodes: vis.DataSet<Node>, edges: vis.DataSet<Edge>, network: vis.Network
 
-export function init (visnetwork: HTMLElement, getDepsForPkg: (pkgName: string) => void) {
-  htmlVisnetwork = visnetwork
+export function init (): { nodes: vis.DataSet<Node>, edges: vis.DataSet<Edge> } {
   nodes = new vis.DataSet([])
   edges = new vis.DataSet([])
-  network = new vis.Network(htmlVisnetwork, { nodes, edges }, {})
 
-  network.on('doubleClick', (params) => {
-    if (params.nodes.length > 0) {
-      const id: string = params.nodes[0]
-      const pkg = nodes.get(id) as Node
-      getDepsForPkg(pkg.packagePath)
-    }
-  })
+  return { nodes, edges }
 }
 
 export function buildInitDirGraph (initData: ResData) {
