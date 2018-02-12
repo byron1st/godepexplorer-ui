@@ -1,34 +1,31 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { ipcRenderer } from 'electron'
-import * as constants from '../../constants'
+import * as vis from '../visnetwork'
+import * as ipc from '../ipc'
+
+const VisNetworkComp = 'vis-canvas'
 
 class Container extends React.Component {
   constructor (props: {}) {
     super(props)
 
-    initializeIPC()
+    ipc.initializeIPC()
   }
 
-  render () {
-    return (
-      <div>
-        <h1>Hello World!</h1>
-      </div>
-    )
+  componentDidMount () {
+    vis.init(document.getElementById(VisNetworkComp))
+    ipc.sendTestReq()
+  }
+
+  render() {
+    return <div id={VisNetworkComp} style={style} />
   }
 }
 
-function initializeIPC () {
-  const IPC = constants.IPC
-
-  ipcRenderer.on(IPC.GetInitDir.Response, (event: any, dirStructure: any) => {
-    // TODO: do something.
-    console.log(dirStructure)
-  })
-
-  // For Test
-  ipcRenderer.send(IPC.GetInitDir.Request, {pkgName: 'github.com/hyperledger/fabric/peer'})
+const style = {
+  width: '100%',
+  height: '100%',
+  margin: 0
 }
 
 ReactDOM.render(<Container />, document.getElementById("container"))
