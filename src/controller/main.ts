@@ -1,44 +1,60 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, App } from 'electron'
 import * as url from 'url'
 import * as path from 'path'
 import * as util from './util'
 
-let mainCanvasWindow: Electron.BrowserWindow
+// Declare global variables
+const CanvasIndexUrl = url.format({
+  pathname: path.join(__dirname, '../canvas/index.html'),
+  protocol: 'file:',
+  slashes: true,
+})
 
-const CanvasIndexPath = path.join(__dirname, '../canvas/index.html')
-const InfopanelIndexPath = path.join(__dirname, '../infopanel/index.html')
+const InfopanelIndexUrl = url.format({
+  pathname: path.join(__dirname, '../infopanel/index.html'),
+  protocol: 'file:',
+  slashes: true,
+})
 
+let canvasWindow: Electron.BrowserWindow
+
+// Declare global functions
 function createCanvasWindow () {
-  mainCanvasWindow = new BrowserWindow({
+  const windowOpts = {
     height: 600,
-    width: 800,
-  })
+    width: 800
+  }
 
-  mainCanvasWindow.loadURL(url.format({
-    pathname: CanvasIndexPath,
-    protocol: 'file:',
-    slashes: true,
-  }))
+  // Create the window for the canvas process
+  canvasWindow = new BrowserWindow(windowOpts)
+  canvasWindow.loadURL(CanvasIndexUrl)
+  canvasWindow.webContents.openDevTools()
 
-  const reactDevToolPath = util.getReactDevToolPath()
-  BrowserWindow.addDevToolsExtension(reactDevToolPath)
-  mainCanvasWindow.webContents.openDevTools()
-
-  mainCanvasWindow.on('closed', () => {
-    mainCanvasWindow = null
+  // Subscribe the window events
+  canvasWindow.on('closed', () => {
+    canvasWindow = null
   })
 }
 
-app.on('ready', createCanvasWindow)
+function initializeApp (app: App) {
+  // Attach dev tools to the windows
+  BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
 
-app.on('window-all-closed', () => {
-  if (process.platform !== "darwin") {
-    app.quit()
-  }
-})
+  // Subscribe the app events
+  app.on('ready', createCanvasWindow)
 
-app.on('activate', () => {
-  if (mainCanvasWindow === null) {
-    createCanvasWindow()
-  }
-})
+  app.on('window-all-closed', () => {
+    if (process.platform !== "darwin") {
+      app.quit()
+    }
+  })
+
+  app.on('activate', () => {
+    if (canvasWindow === null) {
+      createCanvasWindow()
+    }
+  })
+}
+
+// Running scripts
+initializeApp(app)
