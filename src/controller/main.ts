@@ -3,6 +3,7 @@ import * as url from 'url'
 import * as path from 'path'
 import * as util from './util'
 import * as constants from '../constants'
+import godepexplorer from './connectors/godepexplorer'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -28,6 +29,9 @@ function createCanvasWindow () {
 
   // Create the window for the canvas process
   canvasWindow = new BrowserWindow(windowOpts)
+  // Attach dev tools to the windows
+  BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
+
   canvasWindow.loadURL(CanvasIndexUrl)
   canvasWindow.webContents.openDevTools()
 
@@ -38,9 +42,6 @@ function createCanvasWindow () {
 }
 
 function initializeApp (app: App) {
-  // Attach dev tools to the windows
-  BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
-
   // Subscribe the app events
   app.on('ready', createCanvasWindow)
 
@@ -61,12 +62,14 @@ function initializeIPC () {
   const IPC = constants.IPC
 
   // Async event subscribers
-  ipcMain.on(IPC.GetInitDir.Request, (event: any) => {
-    // TODO: connect to godepexplorer
-    const dirStructure = ''
-
-    // Return
-    event.sender.send(IPC.GetInitDir.Response, dirStructure)
+  ipcMain.on(IPC.GetInitDir.Request, (event: any, data: any) => {
+    // Connect to godepexplorer
+    godepexplorer.send(JSON.stringify(data), '/dir')
+    .then(responseData => {
+      const dirStructure = JSON.parse(responseData)
+      // Return
+      event.sender.send(IPC.GetInitDir.Response, dirStructure)
+    })
   })
 
   ipcMain.on(IPC.ExpandPkgStruct.Request, (event: any) => {
@@ -80,3 +83,4 @@ function initializeIPC () {
 
 // Running scripts
 initializeApp(app)
+initializeIPC()
