@@ -23,8 +23,8 @@ class Container extends React.Component {
 }
 
 const style = {
-  width: '100%',
-  height: '100%',
+  width: 'inherit',
+  height: 'inherit',
   margin: 0
 }
 
