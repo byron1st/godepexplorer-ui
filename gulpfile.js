@@ -10,13 +10,13 @@ gulp.task('del', () => {
   return del.sync(['dist/**/*'])
 })
 
-gulp.task('ts', () => {
+gulp.task('ts', ['del'], () => {
   return tsProject.src()
     .pipe(tsProject())
     .js.pipe(gulp.dest(DEST))
 })
 
-gulp.task('copy', () => {
+gulp.task('copy', ['del'], () => {
   return gulp.src(COPY_FILES)
     .pipe(gulp.dest(DEST))
 })
