@@ -5,6 +5,9 @@ import * as util from './util'
 
 let mainCanvasWindow: Electron.BrowserWindow
 
+const CanvasIndexPath = path.join(__dirname, '../canvas/index.html')
+const InfopanelIndexPath = path.join(__dirname, '../infopanel/index.html')
+
 function createCanvasWindow () {
   mainCanvasWindow = new BrowserWindow({
     height: 600,
@@ -12,7 +15,7 @@ function createCanvasWindow () {
   })
 
   mainCanvasWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '../canvas/index.html'),
+    pathname: CanvasIndexPath,
     protocol: 'file:',
     slashes: true,
   }))
