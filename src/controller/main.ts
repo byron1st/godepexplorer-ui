@@ -1,7 +1,8 @@
-import { app, BrowserWindow, App } from 'electron'
+import { app, ipcMain, BrowserWindow, App } from 'electron'
 import * as url from 'url'
 import * as path from 'path'
 import * as util from './util'
+import * as constants from '../constants'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -53,6 +54,27 @@ function initializeApp (app: App) {
     if (canvasWindow === null) {
       createCanvasWindow()
     }
+  })
+}
+
+function initializeIPC () {
+  const IPC = constants.IPC
+
+  // Async event subscribers
+  ipcMain.on(IPC.GetInitDir.Request, (event: any) => {
+    // TODO: connect to godepexplorer
+    const dirStructure = ''
+
+    // Return
+    event.sender.send(IPC.GetInitDir.Response, dirStructure)
+  })
+
+  ipcMain.on(IPC.ExpandPkgStruct.Request, (event: any) => {
+    // TODO: connect to godepexplorer
+    const pkgStructure = ''
+
+    // Return
+    event.sender.send(IPC.ExpandPkgStruct.Request, pkgStructure)
   })
 }
 
