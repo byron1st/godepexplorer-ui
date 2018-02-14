@@ -8,8 +8,6 @@ export function initializeIPC () {
   const IPC = constants.IPC
 
   ipcRenderer.on(IPC.GetInitDir.Response, (event: any, dirStructure: any) => {
-    // TODO: do something.
-    console.log(dirStructure)
     vis.buildInitDirGraph(dirStructure)
   })
 }
