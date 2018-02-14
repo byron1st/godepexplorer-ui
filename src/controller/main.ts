@@ -67,17 +67,21 @@ function initializeIPC () {
     godepexplorer.send(JSON.stringify(data), '/dir')
     .then(responseData => {
       const dirStructure = JSON.parse(responseData)
+
       // Return
       event.sender.send(IPC.GetInitDir.Response, dirStructure)
     })
   })
 
-  ipcMain.on(IPC.ExpandPkgStruct.Request, (event: any) => {
-    // TODO: connect to godepexplorer
-    const pkgStructure = ''
+  ipcMain.on(IPC.ExpandPkgStruct.Request, (event: any, data: any) => {
+    // Connect to godepexplorer
+    godepexplorer.send(JSON.stringify(data), '/dep')
+    .then(responseData => {
+      const pkgStructure = JSON.parse(responseData)
 
-    // Return
-    event.sender.send(IPC.ExpandPkgStruct.Request, pkgStructure)
+      // Return
+      event.sender.send(IPC.ExpandPkgStruct.Response, pkgStructure)
+    })
   })
 }
 

@@ -1,4 +1,5 @@
 import * as vis from 'vis'
+import * as ipc from './ipc'
 
 interface ResData {
   nodes: Node[]
@@ -33,7 +34,7 @@ let edges: vis.DataSet<Edge> = new vis.DataSet([])
 export function init (htmlElements: HTMLElement) {
   const visnetwork = new vis.Network(htmlElements, { nodes, edges }, {})
 
-  // visnetwork.on('doubleClick', getDepsForPkg)
+  visnetwork.on('doubleClick', getDepsForPkg)
   // visnetwork.on('click', showDetails)
 }
 
@@ -48,4 +49,15 @@ export function addDepsToGraph (resData: ResData) {
     edge.arrows = 'to'
     return edge
   }))
+}
+
+function getDepsForPkg (params: any) {
+  if (params.nodes.length === 0) {
+    return
+  }
+
+  const id: string = params.nodes[0]
+  const pkg = nodes.get(id)
+
+  ipc.sendExpandingReq(pkg.packagePath)
 }
