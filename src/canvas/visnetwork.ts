@@ -1,12 +1,8 @@
 import * as vis from 'vis'
 import * as ipc from './ipc'
+import { Response } from '../protocol.external'
 
-interface ResData {
-  nodes: Node[]
-  edges: Edge[]
-}
-
-interface Node extends vis.Node {
+export interface Node extends vis.Node {
   id: string
   label: string
   packagePath: string
@@ -18,7 +14,7 @@ interface Node extends vis.Node {
   funcSet: { [func: string]: boolean }
 }
 
-interface Edge extends vis.Edge {
+export interface Edge extends vis.Edge {
   id: string
   from: string
   to: string
@@ -38,12 +34,12 @@ export function init (htmlElements: HTMLElement) {
   // visnetwork.on('click', showDetails)
 }
 
-export function buildInitDirGraph (initData: ResData) {
+export function buildInitDirGraph (initData: Response) {
   nodes.update(initData.nodes)
   edges.update(initData.edges)
 }
 
-export function addDepsToGraph (resData: ResData) {
+export function addDepsToGraph (resData: Response) {
   nodes.update(resData.nodes)
   edges.update(resData.edges.map(edge => {
     edge.arrows = 'to'

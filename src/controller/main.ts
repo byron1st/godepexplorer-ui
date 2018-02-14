@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as util from './util'
 import * as constants from '../constants'
 import godepexplorer from './connectors/godepexplorer'
-import * as protocol from './protocol'
+import * as protocol from '../protocol.external'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -69,10 +69,10 @@ function initializeIPC () {
     // Connect to godepexplorer
     godepexplorer.send(JSON.stringify(data), '/dir')
     .then(responseData => {
-      const dirStructure = JSON.parse(responseData)
+      const dirStruct: protocol.Response = JSON.parse(responseData)
 
       // Return
-      event.sender.send(IPC.GetInitDir.Response, dirStructure)
+      event.sender.send(IPC.GetInitDir.Response, dirStruct)
     })
   })
 
@@ -82,10 +82,10 @@ function initializeIPC () {
     // Connect to godepexplorer
     godepexplorer.send(JSON.stringify(data), '/dep')
     .then(responseData => {
-      const pkgStructure = JSON.parse(responseData)
+      const pkgStruct: protocol.Response = JSON.parse(responseData)
 
       // Return
-      event.sender.send(IPC.ExpandPkgStruct.Response, pkgStructure)
+      event.sender.send(IPC.ExpandPkgStruct.Response, pkgStruct)
     })
   })
 }
