@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import * as vis from '../visnetwork'
+import * as godepvis from '../visnetwork.godep'
 import * as ipc from '../ipc'
 
 const VisNetworkComp = 'vis-canvas'
@@ -13,7 +13,7 @@ class Container extends React.Component {
   }
 
   componentDidMount () {
-    vis.init(document.getElementById(VisNetworkComp))
+    godepvis.default.init(document.getElementById(VisNetworkComp))
     ipc.sendTestReq()
   }
 
