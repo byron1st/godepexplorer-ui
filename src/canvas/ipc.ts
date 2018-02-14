@@ -15,9 +15,9 @@ export function initializeIPC () {
 }
 
 export function sendExpandingReq (pkgName: string) {
-  ipcRenderer.send(constants.IPC.ExpandPkgStruct.Request, { pkgName })
+  ipcRenderer.send(constants.IPC.ExpandPkgStruct.Request, pkgName)
 }
 
 export function sendTestReq () {
-  ipcRenderer.send(constants.IPC.GetInitDir.Request, {pkgName: 'github.com/hyperledger/fabric/peer'})
+  ipcRenderer.send(constants.IPC.GetInitDir.Request, 'github.com/hyperledger/fabric/peer')
 }
