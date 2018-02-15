@@ -1,9 +1,5 @@
 import * as vis from 'vis'
-
-export interface GraphElements<N extends vis.Node, E extends vis.Edge> {
-  nodes: N[]
-  edges: E[]
-}
+import { GraphElements } from '../types'
 
 // Every functions defined in every child class should be defined as an arrow function
 // because of `this` binding problem.

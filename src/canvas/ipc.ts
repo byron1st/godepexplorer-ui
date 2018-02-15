@@ -1,16 +1,16 @@
 import { ipcRenderer } from 'electron'
 import * as constants from '../constants'
 import * as godepvis from './visnetwork.godep'
-import { GraphElements } from './visnetwork.common'
+import { GraphElements, Node, Edge } from '../types'
 
 const IPC = constants.IPC
 
 export function initializeIPC () {
-  ipcRenderer.on(IPC.GetInitDir.Response, (event: any, dirStruct: GraphElements<godepvis.Node, godepvis.Edge>) => {
+  ipcRenderer.on(IPC.GetInitDir.Response, (event: any, dirStruct: GraphElements<Node, Edge>) => {
     godepvis.default.updateGraph(dirStruct)
   })
 
-  ipcRenderer.on(IPC.ExpandPkgStruct.Response, (event: any, pkgStruct: GraphElements<godepvis.Node, godepvis.Edge>) => {
+  ipcRenderer.on(IPC.ExpandPkgStruct.Response, (event: any, pkgStruct: GraphElements<Node, Edge>) => {
     godepvis.default.addDepsToGraph(pkgStruct)
   })
 }
@@ -19,7 +19,7 @@ export function sendExpandingReq (pkgName: string) {
   ipcRenderer.send(IPC.ExpandPkgStruct.Request, pkgName)
 }
 
-export function sendInfo (info: GraphElements<godepvis.Node, godepvis.Edge>) {
+export function sendInfo (info: GraphElements<Node, Edge>) {
   ipcRenderer.send(IPC.ShowInfo.Send, info)
 }
 
