@@ -31,8 +31,10 @@ function createCanvasWindow () {
 
   // Create the window for the canvas process
   canvasWindow = new BrowserWindow(windowOpts)
-  // Attach dev tools to the windows
-  BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
+  if (BrowserWindow.getDevToolsExtensions() !== null) {
+    // Attach dev tools to the windows
+    BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
+  }
 
   canvasWindow.loadURL(CanvasIndexUrl)
   canvasWindow.webContents.openDevTools()
@@ -50,7 +52,6 @@ function createInfopanelWindow (initialData?: any) {
   }
 
   infopanelWindow = new BrowserWindow(windowOpts)
-  // BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
 
   if (initialData) {
     infopanelWindow.initialData = initialData
