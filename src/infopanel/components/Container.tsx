@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { remote } from 'electron'
 
 class Container extends React.Component {
   render() {
@@ -9,5 +10,8 @@ class Container extends React.Component {
 
 const style = {
 }
+
+const window: Electron.BrowserWindow & { initialData?: any } = remote.getCurrentWindow()
+console.log(window.initialData)
 
 ReactDOM.render(<Container />, document.getElementById("container"))

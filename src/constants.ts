@@ -6,5 +6,9 @@ export const IPC = {
   ExpandPkgStruct: {
     Request: 'request-expand-pkg-structure',
     Response: 'receive-expand-pkg-structure'
+  },
+  ShowInfo: {
+    Send: 'send-info',
+    Receive: 'receive-info'
   }
 }

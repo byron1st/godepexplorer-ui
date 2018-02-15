@@ -3,9 +3,9 @@ import * as constants from '../constants'
 import * as godepvis from './visnetwork.godep'
 import { GraphElements } from './visnetwork.common'
 
-export function initializeIPC () {
-  const IPC = constants.IPC
+const IPC = constants.IPC
 
+export function initializeIPC () {
   ipcRenderer.on(IPC.GetInitDir.Response, (event: any, dirStruct: GraphElements<godepvis.Node, godepvis.Edge>) => {
     godepvis.default.updateGraph(dirStruct)
   })
@@ -16,9 +16,13 @@ export function initializeIPC () {
 }
 
 export function sendExpandingReq (pkgName: string) {
-  ipcRenderer.send(constants.IPC.ExpandPkgStruct.Request, pkgName)
+  ipcRenderer.send(IPC.ExpandPkgStruct.Request, pkgName)
+}
+
+export function sendInfo (info: godepvis.Node[] | godepvis.Edge[]) {
+  ipcRenderer.send(IPC.ShowInfo.Send, info)
 }
 
 export function sendTestReq () {
-  ipcRenderer.send(constants.IPC.GetInitDir.Request, 'github.com/hyperledger/fabric/peer')
+  ipcRenderer.send(IPC.GetInitDir.Request, 'github.com/hyperledger/fabric/peer')
 }

@@ -20,6 +20,7 @@ const InfopanelIndexUrl = url.format({
 })
 
 let canvasWindow: Electron.BrowserWindow
+let infopanelWindow: Electron.BrowserWindow & { initialData?: any }
 
 // Declare global functions
 function createCanvasWindow () {
@@ -39,6 +40,27 @@ function createCanvasWindow () {
   // Subscribe the window events
   canvasWindow.on('closed', () => {
     canvasWindow = null
+  })
+}
+
+function createInfopanelWindow (initialData?: any) {
+  const windowOpts = {
+    height: 400,
+    width: 600
+  }
+
+  infopanelWindow = new BrowserWindow(windowOpts)
+  // BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
+
+  if (initialData) {
+    infopanelWindow.initialData = initialData
+  }
+
+  infopanelWindow.loadURL(InfopanelIndexUrl)
+  infopanelWindow.webContents.openDevTools()
+
+  infopanelWindow.on('closed', () => {
+    infopanelWindow = null
   })
 }
 
@@ -62,7 +84,7 @@ function initializeApp (app: App) {
 function initializeIPC () {
   const IPC = constants.IPC
 
-  // Async event subscribers
+  // Connect to godepexplorer
   ipcMain.on(IPC.GetInitDir.Request, (event: any, pkgName: string) => {
     const data: protocol.Request = { pkgName }
 
@@ -87,6 +109,16 @@ function initializeIPC () {
       // Return
       event.sender.send(IPC.ExpandPkgStruct.Response, pkgStruct)
     })
+  })
+
+  // Connect to Infopanel
+  ipcMain.on(IPC.ShowInfo.Send, (event: any, info: any) => {
+    // TODO: connect to infopanel
+    if (infopanelWindow) {
+      infopanelWindow.webContents.send(IPC.ShowInfo.Receive, info)
+    } else {
+      createInfopanelWindow(info)
+    }
   })
 }
 
