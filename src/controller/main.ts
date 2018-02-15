@@ -85,42 +85,33 @@ function initializeApp (app: App) {
 function initializeIPC () {
   const IPC = constants.IPC
 
-  // Connect to godepexplorer
-  ipcMain.on(IPC.GetInitDir.Request, (event: any, pkgName: string) => {
-    const data: protocol.Request = { pkgName }
-
-    // Connect to godepexplorer
-    godepexplorer.send(JSON.stringify(data), '/dir')
-    .then(responseData => {
-      const dirStruct: protocol.Response = JSON.parse(responseData)
-
-      // Return
-      event.sender.send(IPC.GetInitDir.Response, dirStruct)
-    })
-  })
-
-  ipcMain.on(IPC.ExpandPkgStruct.Request, (event: any, pkgName: string) => {
-    const data: protocol.Request = { pkgName }
-
-    // Connect to godepexplorer
-    godepexplorer.send(JSON.stringify(data), '/dep')
-    .then(responseData => {
-      const pkgStruct: protocol.Response = JSON.parse(responseData)
-
-      // Return
-      event.sender.send(IPC.ExpandPkgStruct.Response, pkgStruct)
-    })
-  })
+  // Connect to Godepexplorer
+  ipcMain.on(IPC.GetInitDir.Request, getBasicHandlerForGodepexplorer('/dir', IPC.GetInitDir.Response))
+  ipcMain.on(IPC.ExpandPkgStruct.Request, getBasicHandlerForGodepexplorer('/dep', IPC.ExpandPkgStruct.Response))
 
   // Connect to Infopanel
   ipcMain.on(IPC.ShowInfo.Send, (event: any, info: any) => {
-    // TODO: connect to infopanel
     if (infopanelWindow) {
       infopanelWindow.webContents.send(IPC.ShowInfo.Receive, info)
     } else {
       createInfopanelWindow(info)
     }
   })
+}
+
+function getBasicHandlerForGodepexplorer (targetPath: string, returnEventType: string) {
+  return (event: any, pkgName: string) => {
+    const data: protocol.Request = { pkgName }
+
+    // Connect to godepexplorer
+    godepexplorer.send(JSON.stringify(data), targetPath)
+    .then(responseData => {
+      const dirStruct: protocol.Response = JSON.parse(responseData)
+
+      // Return
+      event.sender.send(returnEventType, dirStruct)
+    })
+  }
 }
 
 // Running scripts
