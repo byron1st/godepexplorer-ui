@@ -42,16 +42,12 @@ class GoDepVisNetwork extends viscommon.VisNetwork<Node, Edge> {
   }
 
   showInfo = (params: any) => {
-    let info
-    switch (whatIsClicked(params)) {
-    case Clicked.Node:
-      info = this.nodes.get(params.nodes[0])
-      break
-    case Clicked.Edge:
-      info = this.edges.get(params.edges[0])
+    let info: viscommon.GraphElements<Node, Edge> = {
+      nodes: params.nodes.map((nodeId: string) => this.nodes.get(nodeId)),
+      edges: params.edges.map((edgeId: string) => this.edges.get(edgeId))
     }
 
-    if (info) {
+    if (info.nodes.length !== 0 || info.edges.length !== 0) {
       ipc.sendInfo(info)
     }
   }
@@ -64,19 +60,6 @@ class GoDepVisNetwork extends viscommon.VisNetwork<Node, Edge> {
     }))
   }
 
-}
-
-enum Clicked {
-  Node,
-  Edge,
-}
-
-function whatIsClicked (params: any) {
-  if (params.nodes[0]) {
-    return Clicked.Node
-  } else if (params.edges[0]) {
-    return Clicked.Edge
-  }
 }
 
 export default new GoDepVisNetwork()

@@ -19,7 +19,7 @@ export function sendExpandingReq (pkgName: string) {
   ipcRenderer.send(IPC.ExpandPkgStruct.Request, pkgName)
 }
 
-export function sendInfo (info: godepvis.Node[] | godepvis.Edge[]) {
+export function sendInfo (info: GraphElements<godepvis.Node, godepvis.Edge>) {
   ipcRenderer.send(IPC.ShowInfo.Send, info)
 }
 
