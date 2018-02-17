@@ -3,24 +3,24 @@ import * as ipc from './ipc'
 import { Graph, Node, Edge } from '../types'
 
 class GoDepVisNetwork {
-  nodes: vis.DataSet<vis.Node & Node> = new vis.DataSet([])
-  edges: vis.DataSet<vis.Edge & Edge> = new vis.DataSet([])
+  nodes: vis.DataSet<Node> = new vis.DataSet([])
+  edges: vis.DataSet<Edge> = new vis.DataSet([])
 
-  init (htmlElements: HTMLElement) {
+  initNetwork (htmlElements: HTMLElement) {
     const visnetwork = new vis.Network(htmlElements, { 
       nodes: this.nodes,
       edges: this.edges
     }, {})
 
-    this.initNetwork(visnetwork)
+    this.initEvent(visnetwork)
   }
 
-  updateGraph (data: Graph) {
-    this.nodes.update(data.nodes)
-    this.edges.update(data.edges)
+  updateGraph (graph: Graph) {
+    this.nodes.update(graph.nodes)
+    this.edges.update(graph.edges)
   }
 
-  initNetwork (visnetwork: vis.Network) {
+  initEvent (visnetwork: vis.Network) {
     visnetwork.on('doubleClick', this.getDepsForPkg.bind(this))
     visnetwork.on('click', this.showInfo.bind(this))
   }
