@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { remote } from 'electron'
 import { GraphElements, Node, Edge } from '../../types'
 import * as ipc from '../ipc'
+import {InfoTable} from './InfoTable'
 
 class Container extends React.Component<{}, GraphElements<Node, Edge>> {
   constructor (props: {}) {
@@ -28,11 +29,18 @@ class Container extends React.Component<{}, GraphElements<Node, Edge>> {
     }
   }
 
-  render() {
+  render () {
     console.log(this.state)
-    return <table style={style.table}>
-
-    </table>
+    if (this.state.nodes[0]) {
+      const data = {
+        id: this.state.nodes[0].id,
+        isPkg: this.state.nodes[0].isPkg,
+        packageDir: this.state.nodes[0].packageDir,
+        packagePath: this.state.nodes[0].packagePath
+      }
+      return <InfoTable data={[data]} />
+    }
+    return null
   }
 }
 
