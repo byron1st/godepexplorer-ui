@@ -1,9 +1,9 @@
 import * as vis from 'vis'
-import { GraphElements } from '../types'
+import { Graph, Node, Edge} from '../types'
 
 // Every functions defined in every child class should be defined as an arrow function
 // because of `this` binding problem.
-export abstract class VisNetwork<N extends vis.Node, E extends vis.Edge> {
+export abstract class VisNetwork<N extends AbstractNode<vis.Node, >, E extends AbstractEdge<vis.Edge, >> {
   nodes: vis.DataSet<N> = new vis.DataSet([])
   edges: vis.DataSet<E> = new vis.DataSet([])
 
@@ -16,7 +16,7 @@ export abstract class VisNetwork<N extends vis.Node, E extends vis.Edge> {
     this.initNetwork(visnetwork)
   }
 
-  updateGraph (data: GraphElements<N, E>) {
+  updateGraph (data: AbstractGraph<N, E>) {
     this.nodes.update(data.nodes)
     this.edges.update(data.edges)
   }

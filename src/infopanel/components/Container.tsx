@@ -1,11 +1,11 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { remote } from 'electron'
-import { GraphElements, Node, Edge } from '../../types'
+import { Graph, Node, Edge } from '../../types'
 import * as ipc from '../ipc'
 import {InfoTable} from './InfoTable'
 
-class Container extends React.Component<{}, GraphElements<Node, Edge>> {
+class Container extends React.Component<{}, Graph> {
   constructor (props: {}) {
     super(props)
 
@@ -18,7 +18,7 @@ class Container extends React.Component<{}, GraphElements<Node, Edge>> {
     ipc.initializeIPC(this.update.bind(this))
   }
 
-  update (graphElements: GraphElements<Node, Edge>) {
+  update (graphElements: Graph) {
     this.setState({ nodes: graphElements.nodes, edges: graphElements.edges })
   }
 
@@ -31,16 +31,16 @@ class Container extends React.Component<{}, GraphElements<Node, Edge>> {
 
   render () {
     console.log(this.state)
-    if (this.state.nodes[0]) {
-      const data = {
-        id: this.state.nodes[0].id,
-        isPkg: this.state.nodes[0].isPkg,
-        packageDir: this.state.nodes[0].packageDir,
-        packagePath: this.state.nodes[0].packagePath
-      }
-      return <InfoTable data={[data]} />
-    }
-    return null
+    // if (this.state.nodes[0]) {
+    //   const data = {
+    //     id: this.state.nodes[0].id,
+    //     isPkg: this.state.nodes[0].isPkg,
+    //     packageDir: this.state.nodes[0].packageDir,
+    //     packagePath: this.state.nodes[0].packagePath
+    //   }
+    //   return <InfoTable data={[data]} />
+    // }
+    return <div></div>
   }
 }
 
