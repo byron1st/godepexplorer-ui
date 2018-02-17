@@ -10,7 +10,7 @@ interface InfoTableProps {
   header: string
 }
 
-export class InfoTable extends React.Component<InfoTableProps, InfoTableState> {
+export default class InfoTableContainer extends React.Component<InfoTableProps, InfoTableState> {
   state = {
     isVisible: true
   }
@@ -20,13 +20,10 @@ export class InfoTable extends React.Component<InfoTableProps, InfoTableState> {
   }
 
   render () {
-    // const table = this.getTable()
-
     return <div style={style.container}>
       <h3 onClick={this.changeVisible.bind(this)}>{this.props.header}</h3>
       {
         this.state.isVisible
-        // ? table
         ? <Table data={this.props.data} />
         : null
       }

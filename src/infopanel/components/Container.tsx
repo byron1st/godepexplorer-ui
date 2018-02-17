@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { remote } from 'electron'
 import { Graph, Node, Edge } from '../../types'
 import * as ipc from '../ipc'
-import {InfoTable} from './InfoTable'
+import InfoTableContainer from './InfoTableContainer'
 
 class Container extends React.Component<{}, Graph> {
   constructor (props: {}) {
@@ -31,8 +31,8 @@ class Container extends React.Component<{}, Graph> {
 
   render () {
     return [
-      <InfoTable data={this.state.nodes} header='Nodes' key='nodes-info' />,
-      <InfoTable data={this.state.edges} header='Edges' key='edges-info' />
+      <InfoTableContainer data={this.state.nodes} header='Nodes' key='nodes-info' />,
+      <InfoTableContainer data={this.state.edges} header='Edges' key='edges-info' />
     ]
   }
 }
