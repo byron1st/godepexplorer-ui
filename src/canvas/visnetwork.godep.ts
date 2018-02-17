@@ -1,5 +1,4 @@
 import * as vis from 'vis'
-// import * as viscommon from './visnetwork.common'
 import * as ipc from './ipc'
 import { Graph, Node, Edge } from '../types'
 
