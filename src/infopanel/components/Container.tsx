@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { remote } from 'electron'
 import { GraphElements, Node, Edge } from '../../types'
+import * as ipc from '../ipc'
 
 class Container extends React.Component<{}, GraphElements<Node, Edge>> {
   constructor (props: {}) {
@@ -12,6 +13,8 @@ class Container extends React.Component<{}, GraphElements<Node, Edge>> {
       nodes: [],
       edges: []
     }
+
+    ipc.initializeIPC(this.update.bind(this))
   }
 
   update (graphElements: GraphElements<Node, Edge>) {
