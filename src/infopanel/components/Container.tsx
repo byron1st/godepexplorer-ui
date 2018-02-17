@@ -30,17 +30,10 @@ class Container extends React.Component<{}, Graph> {
   }
 
   render () {
-    console.log(this.state)
-    // if (this.state.nodes[0]) {
-    //   const data = {
-    //     id: this.state.nodes[0].id,
-    //     isPkg: this.state.nodes[0].isPkg,
-    //     packageDir: this.state.nodes[0].packageDir,
-    //     packagePath: this.state.nodes[0].packagePath
-    //   }
-    //   return <InfoTable data={[data]} />
-    // }
-    return <div></div>
+    return [
+      <InfoTable data={this.state.nodes} header='Nodes' key='nodes-info' />,
+      <InfoTable data={this.state.edges} header='Edges' key='edges-info' />
+    ]
   }
 }
 
