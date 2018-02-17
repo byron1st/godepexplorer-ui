@@ -4,8 +4,8 @@ import { Graph, Node, Edge } from '../types'
 
 const IPC = constants.IPC
 
-export function initializeIPC (update: (graphElements: Graph) => void) {
-  ipcRenderer.on(IPC.ShowInfo.Receive, (event: any, graphElements: Graph) => {
-    update(graphElements)
+export function initializeIPC (update: (graph: Graph) => void) {
+  ipcRenderer.on(IPC.ShowInfo.Receive, (event: any, graph: Graph) => {
+    update(graph)
   })
 }

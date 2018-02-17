@@ -18,8 +18,8 @@ class Container extends React.Component<{}, Graph> {
     ipc.initializeIPC(this.update.bind(this))
   }
 
-  update (graphElements: Graph) {
-    this.setState({ nodes: graphElements.nodes, edges: graphElements.edges })
+  update (graph: Graph) {
+    this.setState({ nodes: graph.nodes, edges: graph.edges })
   }
 
   componentDidMount () {
