@@ -50,7 +50,7 @@ class GoDepVisNetwork {
   addDepsToGraph = (resData: Graph) => {
     this.nodes.update(resData.nodes)
     this.edges.update(resData.edges.map(edge => {
-      edge.meta.arrows = 'to'
+      edge.arrows = 'to'
       return edge
     }))
   }

@@ -5,6 +5,7 @@ export interface Node extends vis.Node {
 }
 
 export interface Edge extends vis.Edge {
+  arrows?: string // optional type that is not defined in vis.Edge, but actually can be used.
   meta: EdgeMetaInfo
 }
 
