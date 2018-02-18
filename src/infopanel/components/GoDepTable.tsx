@@ -1,12 +1,40 @@
 import * as React from 'react'
 
+const keyLabelMap:{[key: string]: string} = {
+  id: 'ID',
+  label: 'Label',
+  packagePath: 'Package Path',
+  packageName: 'Package Name',
+  packageDir: 'Package Dir',
+  isPkg: 'Package?',
+  isExternal: 'External Pkg?',
+  isStd: 'Standard Pkg?',
+  funcSet: 'Functions',
+  from: 'From(ID)',
+  to: 'To(ID)',
+  type: 'Type',
+  count: 'Count',
+  depAtFunc: 'Function-level'
+}
+
+const edgeType = ['Composition', 'Import-Relation']
+
 // Should be implemented specifically for godepexplorer. No way to generalize it.
 export default class Table extends React.Component<{data: any[], header: string}, {}> {
-  getRow (label: string, value: string | JSX.Element, index: number, key: string) {
+  getRow (key: string, value: string | JSX.Element | boolean, index: number, reactKey: string) {
+    let visibleValue = value
+    if (typeof value === 'boolean') {
+      if (value) {
+        visibleValue = 'Yes'
+      } else {
+        visibleValue = 'No'
+      }
+    }
+
     return (
-      <div className={`row ${index % 2 !== 0 ? 'bg-light text-dark' : 'bg-dark text-white'}`} key={key}>
-        <div className='col-3'>{label}</div>
-        <div className='col-9'>{value}</div>
+      <div className={`row ${index % 2 !== 0 ? 'bg-light text-dark' : 'bg-dark text-white'}`} key={reactKey}>
+        <div className='col-3'>{keyLabelMap[key]}</div>
+        <div className='col-9'>{visibleValue}</div>
       </div>
     )
   }
@@ -20,7 +48,7 @@ export default class Table extends React.Component<{data: any[], header: string}
 
     const callbackFn = (datum: any) => {
       const rows: JSX.Element[] = []
-      rows.push(this.getRow('ID', datum.id, 0, this.getRowKey(datum.id, 'ID')))
+      rows.push(this.getRow('id', datum.id, 0, this.getRowKey(datum.id, 'ID')))
       Object.keys(datum.meta).forEach((key, index) => {
         if (key === 'funcSet') {
           const funcList = Object.keys(datum.meta[key]).map(func => <li key={datum.id+func}>{func}</li>)
@@ -52,12 +80,15 @@ export default class Table extends React.Component<{data: any[], header: string}
     const callbackFn = (datum: any, edgeIndex: number) => {
       const rows: JSX.Element[] = []
 
-      rows.push(this.getRow('From (Id)', datum.from, 0, this.getRowKey(datum.id, 'from')))
-      rows.push(this.getRow('To (Id)', datum.to, 1, this.getRowKey(datum.id, 'to')))
+      rows.push(this.getRow('from', datum.from, 0, this.getRowKey(datum.id, 'from')))
+      rows.push(this.getRow('to', datum.to, 1, this.getRowKey(datum.id, 'to')))
       Object.keys(datum.meta).forEach((key, index) => {
         if (key === 'depAtFunc' && datum.meta[key]) {
           const funcList = Object.keys(datum.meta[key]).map(func => <li key={datum.id+func}>{func}</li>)
           rows.push(this.getRow(key, <ul>{funcList}</ul>, index, this.getRowKey(datum.id, key)))
+        } else if (key === 'type') {
+          const value = edgeType[Number(datum.meta[key])]
+          rows.push(this.getRow(key, value, index, this.getRowKey(datum.id, key)))
         } else {
           rows.push(this.getRow(key, datum.meta[key], index, this.getRowKey(datum.id, key)))
         }
