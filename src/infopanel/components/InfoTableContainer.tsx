@@ -21,10 +21,11 @@ export default class InfoTableContainer extends React.Component<InfoTableProps, 
 
   render () {
     return <div style={style.container}>
-      <h3 onClick={this.changeVisible.bind(this)}>{this.props.header}</h3>
+      <h2 onClick={this.changeVisible.bind(this)}>{this.props.header}</h2>
+      <hr />
       {
         this.state.isVisible
-        ? <Table data={this.props.data} />
+        ? <Table data={this.props.data} header={this.props.header} />
         : null
       }
     </div>
