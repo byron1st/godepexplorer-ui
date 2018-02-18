@@ -3,11 +3,6 @@
   <head>
     <meta charset="UTF-8">
     <title>Info Panel</title>
-
-    <script>
-      require('bootstrap')
-    </script>
-
     <style type="text/css">
         html {
           width: 100%;
@@ -18,15 +13,16 @@
           height: 100%;
           margin: 0;
         }
-        #container {
-          width: inherit;
-          height: inherit;
-          margin: 0;
-        }
     </style>
+    <script>
+      var $ = require('jquery')
+      window.$ = $
+      require('bootstrap')
+    </script>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
   </head>
   <body>
-    <div id="container" />
+    <div id="container" class="container-fluid" />
   </body>
 
   <script>
