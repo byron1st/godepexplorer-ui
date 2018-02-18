@@ -20,6 +20,11 @@ class GoDepVisNetwork {
     this.edges.update(graph.edges)
   }
 
+  resetGraph () {
+    this.nodes.clear()
+    this.edges.clear()
+  }
+
   initEvent (visnetwork: vis.Network) {
     visnetwork.on('doubleClick', this.getDepsForPkg.bind(this))
     visnetwork.on('click', this.showInfo.bind(this))

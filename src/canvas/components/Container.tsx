@@ -15,7 +15,7 @@ class Container extends React.Component {
 
   componentDidMount () {
     godepvis.default.initNetwork(document.getElementById(VisNetworkComp))
-    ipc.sendTestReq()
+    // ipc.sendTestReq()
   }
 
   render() {

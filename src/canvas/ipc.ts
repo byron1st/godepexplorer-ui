@@ -23,6 +23,10 @@ export function sendInfo (info: Graph) {
   ipcRenderer.send(IPC.ShowInfo.Send, info)
 }
 
-export function sendTestReq () {
-  ipcRenderer.send(IPC.GetInitDir.Request, 'github.com/hyperledger/fabric/peer')
+export function sendGetInitDir (rootPath: string) {
+  ipcRenderer.send(IPC.GetInitDir.Request, rootPath)
 }
+
+// export function sendTestReq () {
+//   ipcRenderer.send(IPC.GetInitDir.Request, 'github.com/hyperledger/fabric/peer')
+// }
