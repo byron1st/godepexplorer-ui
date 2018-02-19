@@ -16,7 +16,8 @@ export default class MenuBar extends React.Component {
         const rootPath = extractRootPath(filepaths[0])
         if (rootPath) {
           network.resetGraph()
-          ipc.sendGetInitDir(rootPath)
+          // ipc.sendGetInitDir(rootPath)
+          ipc.sendExpandingReq(rootPath)
           this.setState({ rootPath })
         }
       }
