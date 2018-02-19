@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom'
 import * as godepvis from '../visnetwork.godep'
 import * as ipc from '../ipc'
 import MenuBar from './MenuBar'
+import SideBar from './SideBar'
 
 const VisNetworkComp = 'vis-canvas'
 
@@ -21,6 +22,7 @@ class Container extends React.Component {
   render() {
     return [
       <MenuBar key='canvas-menubar' />,
+      <SideBar />,
       <div id={VisNetworkComp} style={style} key='canvas-vis' />
     ]
   }
