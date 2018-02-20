@@ -2,20 +2,22 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import GoDepVisNetwork from '../visnetwork.godep'
 import * as ipc from '../ipc'
-import {Graph} from '../../types'
+import { Graph } from '../../types'
 import MenuBar from './MenuBar'
 import SideBar from './SideBar'
 import InfoPanel from './InfoPanel'
+import VisCanvas from './VisCanvas'
 
-const VisNetworkComp = 'vis-canvas'
+const VisNetworkCompID = 'vis-canvas'
 
 interface Store {
   sideBarWidth: number,
-  showInfoGraph: Graph,
-  goDepVisNetwork: GoDepVisNetwork
+  showInfoGraph: Graph
 }
 
 class Container extends React.Component<{}, Store> {
+  godepVisNetwork = new GoDepVisNetwork(this.showInfo.bind(this))
+
   constructor (props: {}) {
     super(props)
 
@@ -25,15 +27,14 @@ class Container extends React.Component<{}, Store> {
       showInfoGraph: {
         nodes: [],
         edges: []
-      },
-      goDepVisNetwork: new GoDepVisNetwork(this.showInfo.bind(this))
+      }
     }
 
-    ipc.initializeIPC(this.state.goDepVisNetwork)
+    ipc.initializeIPC(this.godepVisNetwork)
   }
 
   componentDidMount () {
-    this.state.goDepVisNetwork.initNetwork(document.getElementById(VisNetworkComp))
+    this.godepVisNetwork.initNetwork(document.getElementById(VisNetworkCompID))
   }
 
   showInfo (graph: Graph) {
@@ -46,18 +47,12 @@ class Container extends React.Component<{}, Store> {
 
   render() {
     return [
-      <MenuBar key='canvas-menubar' goDepVisNetwork={this.state.goDepVisNetwork} />,
-      <SideBar width={this.state.sideBarWidth} updateWidth={this.updateSideBarWidth.bind(this)} />,
-      <InfoPanel sideBarWidth={this.state.sideBarWidth} graph={this.state.showInfoGraph} />,
-      <div id={VisNetworkComp} style={style} key='canvas-vis' />
+      <MenuBar resetGraph={this.godepVisNetwork.resetGraph.bind(this.godepVisNetwork)} key='canvas-menubar' />,
+      <SideBar width={this.state.sideBarWidth} updateWidth={this.updateSideBarWidth.bind(this)} key='canvas-sidebar' />,
+      <InfoPanel sideBarWidth={this.state.sideBarWidth} graph={this.state.showInfoGraph} key='canvas-infopanel' />,
+      <VisCanvas compID={VisNetworkCompID} key='canvas-viscanvas' />
     ]
   }
-}
-
-const style = {
-  width: 'inherit',
-  height: 'inherit',
-  margin: 0
 }
 
 ReactDOM.render(<Container />, document.getElementById("container"))

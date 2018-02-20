@@ -3,7 +3,7 @@ import { remote } from 'electron'
 import GoDepVisNetwork from '../visnetwork.godep'
 import * as ipc from '../ipc'
 
-export default class MenuBar extends React.Component<{goDepVisNetwork: GoDepVisNetwork}> {
+export default class MenuBar extends React.Component<{ resetGraph: () => void }> {
   state = {
     rootPath: ''
   }
@@ -15,8 +15,21 @@ export default class MenuBar extends React.Component<{goDepVisNetwork: GoDepVisN
       if (filepaths) {
         const rootPath = extractRootPath(filepaths[0])
         if (rootPath) {
-          this.props.goDepVisNetwork.resetGraph()
-          // ipc.sendGetInitDir(rootPath)
+          this.props.resetGraph()
+          ipc.sendExpandingReq(rootPath)
+          this.setState({ rootPath })
+        }
+      }
+    })
+  }
+
+  addPackage () {
+    remote.dialog.showOpenDialog({
+      properties: ['openDirectory']
+    }, (filepaths: string[]) => {
+      if (filepaths) {
+        const rootPath = extractRootPath(filepaths[0])
+        if (rootPath) {
           ipc.sendExpandingReq(rootPath)
           this.setState({ rootPath })
         }
@@ -26,12 +39,18 @@ export default class MenuBar extends React.Component<{goDepVisNetwork: GoDepVisN
 
   render () {
     return (
-      <nav className='navbar fixed-top navbar-dark bg-dark'>
-        <div className='navbar-brand'>Canvas</div>
-        <div className='form-inline'>
-          <button className='btn btn-primary' onClick={this.loadPackage.bind(this)}>Load</button>
-          <input type='text' readOnly className='form-control ml-3' value={this.state.rootPath} />
+      <nav className='navbar fixed-top navbar-expand-sm navbar-dark bg-dark'>
+        <div className='navbar-brand'>GoDepExplorer UI</div>
+        <button className='navbar-toggler' type='button' data-toggle='collapse' data-target='#mainMenu' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>
+          <span className='navbar-toggler-icon'></span>
+        </button>
+        <div className='collapse navbar-collapse' id='mainMenu'>
+          <div className='navbar-nav'>
+              <a className='nav-item nav-link' onClick={this.loadPackage.bind(this)}>Load</a>
+              <a className='nav-item nav-link' onClick={this.addPackage.bind(this)}>Add</a>
+          </div>
         </div>
+        <span className='navbar-text'>{this.state.rootPath}</span>
       </nav>
     )
   }

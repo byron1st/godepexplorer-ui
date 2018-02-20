@@ -12,6 +12,7 @@ export default class GoDepVisNetwork {
   }
 
   initNetwork (htmlElements: HTMLElement) {
+    console.log('init network')
     const visnetwork = new vis.Network(htmlElements, { 
       nodes: this.nodes,
       edges: this.edges
@@ -54,7 +55,6 @@ export default class GoDepVisNetwork {
 
     if (graph.nodes.length !== 0 || graph.edges.length !== 0) {
       // ipc.sendInfo(info)
-      console.log('called in visnetwork')
       this.showInfoConn(graph)
     }
   }
