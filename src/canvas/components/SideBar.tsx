@@ -1,22 +1,14 @@
 import * as React from 'react'
 import Resizable from 're-resizable'
 
-export default class MenuBar extends React.Component {
-  state = {
-    width: 300
-  }
-
-  updateWidth (event: MouseEvent, direction: string, ref: HTMLElement, delta: { width: number, height: number }) {
-    this.setState({ width: this.state.width + delta.width })
-  }
-
+export default class MenuBar extends React.Component<{width: number, updateWidth: (event: MouseEvent, direction: string, ref: HTMLElement, delta: { width: number, height: number })=>void}> {
   render () {
     return (
       <Resizable
-        className='position-fixed bg-light'
+        className='position-fixed bg-secondary'
         style={style.ResizableComp}
-        size={{ height: '100%', width: this.state.width }}
-        onResizeStop={this.updateWidth.bind(this)}
+        size={{ height: '100%', width: this.props.width }}
+        onResizeStop={this.props.updateWidth}
         minWidth={300}
         maxWidth={800}
       >
