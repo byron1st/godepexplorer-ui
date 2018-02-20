@@ -2,9 +2,14 @@ import * as vis from 'vis'
 import * as ipc from './ipc'
 import { Graph, Node, Edge } from '../types'
 
-class GoDepVisNetwork {
+export default class GoDepVisNetwork {
   nodes: vis.DataSet<Node> = new vis.DataSet([])
   edges: vis.DataSet<Edge> = new vis.DataSet([])
+  showInfoConn: (graph: Graph) => void
+
+  constructor (showInfoFn: (graph: Graph) => void) {
+    this.showInfoConn = showInfoFn
+  }
 
   initNetwork (htmlElements: HTMLElement) {
     const visnetwork = new vis.Network(htmlElements, { 
@@ -42,13 +47,15 @@ class GoDepVisNetwork {
   }
 
   showInfo (params: any) {
-    let info: Graph = {
+    let graph: Graph = {
       nodes: params.nodes.map((nodeId: string) => this.nodes.get(nodeId)),
       edges: params.edges.map((edgeId: string) => this.edges.get(edgeId))
     }
 
-    if (info.nodes.length !== 0 || info.edges.length !== 0) {
-      ipc.sendInfo(info)
+    if (graph.nodes.length !== 0 || graph.edges.length !== 0) {
+      // ipc.sendInfo(info)
+      console.log('called in visnetwork')
+      this.showInfoConn(graph)
     }
   }
 
@@ -61,5 +68,3 @@ class GoDepVisNetwork {
   }
 
 }
-
-export default new GoDepVisNetwork()

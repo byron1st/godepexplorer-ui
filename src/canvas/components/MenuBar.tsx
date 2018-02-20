@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { remote } from 'electron'
-import network from '../visnetwork.godep'
+import GoDepVisNetwork from '../visnetwork.godep'
 import * as ipc from '../ipc'
 
-export default class MenuBar extends React.Component {
+export default class MenuBar extends React.Component<{goDepVisNetwork: GoDepVisNetwork}> {
   state = {
     rootPath: ''
   }
@@ -15,7 +15,7 @@ export default class MenuBar extends React.Component {
       if (filepaths) {
         const rootPath = extractRootPath(filepaths[0])
         if (rootPath) {
-          network.resetGraph()
+          this.props.goDepVisNetwork.resetGraph()
           // ipc.sendGetInitDir(rootPath)
           ipc.sendExpandingReq(rootPath)
           this.setState({ rootPath })

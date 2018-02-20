@@ -1,13 +1,15 @@
 import * as React from 'react'
 import Resizable from 're-resizable'
+import { Graph } from '../../types'
+import InfoTableContainer from './InfoTableContainer'
 
-export default class InfoPanel extends React.Component<{sideBarWidth: number}> {
+export default class InfoPanel extends React.Component<{sideBarWidth: number, graph: Graph}> {
   state = {
     height: 300
   }
 
   updateHeight (event: MouseEvent, direction: string, ref: HTMLElement, delta: { width: number, height: number }) {
-    this.setState({ width: this.state.height + delta.height })
+    this.setState({ height: this.state.height + delta.height })
   }
 
   render () {
@@ -23,7 +25,8 @@ export default class InfoPanel extends React.Component<{sideBarWidth: number}> {
         minHeight={300}
         maxHeight={800}
       >
-
+        <InfoTableContainer data={this.props.graph.nodes} header='Nodes' key='nodes-info' />
+        <InfoTableContainer data={this.props.graph.edges} header='Edges' key='edges-info' />
       </Resizable>
     )
   }
@@ -33,6 +36,7 @@ const style = {
   ResizableComp: {
     zIndex: 1009,
     borderStyle: 'outset none none none',
-    position: 'fixed'
+    position: 'fixed',
+    overflowY: 'scroll'
   }
 }
