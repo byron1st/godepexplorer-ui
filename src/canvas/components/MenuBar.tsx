@@ -16,7 +16,7 @@ export default class MenuBar extends React.Component<{ resetGraph: () => void }>
         const rootPath = extractRootPath(filepaths[0])
         if (rootPath) {
           this.props.resetGraph()
-          ipc.sendExpandingReq(rootPath)
+          ipc.sendDepReq(rootPath)
           this.setState({ rootPath })
         }
       }
@@ -30,7 +30,7 @@ export default class MenuBar extends React.Component<{ resetGraph: () => void }>
       if (filepaths) {
         const rootPath = extractRootPath(filepaths[0])
         if (rootPath) {
-          ipc.sendExpandingReq(rootPath)
+          ipc.sendDepReq(rootPath)
           this.setState({ rootPath })
         }
       }

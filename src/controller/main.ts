@@ -86,17 +86,7 @@ function initializeIPC () {
   const IPC = constants.IPC
 
   // Connect to Godepexplorer
-  ipcMain.on(IPC.GetInitDir.Request, getBasicHandlerForGodepexplorer('/dir', IPC.GetInitDir.Response))
-  ipcMain.on(IPC.ExpandPkgStruct.Request, getBasicHandlerForGodepexplorer('/dep', IPC.ExpandPkgStruct.Response))
-
-  // Connect to Infopanel
-  ipcMain.on(IPC.ShowInfo.Send, (event: any, info: any) => {
-    if (infopanelWindow) {
-      infopanelWindow.webContents.send(IPC.ShowInfo.Receive, info)
-    } else {
-      createInfopanelWindow(info)
-    }
-  })
+  ipcMain.on(IPC.GetDepOfPkg.Request, getBasicHandlerForGodepexplorer('/dep', IPC.GetDepOfPkg.Response))
 }
 
 function getBasicHandlerForGodepexplorer (targetPath: string, returnEventType: string) {

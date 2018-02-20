@@ -1,14 +1,6 @@
 export const IPC = {
-  GetInitDir: {
-    Request: 'request-initial-dir-structure',
-    Response: 'receive-initial-dir-strcuture'
-  },
-  ExpandPkgStruct: {
+  GetDepOfPkg: {
     Request: 'request-expand-pkg-structure',
     Response: 'receive-expand-pkg-structure'
-  },
-  ShowInfo: {
-    Send: 'send-info',
-    Receive: 'receive-info'
   }
 }

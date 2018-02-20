@@ -44,7 +44,7 @@ export default class GoDepVisNetwork {
     const id: string = params.nodes[0]
     const pkg = this.nodes.get(id)
   
-    ipc.sendExpandingReq(pkg.meta.packagePath)
+    ipc.sendDepReq(pkg.meta.packagePath)
   }
 
   showInfo (params: any) {
