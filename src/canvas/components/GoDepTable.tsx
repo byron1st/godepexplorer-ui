@@ -112,11 +112,11 @@ export default class Table extends React.Component<{data: any[], header: string}
 
   render () {
     let elements: JSX.Element[] = null
-    if (this.props.header === 'Nodes') {
-      elements = this.getNodeElements()
-    } else {
-      elements = this.getEdgeElements()
-    }
+
+    this.props.header === 'Nodes'
+    ? elements = this.getNodeElements()
+    : elements = this.getEdgeElements()
+
     return elements
   }
 }

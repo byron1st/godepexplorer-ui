@@ -15,21 +15,6 @@ export default class MenuBar extends React.Component<{ resetGraph: () => void }>
       if (filepaths) {
         const rootPath = extractRootPath(filepaths[0])
         if (rootPath) {
-          this.props.resetGraph()
-          ipc.sendDepReq(rootPath)
-          this.setState({ rootPath })
-        }
-      }
-    })
-  }
-
-  addPackage () {
-    remote.dialog.showOpenDialog({
-      properties: ['openDirectory']
-    }, (filepaths: string[]) => {
-      if (filepaths) {
-        const rootPath = extractRootPath(filepaths[0])
-        if (rootPath) {
           ipc.sendDepReq(rootPath)
           this.setState({ rootPath })
         }
@@ -47,7 +32,7 @@ export default class MenuBar extends React.Component<{ resetGraph: () => void }>
         <div className='collapse navbar-collapse' id='mainMenu'>
           <div className='navbar-nav'>
               <a className='nav-item nav-link' onClick={this.loadPackage.bind(this)}>Load</a>
-              <a className='nav-item nav-link' onClick={this.addPackage.bind(this)}>Add</a>
+              <a className='nav-item nav-link' onClick={this.props.resetGraph}>Reset</a>
           </div>
         </div>
         <span className='navbar-text'>{this.state.rootPath}</span>

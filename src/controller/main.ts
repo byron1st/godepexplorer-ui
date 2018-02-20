@@ -13,14 +13,7 @@ const CanvasIndexUrl = url.format({
   slashes: true,
 })
 
-const InfopanelIndexUrl = url.format({
-  pathname: path.join(__dirname, '../infopanel/index.html'),
-  protocol: 'file:',
-  slashes: true,
-})
-
 let canvasWindow: Electron.BrowserWindow
-let infopanelWindow: Electron.BrowserWindow & { initialData?: any }
 
 // Declare global functions
 function createCanvasWindow () {
@@ -42,26 +35,6 @@ function createCanvasWindow () {
   // Subscribe the window events
   canvasWindow.on('closed', () => {
     canvasWindow = null
-  })
-}
-
-function createInfopanelWindow (initialData?: any) {
-  const windowOpts = {
-    height: 400,
-    width: 600
-  }
-
-  infopanelWindow = new BrowserWindow(windowOpts)
-
-  if (initialData) {
-    infopanelWindow.initialData = initialData
-  }
-
-  infopanelWindow.loadURL(InfopanelIndexUrl)
-  infopanelWindow.webContents.openDevTools()
-
-  infopanelWindow.on('closed', () => {
-    infopanelWindow = null
   })
 }
 

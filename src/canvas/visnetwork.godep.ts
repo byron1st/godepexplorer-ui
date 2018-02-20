@@ -12,7 +12,6 @@ export default class GoDepVisNetwork {
   }
 
   initNetwork (htmlElements: HTMLElement) {
-    console.log('init network')
     const visnetwork = new vis.Network(htmlElements, { 
       nodes: this.nodes,
       edges: this.edges
@@ -48,13 +47,12 @@ export default class GoDepVisNetwork {
   }
 
   showInfo (params: any) {
-    let graph: Graph = {
+    const graph: Graph = {
       nodes: params.nodes.map((nodeId: string) => this.nodes.get(nodeId)),
       edges: params.edges.map((edgeId: string) => this.edges.get(edgeId))
     }
 
     if (graph.nodes.length !== 0 || graph.edges.length !== 0) {
-      // ipc.sendInfo(info)
       this.showInfoConn(graph)
     }
   }
