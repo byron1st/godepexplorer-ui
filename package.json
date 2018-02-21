@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "dist/controller/main.js",
   "scripts": {
-    "build": "gulp",
+    "build": "gulp && electron .",
     "start": "npm run build && electron ."
   },
   "author": "byron1st",
