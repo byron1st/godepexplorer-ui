@@ -83,8 +83,8 @@ export default class Table extends React.Component<{data: any[], header: string}
       rows.push(this.getRow('from', datum.from, 0, this.getRowKey(datum.id, 'from')))
       rows.push(this.getRow('to', datum.to, 1, this.getRowKey(datum.id, 'to')))
       Object.keys(datum.meta).forEach((key, index) => {
-        if (key === 'depAtFunc' && datum.meta[key]) {
-          const funcList = Object.keys(datum.meta[key]).map(func => <li key={datum.id+func}>{func}</li>)
+        if (key === 'depAtFuncSet' && datum.meta[key]) {
+          const funcList = Object.keys(datum.meta[key]).map((funcID: any) => <li key={datum.id + funcID}>{funcID}</li>)
           rows.push(this.getRow(key, <ul>{funcList}</ul>, index, this.getRowKey(datum.id, key)))
         } else if (key === 'type') {
           const value = edgeType[Number(datum.meta[key])]
