@@ -1,7 +1,12 @@
 import * as React from 'react'
 import Resizable from 're-resizable'
 
-export default class MenuBar extends React.Component<{width: number, updateWidth: (event: MouseEvent, direction: string, ref: HTMLElement, delta: { width: number, height: number })=>void}> {
+interface SideBarProps {
+  width: number
+  updateWidth: (event: MouseEvent, direction: string, ref: HTMLElement, delta: { width: number, height: number }) => void
+}
+
+export default class SideBar extends React.Component<SideBarProps> {
   render () {
     return (
       <Resizable
@@ -12,7 +17,7 @@ export default class MenuBar extends React.Component<{width: number, updateWidth
         minWidth={300}
         maxWidth={800}
       >
-
+        
       </Resizable>
     )
   }
