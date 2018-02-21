@@ -26,7 +26,15 @@ function createCanvasWindow () {
   canvasWindow = new BrowserWindow(windowOpts)
   if (BrowserWindow.getDevToolsExtensions() !== null) {
     // Attach dev tools to the windows
-    BrowserWindow.addDevToolsExtension(util.getReactDevToolPath())
+    const reactDevTool = util.getReactDevToolPath()
+    if (reactDevTool) {
+      BrowserWindow.addDevToolsExtension(reactDevTool)
+    }
+
+    const reduxDevTool = util.getReduxDevToolPath()
+    if (reduxDevTool) {
+      BrowserWindow.addDevToolsExtension(reduxDevTool)
+    }
   }
 
   canvasWindow.loadURL(CanvasIndexUrl)

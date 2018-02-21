@@ -1,5 +1,8 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import Reducers from '../reducers/reducers'
 import GoDepVisNetwork from '../visnetwork.godep'
 import * as ipc from '../ipc'
 import { Graph } from '../../types'
@@ -46,12 +49,18 @@ class Container extends React.Component<{}, Store> {
   }
 
   render() {
-    return [
-      <MenuBar resetGraph={this.godepVisNetwork.resetGraph.bind(this.godepVisNetwork)} key='canvas-menubar' />,
-      <SideBar width={this.state.sideBarWidth} updateWidth={this.updateSideBarWidth.bind(this)} key='canvas-sidebar' />,
-      <InfoPanel sideBarWidth={this.state.sideBarWidth} graph={this.state.showInfoGraph} key='canvas-infopanel' />,
-      <VisCanvas compID={VisNetworkCompID} key='canvas-viscanvas' />
-    ]
+    //@ts-ignore
+    const store = createStore(Reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    return (
+      <Provider store={store}>
+        <div>
+          <MenuBar resetGraph={this.godepVisNetwork.resetGraph.bind(this.godepVisNetwork)} key='canvas-menubar' />
+          <SideBar width={this.state.sideBarWidth} updateWidth={this.updateSideBarWidth.bind(this)} key='canvas-sidebar' />
+          <InfoPanel sideBarWidth={this.state.sideBarWidth} graph={this.state.showInfoGraph} key='canvas-infopanel' />
+          <VisCanvas compID={VisNetworkCompID} key='canvas-viscanvas' />
+        </div>
+      </Provider>
+    )
   }
 }
 
