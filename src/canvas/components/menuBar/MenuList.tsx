@@ -1,14 +1,18 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
 import { remote } from 'electron'
 import * as IPC from '../../ipc'
+import { graphActions } from '../../Actions'
 
-export default () => (
+type MenuListProps = {
+  resetGraph: () => any
+}
+
+const MenuList = (props: MenuListProps) => (
   <div className='collapse navbar-collapse' id='mainMenu'>
     <div className='navbar-nav'>
         <a className='nav-item nav-link' onClick={openSelectDirectoryDialog}>Load</a>
-        {
-          // <a className='nav-item nav-link' onClick={this.props.resetGraph}>Reset</a>
-        }
+        <a className='nav-item nav-link' onClick={props.resetGraph}>Reset</a>
     </div>
   </div>
 )
@@ -39,3 +43,11 @@ function extractRootPath (filePath: string) {
     remote.dialog.showErrorBox('Error', 'GOPAHT is not set.')
   }
 }
+
+function mapDispatchToProps (dispatch: any) {
+  return {
+    resetGraph: () => dispatch(graphActions.resetGraph())
+  }
+}
+
+export default connect(null, mapDispatchToProps)(MenuList)

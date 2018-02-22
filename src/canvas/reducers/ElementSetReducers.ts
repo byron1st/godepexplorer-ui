@@ -30,6 +30,8 @@ export function elementSetReducers (state = INITIAL_STATE, action: GraphAction) 
         nodeSet: { ...state.nodeSet, ...newNodeSet },
         edgeSet: { ...state.edgeSet, ...newEdgeSet }
       }
+    case getType(graphActions.resetGraph):
+      return INITIAL_STATE
     default:
       return state
   }

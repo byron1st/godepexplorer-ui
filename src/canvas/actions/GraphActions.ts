@@ -10,7 +10,8 @@ export const graphActions = {
   selectElement: createAction('SELECT_ELEMENT', (selectedGraph: Graph) => ({
     type: 'SELECT_ELEMENT',
     payload: selectedGraph
-  }))
+  })),
+  resetGraph: createAction('RESET_GRAPH')
 }
 
 const returnsOfActions = Object.values(graphActions).map($call)

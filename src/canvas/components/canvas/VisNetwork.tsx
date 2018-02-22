@@ -23,10 +23,14 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   }
 
   componentWillUpdate (nextProps: VisNetworkProps) {
-    this.updateGraph({
-      nodes: Object.values(nextProps.elementSet.nodeSet),
-      edges: Object.values(nextProps.elementSet.edgeSet)
-    })
+    if (isResetCommand(nextProps.elementSet)) {
+      this.resetGraph()
+    } else {
+      this.updateGraph({
+        nodes: Object.values(nextProps.elementSet.nodeSet),
+        edges: Object.values(nextProps.elementSet.edgeSet)
+      })
+    }
   }
 
   initNetwork (htmlElement: HTMLElement) {
@@ -52,10 +56,10 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     }))
   }
 
-  // resetGraph () {
-  //   this.nodes.clear()
-  //   this.edges.clear()
-  // }
+  resetGraph () {
+    this.nodes.clear()
+    this.edges.clear()
+  }
 
   getDepsForPkg (params: any) {
     if (params.nodes.length === 0) {
@@ -68,10 +72,6 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     ipc.sendDepReq(pkg.meta.packagePath)
   }
 
-  render () {
-    return ''
-  }
-
   showInfo (params: any) {
     const graph: Graph = {
       nodes: params.nodes.map((nodeId: string) => this.nodes.get(nodeId)),
@@ -82,6 +82,14 @@ class VisNetwork extends React.Component<VisNetworkProps> {
       this.props.selectElement(graph)
     }
   }
+
+  render () {
+    return ''
+  }
+}
+
+function isResetCommand (elementSet: ElementSet) {
+  return Object.keys(elementSet.nodeSet).length === 0 && Object.keys(elementSet.edgeSet).length === 0
 }
 
 function mapStateToProps (state: RootState) {
