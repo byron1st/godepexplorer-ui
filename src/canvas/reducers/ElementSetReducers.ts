@@ -13,7 +13,7 @@ const INITIAL_STATE: ElementSetState = {
   edgeSet: {}
 }
 
-export const elementSetReducers = (state = INITIAL_STATE, action: GraphAction) => {
+export function elementSetReducers (state = INITIAL_STATE, action: GraphAction) {
   switch(action.type) {
     case getType(graphActions.updateGraph):
       let initNodeSet: {[ID: string]: Node} = {}

@@ -7,6 +7,7 @@ import { graphActions } from '../Actions'
 import SideBar from './sideBar/SideBar'
 import MenuBar from './menuBar/MenuBar'
 import Canvas from './canvas/Canvas'
+import InfoPanel from './infoPanel/InfoPanel'
 
 const VisNetworkCompID = 'vis-canvas'
 
@@ -28,6 +29,7 @@ class Root extends React.Component<RootProps> {
       <div style={{width: 'inherit', height: 'inherit'}}>
         <SideBar />
         <MenuBar appTitle='GoDepExplorer UI' />
+        <InfoPanel />
         <Canvas compID={VisNetworkCompID}/>
       </div>
     )
