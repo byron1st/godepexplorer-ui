@@ -6,6 +6,10 @@ export const graphActions = {
   updateGraph: createAction('UPDATE_GRAPH', (newGraph: Graph) => ({
     type: 'UPDATE_GRAPH',
     payload: newGraph
+  })),
+  selectElement: createAction('SELECT_ELEMENT', (selectedGraph: Graph) => ({
+    type: 'SELECT_ELEMENT',
+    payload: selectedGraph
   }))
 }
 

@@ -2,12 +2,14 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import * as vis from 'vis'
 import * as ipc from '../../IPC'
-import { Graph, Node, Edge, ElementSet } from '../../../GlobalTypes'
+import { Graph, Node, Edge, ElementSet, EdgeType } from '../../../GlobalTypes'
 import { RootState } from '../../Reducers'
+import { graphActions } from '../../Actions'
 
 type VisNetworkProps = {
   elementSet: ElementSet
   compID: string
+  selectElement: (selectedGraph: Graph) => any
 }
 
 class VisNetwork extends React.Component<VisNetworkProps> {
@@ -38,13 +40,13 @@ class VisNetwork extends React.Component<VisNetworkProps> {
 
   initEvent (visnetwork: vis.Network) {
     visnetwork.on('doubleClick', this.getDepsForPkg.bind(this))
-    // visnetwork.on('click', this.showInfo.bind(this))
+    visnetwork.on('click', this.showInfo.bind(this))
   }
 
   updateGraph (graph: Graph) {
     this.nodes.update(graph.nodes)
-    this.edges.update(graph.edges.filter(edge => edge.meta.type === 0))
-    this.edges.update(graph.edges.filter(edge => edge.meta.type === 1).map(edge => {
+    this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.COMP))
+    this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
       edge.arrows = 'to'
       return edge
     }))
@@ -70,16 +72,16 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     return ''
   }
 
-  // showInfo (params: any) {
-  //   const graph: Graph = {
-  //     nodes: params.nodes.map((nodeId: string) => this.nodes.get(nodeId)),
-  //     edges: params.edges.map((edgeId: string) => this.edges.get(edgeId))
-  //   }
+  showInfo (params: any) {
+    const graph: Graph = {
+      nodes: params.nodes.map((nodeId: string) => this.nodes.get(nodeId)),
+      edges: params.edges.map((edgeId: string) => this.edges.get(edgeId))
+    }
 
-  //   if (graph.nodes.length !== 0 || graph.edges.length !== 0) {
-  //     this.showInfoConn(graph)
-  //   }
-  // }
+    if (graph.nodes.length !== 0 || graph.edges.length !== 0) {
+      this.props.selectElement(graph)
+    }
+  }
 }
 
 function mapStateToProps (state: RootState) {
@@ -88,4 +90,12 @@ function mapStateToProps (state: RootState) {
   }
 }
 
-export default connect(mapStateToProps)(VisNetwork)
+function mapDispatchToProps (dispatch: any) {
+  return {
+    selectElement: (selectedGraph: Graph) => {
+      dispatch(graphActions.selectElement(selectedGraph))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VisNetwork)

@@ -1,10 +1,14 @@
 import * as vis from 'vis'
 
 export interface Node extends vis.Node {
+  id: string
   meta: NodeMetaInfo
 }
 
 export interface Edge extends vis.Edge {
+  id: string
+  from: string
+  to: string
   arrows?: string // optional type that is not defined in vis.Edge, but actually can be used.
   meta: EdgeMetaInfo
 }
@@ -19,7 +23,13 @@ export interface ElementSet {
   edgeSet: { [ID: string]: Edge }
 }
 
+export enum EdgeType {
+  COMP = 0,
+  REL
+}
+
 interface NodeMetaInfo {
+  [key: string]: string | boolean | { [func: string]: boolean }
   packagePath: string
   packageName: string
   packageDir: string
@@ -30,7 +40,8 @@ interface NodeMetaInfo {
 }
 
 interface EdgeMetaInfo {
-  type: 0 | 1
+  [key: string]: number | { [key: string]: boolean } | string
+  type: EdgeType
   count: number
   depAtFunc: { [key: string]: boolean }
   arrows?: 'to' | 'from' | 'middle'
