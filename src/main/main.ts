@@ -18,8 +18,8 @@ let canvasWindow: Electron.BrowserWindow
 // Declare global functions
 function createCanvasWindow () {
   const windowOpts = {
-    height: 600,
-    width: 800
+    height: 800,
+    width: 1200
   }
 
   // Create the window for the canvas process

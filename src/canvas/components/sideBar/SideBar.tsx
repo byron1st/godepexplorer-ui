@@ -21,8 +21,9 @@ class SideBar extends React.Component<SideBarProps> {
         className='position-fixed bg-secondary'
         style={style.ResizableComp}
         size={{ height: '100%', width: this.props.width }}
+        enable={resizeEnabled}
         onResizeStop={this.updateWidth.bind(this)}
-        minWidth={300}
+        minWidth={200}
         maxWidth={800}
       >
         
@@ -37,6 +38,8 @@ const style = {
     borderStyle: 'none outset none none'
   }
 }
+
+const resizeEnabled = { top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }
 
 function mapStateToProps (state: RootState) {
   return {

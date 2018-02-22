@@ -30,10 +30,12 @@ class InfoPanel extends React.Component<InfoPanelProps> {
         className='fixed-bottom bg-light'
         style={{...style.ResizableComp, paddingLeft: this.props.sideBarWidth}}
         size={{ width: '100%', height: this.props.height }}
+        enable={resizeEnabled}
         onResizeStop={this.updateHeight.bind(this)}
-        minHeight={300}
+        minHeight={200}
         maxHeight={800}
       >
+        Hello, World
         {/* <InfoTableContainer data={this.props.graph.nodes} header='Nodes' key='nodes-info' />
         <InfoTableContainer data={this.props.graph.edges} header='Edges' key='edges-info' /> */}
       </Resizable>
@@ -49,6 +51,8 @@ const style = {
     overflowY: 'scroll'
   }
 }
+
+const resizeEnabled = { top:true, right:false, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }
 
 function mapStateToProps (state: RootState) {
   return {
