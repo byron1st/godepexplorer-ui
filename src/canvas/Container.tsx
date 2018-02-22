@@ -4,6 +4,9 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import * as reducers from './Reducers'
 import SideBar from './components/sideBar/SideBar'
+import Canvas from './components/canvas/Canvas'
+
+const VisNetworkCompID = 'vis-canvas'
 
 class Container extends React.Component {
   render() {
@@ -11,8 +14,9 @@ class Container extends React.Component {
     const store = createStore(reducers.rootReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     return (
       <Provider store={store}>
-        <div>
+        <div style={{width: 'inherit', height: 'inherit'}}>
           <SideBar />
+          <Canvas compID={VisNetworkCompID}/>
         </div>
       </Provider>
     )
