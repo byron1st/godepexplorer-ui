@@ -1,7 +1,7 @@
 {
   "name": "godepexplorer-ui",
   "version": "0.0.1",
-  "main": "dist/controller/main.js",
+  "main": "dist/main/main.js",
   "scripts": {
     "build": "gulp && electron .",
     "start": "npm run build && electron ."

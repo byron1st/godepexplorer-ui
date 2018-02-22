@@ -12,10 +12,10 @@ export interface UpdateInfoPanelHeightAction extends Action {
   height: number
 }
 
-export function updateSideBarWidth (width: number): UpdateSideBarWidthAction {
+export function updateSideBarWidth (newWidth: number) {
   return {
     type: actionTypes.UPDATE_SIDEBARWIDTH_ACTION,
-    width: width
+    width: newWidth
   }
 }
 

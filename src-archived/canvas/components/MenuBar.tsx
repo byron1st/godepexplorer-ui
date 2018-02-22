@@ -25,10 +25,13 @@ export default class MenuBar extends React.Component<{ resetGraph: () => void }>
   render () {
     return (
       <nav className='navbar fixed-top navbar-expand-sm navbar-dark bg-dark'>
-        <div className='navbar-brand'>GoDepExplorer UI</div>
+        <div className='navbar-brand'>GoDepExplorer UI{/*TODO: prop으로 추출*/}</div>
         <button className='navbar-toggler' type='button' data-toggle='collapse' data-target='#mainMenu' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation'>
           <span className='navbar-toggler-icon'></span>
         </button>
+        {
+          // TODO: ******* MenuList 형태로 추출 *******
+        }
         <div className='collapse navbar-collapse' id='mainMenu'>
           <div className='navbar-nav'>
               <a className='nav-item nav-link' onClick={this.loadPackage.bind(this)}>Load</a>
@@ -36,6 +39,9 @@ export default class MenuBar extends React.Component<{ resetGraph: () => void }>
           </div>
         </div>
         <span className='navbar-text'>{this.state.rootPath}</span>
+        {
+          // *********************************
+        }
       </nav>
     )
   }
