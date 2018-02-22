@@ -2,9 +2,9 @@ import { app, ipcMain, BrowserWindow, App } from 'electron'
 import * as url from 'url'
 import * as path from 'path'
 import * as util from './util'
-import * as constants from '../constants'
 import godepexplorer from './connectors/godepexplorer'
-import * as types from '../types'
+import * as types from '../GlobalTypes'
+import * as IPCType from '../IPCTypes'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -64,10 +64,8 @@ function initializeApp (app: App) {
 }
 
 function initializeIPC () {
-  const IPC = constants.IPC
-
   // Connect to Godepexplorer
-  ipcMain.on(IPC.GetDepOfPkg.Request, getBasicHandlerForGodepexplorer('/dep', IPC.GetDepOfPkg.Response))
+  ipcMain.on(IPCType.GetDepOfPkg.Request, getBasicHandlerForGodepexplorer('/dep', IPCType.GetDepOfPkg.Response))
 }
 
 function getBasicHandlerForGodepexplorer (targetPath: string, returnEventType: string) {
