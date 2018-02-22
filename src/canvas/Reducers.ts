@@ -1,11 +1,16 @@
 import { combineReducers } from 'redux'
-import * as uiReducers from './reducers/UIReducers'
+import { uiReducers, UIState } from './reducers/UIReducers'
+import { graphReducers, GraphState } from './reducers/GraphReducers'
 
 export type RootState = {
-  readonly uiState: uiReducers.UIState
+  readonly uiState: UIState
+  readonly graphState: GraphState
 }
 
 export const rootReducers = combineReducers<RootState>({
-  uiState: uiReducers.uiReducers
+  uiState: uiReducers,
+  graphState: graphReducers
 })
+
 export * from './reducers/UIReducers'
+export * from './reducers/GraphReducers'

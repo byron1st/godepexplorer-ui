@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
-import { UIAction, uiActions } from '../actions'
+import { uiActions, UIAction } from '../Actions'
 
 export type UIState = {
   readonly sideBarWidth: number

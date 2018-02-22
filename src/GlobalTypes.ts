@@ -14,6 +14,11 @@ export interface Graph {
   edges: Edge[]
 }
 
+export interface ElementSet {
+  nodeSet: { [ID: string]: Node }
+  edgeSet: { [ID: string]: Edge }
+}
+
 interface NodeMetaInfo {
   packagePath: string
   packageName: string
