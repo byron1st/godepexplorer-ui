@@ -11,7 +11,12 @@ export const uiActions = {
     payload: newHeight
   })),
   changeNodeVisible: createAction('CHANGE_NODE_VISIBLE'),
-  changeEdgeVisible: createAction('CHANGE_EDGE_VISIBLE')
+  changeEdgeVisible: createAction('CHANGE_EDGE_VISIBLE'),
+  turnOnLoadingIndicator: createAction('TURNON_LOADING_INDICATOR', (packagePath: string) => ({
+    type: 'TURNON_LOADING_INDICATOR',
+    payload: packagePath
+  })),
+  turnOffLoadingIndicator: createAction('TURNOFF_LOADING_INDICATOR')
 }
 
 const returnsOfActions = Object.values(uiActions).map($call)

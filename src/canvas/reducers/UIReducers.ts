@@ -7,13 +7,17 @@ export type UIState = {
   readonly infoPanelHeight: number
   readonly isNodeVisible: boolean
   readonly isEdgeVisible: boolean
+  readonly loadingPath: string
+  readonly isLoading: boolean
 }
 
 const INITIAL_STATE: UIState = {
   sideBarWidth: 300,
   infoPanelHeight: 300,
   isNodeVisible: true,
-  isEdgeVisible: true
+  isEdgeVisible: true,
+  loadingPath: '',
+  isLoading: false
 }
 
 export function uiReducers (state = INITIAL_STATE, action: UIAction) {
@@ -26,6 +30,10 @@ export function uiReducers (state = INITIAL_STATE, action: UIAction) {
       return { ...state, isNodeVisible: !state.isNodeVisible }
     case getType(uiActions.changeEdgeVisible):
       return { ...state, isEdgeVisible: !state.isEdgeVisible }
+    case getType(uiActions.turnOnLoadingIndicator):
+      return { ...state, loadingPath: action.payload, isLoading: true }
+    case getType(uiActions.turnOffLoadingIndicator):
+      return { ...state, loadingPath: '', isLoading: false }
     default:
       return state
   }

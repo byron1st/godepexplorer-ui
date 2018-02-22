@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { ipcRenderer } from 'electron'
 import * as IPCType from '../../IPCTypes'
 import { Graph } from '../../GlobalTypes'
-import { graphActions } from '../Actions'
+import { graphActions, uiActions } from '../Actions'
 import SideBar from './sideBar/SideBar'
 import MenuBar from './menuBar/MenuBar'
 import Canvas from './canvas/Canvas'
@@ -13,6 +13,7 @@ const VisNetworkCompID = 'vis-canvas'
 
 type RootProps = {
   updateGraph: (newGraph: Graph) => any
+  turnOffLoadingIndicator: () => any
 }
 
 class Root extends React.Component<RootProps> {
@@ -20,6 +21,7 @@ class Root extends React.Component<RootProps> {
     super(props)
 
     ipcRenderer.on(IPCType.GetDepOfPkg.Response, (event: any, newGraph: Graph) => {
+      this.props.turnOffLoadingIndicator()
       this.props.updateGraph(newGraph)
     })
   }
@@ -40,7 +42,8 @@ function mapDispatchToProps (dispatch: any) {
   return {
     updateGraph: (newGraph: Graph) => {
       dispatch(graphActions.updateGraph(newGraph))
-    }
+    },
+    turnOffLoadingIndicator: () => dispatch(uiActions.turnOffLoadingIndicator())
   }
 }
 

@@ -4,12 +4,13 @@ import * as vis from 'vis'
 import * as ipc from '../../IPC'
 import { Graph, Node, Edge, ElementSet, EdgeType } from '../../../GlobalTypes'
 import { RootState } from '../../Reducers'
-import { graphActions } from '../../Actions'
+import { graphActions, uiActions } from '../../Actions'
 
 type VisNetworkProps = {
   elementSet: ElementSet
   compID: string
   selectElement: (selectedGraph: Graph) => any
+  turnOnLoadingIndicator: (packagePath: string) => any
 }
 
 class VisNetwork extends React.Component<VisNetworkProps> {
@@ -68,7 +69,8 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   
     const id: string = params.nodes[0]
     const pkg = this.nodes.get(id)
-  
+
+    this.props.turnOnLoadingIndicator(pkg.meta.packagePath)
     ipc.sendDepReq(pkg.meta.packagePath)
   }
 
@@ -102,6 +104,9 @@ function mapDispatchToProps (dispatch: any) {
   return {
     selectElement: (selectedGraph: Graph) => {
       dispatch(graphActions.selectElement(selectedGraph))
+    },
+    turnOnLoadingIndicator: (packagePath: string) => {
+      dispatch(uiActions.turnOnLoadingIndicator(packagePath))
     }
   }
 }

@@ -2,32 +2,42 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { remote } from 'electron'
 import * as IPC from '../../ipc'
-import { graphActions } from '../../Actions'
+import { graphActions, uiActions } from '../../Actions'
+import { RootState } from '../../Reducers'
 
 type MenuListProps = {
+  loadingPath: string
+  isLoading: boolean
   resetGraph: () => any
+  turnOnLoadingIndicator: (packagePath: string) => any
 }
 
-const MenuList = (props: MenuListProps) => (
-  <div className='collapse navbar-collapse' id='mainMenu'>
-    <div className='navbar-nav'>
-        <a className='nav-item nav-link' onClick={openSelectDirectoryDialog}>Load</a>
-        <a className='nav-item nav-link' onClick={props.resetGraph}>Reset</a>
-    </div>
-  </div>
-)
-
-function openSelectDirectoryDialog () {
-  remote.dialog.showOpenDialog({
-    properties: ['openDirectory']
-  }, (filepaths: string[]) => {
-    if (filepaths) {
-      const rootPath = extractRootPath(filepaths[0])
-      if (rootPath) {
-        IPC.sendDepReq(rootPath)
+class MenuList extends React.Component<MenuListProps> {
+  openSelectDirectoryDialog () {
+    remote.dialog.showOpenDialog({
+      properties: ['openDirectory']
+    }, (filepaths: string[]) => {
+      if (filepaths) {
+        const packagePath = extractRootPath(filepaths[0])
+        if (packagePath) {
+          this.props.turnOnLoadingIndicator(packagePath)
+          IPC.sendDepReq(packagePath)
+        }
       }
-    }
-  })
+    })
+  }
+
+  render () {
+    return [
+      <div className='collapse navbar-collapse' id='mainMenu'>
+        <div className='navbar-nav'>
+            <a className='nav-item nav-link' onClick={this.openSelectDirectoryDialog.bind(this)}>Load</a>
+            <a className='nav-item nav-link' onClick={this.props.resetGraph}>Reset</a>
+        </div>
+      </div>,
+      <span className='navbar-text'>{this.props.isLoading ? <span><i className='fas fa-spinner fa-pulse' /> {this.props.loadingPath}</span> : null}</span>
+    ]
+  }
 }
 
 function extractRootPath (filePath: string) {
@@ -44,10 +54,20 @@ function extractRootPath (filePath: string) {
   }
 }
 
-function mapDispatchToProps (dispatch: any) {
+function mapStateToProps (state: RootState) {
   return {
-    resetGraph: () => dispatch(graphActions.resetGraph())
+    loadingPath: state.uiState.loadingPath,
+    isLoading: state.uiState.isLoading
   }
 }
 
-export default connect(null, mapDispatchToProps)(MenuList)
+function mapDispatchToProps (dispatch: any) {
+  return {
+    resetGraph: () => dispatch(graphActions.resetGraph()),
+    turnOnLoadingIndicator: (packagePath: string) => {
+      dispatch(uiActions.turnOnLoadingIndicator(packagePath))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuList)
