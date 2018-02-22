@@ -2,32 +2,28 @@ import * as React from 'react'
 import { remote } from 'electron'
 import * as IPC from '../../ipc'
 
-export default class MenuList extends React.Component {
-  loadPackage () {
-    remote.dialog.showOpenDialog({
-      properties: ['openDirectory']
-    }, (filepaths: string[]) => {
-      if (filepaths) {
-        const rootPath = extractRootPath(filepaths[0])
-        if (rootPath) {
-          IPC.sendDepReq(rootPath)
+export default () => (
+  <div className='collapse navbar-collapse' id='mainMenu'>
+    <div className='navbar-nav'>
+        <a className='nav-item nav-link' onClick={openSelectDirectoryDialog}>Load</a>
+        {
+          // <a className='nav-item nav-link' onClick={this.props.resetGraph}>Reset</a>
         }
-      }
-    })
-  }
+    </div>
+  </div>
+)
 
-  render () {
-    return (
-      <div className='collapse navbar-collapse' id='mainMenu'>
-        <div className='navbar-nav'>
-            <a className='nav-item nav-link' onClick={this.loadPackage.bind(this)}>Load</a>
-            {
-              // <a className='nav-item nav-link' onClick={this.props.resetGraph}>Reset</a>
-            }
-        </div>
-      </div>
-    )
-  }
+function openSelectDirectoryDialog () {
+  remote.dialog.showOpenDialog({
+    properties: ['openDirectory']
+  }, (filepaths: string[]) => {
+    if (filepaths) {
+      const rootPath = extractRootPath(filepaths[0])
+      if (rootPath) {
+        IPC.sendDepReq(rootPath)
+      }
+    }
+  })
 }
 
 function extractRootPath (filePath: string) {
