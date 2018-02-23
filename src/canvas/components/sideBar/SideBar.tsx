@@ -18,7 +18,7 @@ class SideBar extends React.Component<SideBarProps> {
   render () {
     return (
       <Resizable
-        className='position-fixed bg-secondary'
+        className='position-fixed fixed-top bg-secondary'
         style={style.ResizableComp}
         size={{ height: '100%', width: this.props.width }}
         enable={resizeEnabled}

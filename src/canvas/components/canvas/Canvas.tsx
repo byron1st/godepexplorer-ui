@@ -6,14 +6,20 @@ type CanvasProps = {
 }
 
 export default (props: CanvasProps) => (
-  <div style={style}>
-    <div id={props.compID} style={style} key='canvas-vis' />,
+  <div style={style.container}>
+    <div id={props.compID} style={style.canvas} key='canvas-vis' />,
     <VisNetwork compID={props.compID} />
   </div>
 )
 
 const style = {
-  width: 'inherit',
-  height: 'inherit',
-  margin: 0
+  container: {
+    width: 'inherit',
+    height: 'inherit',
+    marginTop: '-150px'
+  },
+  canvas: {
+    width: 'inherit',
+    height: 'inherit'
+  }
 }

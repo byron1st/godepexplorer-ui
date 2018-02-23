@@ -48,7 +48,7 @@ const style = {
     zIndex: 1009,
     borderStyle: 'outset none none none',
     position: 'fixed',
-    overflowY: 'scroll'
+    overflowY: 'auto'
   }
 }
 
