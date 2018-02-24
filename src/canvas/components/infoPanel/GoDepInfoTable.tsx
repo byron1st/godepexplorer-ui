@@ -87,7 +87,6 @@ function getEdgeElements (elementSet: ElementSet<Edge>) {
 }
 
 function getNodeMetaElements (node: Node) {
-  console.log(node)
   const rows: JSX.Element[] = []
 
   rows.push(getRow('id', node.id, 0, getRowKey(node.id, 'ID')))

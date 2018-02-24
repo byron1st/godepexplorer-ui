@@ -27,13 +27,27 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
     this.props.selectElement(selectionSet)
   }
 
+  getVisibilityText (isVisible: boolean): JSX.Element {
+    let text: JSX.Element
+    isVisible
+    ? text = <span className='badge badge-primary badge-pill'>visible</span>
+    : text = <span className='badge badge-secondary badge-pill'>hide</span>
+    return text
+  }
+
   render () {
     let isActive = ''
     if (this.props.selectedNodeSet[this.props.node.id] !== undefined) {
       isActive = 'active'
     }
     return (
-      <button type='button' className={`list-group-item list-group-item-action ${isActive}`} onClick={this.selectItem.bind(this)}>{this.props.node.label}</button>
+      <button
+        type='button'
+        className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
+        onClick={this.selectItem.bind(this)}>
+        {this.props.node.label}
+        {this.getVisibilityText(this.props.node.isVisible)}
+      </button>
     )
   }
 }
