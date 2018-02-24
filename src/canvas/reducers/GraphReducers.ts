@@ -6,7 +6,7 @@ import { elementSetReducers } from './ElementSetReducers'
 
 export type GraphState = {
   readonly elementSet: ElementSet,
-  readonly infoPanelList: Graph
+  readonly selections: Graph
 }
 
 const INITIAL_GRAPH: Graph = {
@@ -16,7 +16,7 @@ const INITIAL_GRAPH: Graph = {
 
 export const graphReducers = combineReducers<GraphState>({
   elementSet: elementSetReducers,
-  infoPanelList: (state = INITIAL_GRAPH, action: GraphAction) => {
+  selections: (state = INITIAL_GRAPH, action: GraphAction) => {
     switch(action.type) {
       case getType(graphActions.selectElement):
         return action.payload

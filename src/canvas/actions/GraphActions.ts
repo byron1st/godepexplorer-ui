@@ -7,9 +7,9 @@ export const graphActions = {
     type: 'UPDATE_GRAPH',
     payload: newGraph
   })),
-  selectElement: createAction('SELECT_ELEMENT', (selectedGraph: Graph) => ({
+  selectElement: createAction('SELECT_ELEMENT', (selections: Graph) => ({
     type: 'SELECT_ELEMENT',
-    payload: selectedGraph
+    payload: selections
   })),
   resetGraph: createAction('RESET_GRAPH')
 }

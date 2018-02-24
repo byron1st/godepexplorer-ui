@@ -11,7 +11,7 @@ type InfoPanelProps = {
   isNodeVisible: boolean,
   isEdgeVisible: boolean,
   sideBarWidth: number,
-  graph: Graph,
+  selections: Graph,
   updateHeight: (newHeight: number) => any,
   changeNodeVisible: () => any,
   changeEdgeVisible: () => any
@@ -36,8 +36,8 @@ class InfoPanel extends React.Component<InfoPanelProps> {
         minHeight={200}
         maxHeight={800}
       >
-        <InfoTableContainer elements={this.props.graph.nodes} header='Nodes' isVisible={this.props.isNodeVisible} changeVisibility={this.props.changeNodeVisible} />
-        <InfoTableContainer elements={this.props.graph.edges} header='Edges' isVisible={this.props.isEdgeVisible} changeVisibility={this.props.changeEdgeVisible} />
+        <InfoTableContainer elements={this.props.selections.nodes} header='Nodes' isVisible={this.props.isNodeVisible} changeVisibility={this.props.changeNodeVisible} />
+        <InfoTableContainer elements={this.props.selections.edges} header='Edges' isVisible={this.props.isEdgeVisible} changeVisibility={this.props.changeEdgeVisible} />
       </Resizable>
     )
   }
@@ -60,7 +60,7 @@ function mapStateToProps (state: RootState) {
     sideBarWidth: state.uiState.sideBarWidth,
     isNodeVisible: state.uiState.isNodeVisible,
     isEdgeVisible: state.uiState.isEdgeVisible,
-    graph: state.graphState.infoPanelList
+    selections: state.graphState.selections
   }
 }
 
