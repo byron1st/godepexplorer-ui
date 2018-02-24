@@ -12,7 +12,7 @@ type InfoTableProps = {
 
 export default (props: InfoTableProps) => (
   <div>
-    <h2 onClick={props.changeVisibility}>{props.header}</h2>
+    <h3 className='text-dark' onClick={props.changeVisibility}>{props.header}</h3>
     <hr />
     {
       props.isVisible
