@@ -11,6 +11,7 @@ type SideBarListItemProps = {
   elementSet: SetGraph
   isClickable: boolean
   selectElement: (selectionSet: SetGraph) => any
+  changeSingleNodeVisible: (node: Node) => any
 }
 
 class SideBarListItem extends React.Component<SideBarListItemProps> {
@@ -29,16 +30,16 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
     this.props.selectElement(selectionSet)
   }
 
-  getMenuTemplate (nodeId: string) {
-    if (this.props.node.isVisible) {
-      return [{ label: 'Hide', click () { console.log(`Hide this one! ${nodeId}`) }}]
+  getMenuTemplate (node: Node, handleChange: (node: Node) => any) {
+    if (this.props.isClickable) {
+      return [{ label: 'Hide', click () { handleChange(node) }}]
     } else {
-      return [{ label: 'View', click () { console.log(`View this one! ${nodeId}`) }}]
+      return [{ label: 'View', click () { handleChange(node) }}]
     }
   }
 
   openContextMenu (e: any) {
-    const menu = remote.Menu.buildFromTemplate(this.getMenuTemplate(this.props.node.id))
+    const menu = remote.Menu.buildFromTemplate(this.getMenuTemplate(this.props.node, this.props.changeSingleNodeVisible))
 
     e.preventDefault()
     menu.popup(remote.getCurrentWindow())
@@ -73,6 +74,9 @@ function mapDispatchToProps (dispatch: any) {
   return {
     selectElement: (selectionSet: SetGraph) => {
       dispatch(graphActions.selectElement(selectionSet))
+    },
+    changeSingleNodeVisible: (node: Node) => {
+      dispatch(graphActions.changeSingleNodeVisible(node))
     }
   }
 }

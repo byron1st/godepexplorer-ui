@@ -28,6 +28,13 @@ export function elementSetReducers (state = INITIAL_STATE, action: GraphAction) 
       }
     case getType(graphActions.resetGraph):
       return INITIAL_STATE
+    case getType(graphActions.changeSingleNodeVisible):
+      let newSet = { ...state.nodeSet }
+      newSet[action.payload.id] = { ...state.nodeSet[action.payload.id], isVisible: !state.nodeSet[action.payload.id].isVisible }
+      return {
+        nodeSet: newSet,
+        edgeSet: state.edgeSet
+      }
     default:
       return state
   }

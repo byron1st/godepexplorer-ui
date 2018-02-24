@@ -1,6 +1,6 @@
 import { $call } from 'utility-types'
 import { createAction } from 'typesafe-actions'
-import { ListGraph, SetGraph } from '../../GlobalTypes'
+import { ListGraph, SetGraph, Node } from '../../GlobalTypes'
 
 export const graphActions = {
   updateGraph: createAction('UPDATE_GRAPH', (newGraph: ListGraph) => ({
@@ -11,7 +11,11 @@ export const graphActions = {
     type: 'SELECT_ELEMENT',
     payload: selectionSet
   })),
-  resetGraph: createAction('RESET_GRAPH')
+  resetGraph: createAction('RESET_GRAPH'),
+  changeSingleNodeVisible: createAction('CHANGE_SINGLE_NODE_VISIBLE', (node: Node) => ({
+    type: 'CHANGE_SINGLE_NODE_VISIBLE',
+    payload: node
+  }))
 }
 
 const returnsOfActions = Object.values(graphActions).map($call)

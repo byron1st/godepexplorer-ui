@@ -76,10 +76,13 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   selectGraph (nextProps: VisNetworkProps) {
     if (this.visnetwork) {
       this.visnetwork.unselectAll()
-      
+
       this.visnetwork.setSelection({
         nodes: Object.values(nextProps.selectionSet.nodeSet)
-        .filter(node => filterNodeVisibility(node, nextProps.isStdVisible, nextProps.isExtVisible))
+        .filter(node => {
+          const result = filterNodeVisibility(nextProps.elementSet.nodeSet[node.id], nextProps.isStdVisible, nextProps.isExtVisible)
+          return result
+        })
         .map(node => node.id),
         edges: Object.values(nextProps.selectionSet.edgeSet)
         .filter(edge => (
