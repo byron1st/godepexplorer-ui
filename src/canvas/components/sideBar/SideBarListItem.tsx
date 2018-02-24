@@ -59,6 +59,8 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
         onContextMenu={this.openContextMenu.bind(this)}
       >
         {this.props.node.label}
+        <span className='badge badge-primary badge-pill'>{this.props.node.meta.isStd ? 'standard' : ''}</span>
+        <span className='badge badge-secondary badge-pill'>{this.props.node.meta.isExternal ? 'external' : ''}</span>
       </button>
     )
   }
