@@ -31,8 +31,8 @@ class SideBar extends React.Component<SideBarProps> {
         minWidth={200}
         maxWidth={800}
       >
-        <SideBarList header='Visible' nodeList={visibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
-        <SideBarList header='Invisible' nodeList={invisibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
+        <SideBarList header='Visible nodes' nodeList={visibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
+        <SideBarList header='Invisible nodes' nodeList={invisibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
       </Resizable>
     )
   }
