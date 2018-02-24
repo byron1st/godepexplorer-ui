@@ -9,6 +9,7 @@ import { graphActions, uiActions } from '../../Actions'
 type VisNetworkProps = {
   elementSet: ElementSet
   compID: string
+  selections: Graph
   selectElement: (selectedGraph: Graph) => any
   turnOnLoadingIndicator: (packagePath: string) => any
 }
@@ -16,6 +17,7 @@ type VisNetworkProps = {
 class VisNetwork extends React.Component<VisNetworkProps> {
   nodes: vis.DataSet<Node> = new vis.DataSet([])
   edges: vis.DataSet<Edge> = new vis.DataSet([])
+  visnetwork: vis.Network
 
   componentDidMount () {
     //@ts-ignore: 'document' is working well.
@@ -35,17 +37,13 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   }
 
   initNetwork (htmlElement: HTMLElement) {
-    const visnetwork = new vis.Network(htmlElement, { 
+    this.visnetwork = new vis.Network(htmlElement, { 
       nodes: this.nodes,
       edges: this.edges
     }, {})
 
-    this.initEvent(visnetwork)
-  }
-
-  initEvent (visnetwork: vis.Network) {
-    visnetwork.on('doubleClick', this.getDepsForPkg.bind(this))
-    visnetwork.on('click', this.showInfo.bind(this))
+    this.visnetwork.on('doubleClick', this.getDepsForPkg.bind(this))
+    this.visnetwork.on('click', this.showInfo.bind(this))
   }
 
   updateGraph (graph: Graph) {
@@ -60,6 +58,16 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   resetGraph () {
     this.nodes.clear()
     this.edges.clear()
+  }
+
+  selectGraph (selections: Graph) {
+    if (this.visnetwork) {
+      this.visnetwork.unselectAll()
+      this.visnetwork.setSelection({
+        nodes: selections.nodes.map(node => node.id),
+        edges: selections.edges.map(edge => edge.id)
+      })
+    }
   }
 
   getDepsForPkg (params: any) {
@@ -96,7 +104,8 @@ function isResetCommand (elementSet: ElementSet) {
 
 function mapStateToProps (state: RootState) {
   return {
-    elementSet: state.graphState.elementSet
+    elementSet: state.graphState.elementSet,
+    selections: state.graphState.selections
   }
 }
 
