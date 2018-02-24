@@ -21,6 +21,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   nodes: vis.DataSet<Node> = new vis.DataSet([])
   edges: vis.DataSet<Edge> = new vis.DataSet([])
   visnetwork: vis.Network
+  visGraphSet: SetGraph = { nodeSet: {}, edgeSet: {} }
 
   componentDidMount () {
     //@ts-ignore: 'document' is working well.
@@ -32,7 +33,6 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     if (isResetCommand(nextProps.elementSet)) {
       this.resetGraph()
     } else {
-      console.log(nextProps)
       this.updateGraph(nextProps)
       this.selectGraph(nextProps.selectionSet)
     }
@@ -49,15 +49,20 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   }
 
   updateGraph (nextProps: VisNetworkProps) {
-    this.resetGraph()
+    // first remove nodes which become invisible.
+    this.nodes.forEach((node, nodeId) => {
+      if (!filterNodeVisibility(nextProps.elementSet.nodeSet[nodeId], nextProps.isStdVisible, nextProps.isExtVisible)) {
+        this.nodes.remove(nodeId)
+      }
+    })
 
-    const graph = {
-      nodes: Object.values(nextProps.elementSet.nodeSet),
-      edges: Object.values(nextProps.elementSet.edgeSet)
-    }
-    this.nodes.update(graph.nodes.filter(node => filterNodeVisibility(node, nextProps.isStdVisible, nextProps.isExtVisible)))
-    this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.COMP))
-    this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
+    const newNodes = Object.values(nextProps.elementSet.nodeSet)
+    const newEdges = Object.values(nextProps.elementSet.edgeSet)
+    // then add all visible nodes from new elementSet.
+    this.nodes.update(newNodes.filter(node => filterNodeVisibility(node, nextProps.isStdVisible, nextProps.isExtVisible)))
+
+    this.edges.update(newEdges.filter(edge => edge.meta.type === EdgeType.COMP))
+    this.edges.update(newEdges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
       edge.arrows = 'to'
       return edge
     }))
