@@ -34,7 +34,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
       this.resetGraph()
     } else {
       this.updateGraph(nextProps)
-      this.selectGraph(nextProps.selectionSet)
+      this.selectGraph(nextProps)
     }
   }
 
@@ -73,12 +73,20 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     this.edges.clear()
   }
 
-  selectGraph (selectionSet: SetGraph) {
+  selectGraph (nextProps: VisNetworkProps) {
     if (this.visnetwork) {
       this.visnetwork.unselectAll()
+      
       this.visnetwork.setSelection({
-        nodes: Object.values(selectionSet.nodeSet).map(node => node.id),
-        edges: Object.values(selectionSet.edgeSet).map(edge => edge.id)
+        nodes: Object.values(nextProps.selectionSet.nodeSet)
+        .filter(node => filterNodeVisibility(node, nextProps.isStdVisible, nextProps.isExtVisible))
+        .map(node => node.id),
+        edges: Object.values(nextProps.selectionSet.edgeSet)
+        .filter(edge => (
+          filterNodeVisibility(nextProps.elementSet.nodeSet[edge.from], nextProps.isStdVisible, nextProps.isExtVisible)
+          && filterNodeVisibility(nextProps.elementSet.nodeSet[edge.to], nextProps.isStdVisible, nextProps.isExtVisible)
+        ))
+        .map(edge => edge.id)
       })
     }
   }
