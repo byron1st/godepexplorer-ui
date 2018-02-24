@@ -4,7 +4,7 @@ import { Node, Edge } from '../../../GlobalTypes'
 import Table from './GoDepInfoTable'
 
 type InfoTableProps = {
-  elements: Node[] | Edge[]
+  elementSet: {[id: string]: Node} | {[id: string]: Edge}
   header: string
   isVisible: boolean
   changeVisibility: () => any
@@ -16,7 +16,7 @@ export default (props: InfoTableProps) => (
     <hr />
     {
       props.isVisible
-      ? <Table elements={props.elements} header={props.header} />
+      ? <Table elementSet={props.elementSet} header={props.header} />
       : null
     }
   </div>

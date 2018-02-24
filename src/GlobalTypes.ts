@@ -19,8 +19,12 @@ export interface Graph {
 }
 
 export interface ElementSet {
-  nodeSet: { [ID: string]: Node }
-  edgeSet: { [ID: string]: Edge }
+  nodeSet: ElementSetType<Node>
+  edgeSet: ElementSetType<Edge>
+}
+
+export interface ElementSetType<T> {
+  [id: string]: T
 }
 
 export enum EdgeType {

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Node, Edge } from '../../../GlobalTypes'
+import { Node, Edge, ElementSetType } from '../../../GlobalTypes'
 
 const keyLabelMap:{[key: string]: string} = {
   id: 'ID',
@@ -21,17 +21,17 @@ const keyLabelMap:{[key: string]: string} = {
 const edgeType = ['Composition', 'Import-Relation']
 
 type TableProps = {
-  elements: Node[] | Edge[]
+  elementSet: ElementSetType<Node> | ElementSetType<Edge>
   header: string
 }
 
 export default (props: TableProps) => {
   let jsxElements: JSX.Element[] = null
 
-  if (props.elements.length !== 0) {
-    isEdgeList(props.elements)
-    ? jsxElements = getEdgeElements(props.elements)
-    : jsxElements = getNodeElements(props.elements)
+  if (Object.keys(props.elementSet).length !== 0) {
+    isEdgeList(props.elementSet)
+    ? jsxElements = getEdgeElements(props.elementSet)
+    : jsxElements = getNodeElements(props.elementSet)
   }
 
   return (
@@ -48,10 +48,10 @@ const style = {
   }
 }
 
-function getNodeElements (elements: Node[]) {
+function getNodeElements (elementSet: ElementSetType<Node>) {
   const jsxElements: JSX.Element[] = []
 
-  elements.forEach(node => {
+  Object.values(elementSet).forEach(node => {
     jsxElements.push(
       <div className='card m-3' key={node.id}>
         <div className='card-body'>
@@ -67,10 +67,10 @@ function getNodeElements (elements: Node[]) {
   return jsxElements
 }
 
-function getEdgeElements (elements: Edge[]) {
+function getEdgeElements (elementSet: ElementSetType<Edge>) {
   const jsxElements: JSX.Element[] = []
 
-  elements.forEach((edge, edgeIndex) => {
+  Object.values(elementSet).forEach((edge, edgeIndex) => {
     jsxElements.push(
       <div className='card m-3' key={edge.id}>
         <div className='card-body'>
@@ -87,6 +87,7 @@ function getEdgeElements (elements: Edge[]) {
 }
 
 function getNodeMetaElements (node: Node) {
+  console.log(node)
   const rows: JSX.Element[] = []
 
   rows.push(getRow('id', node.id, 0, getRowKey(node.id, 'ID')))
@@ -142,8 +143,8 @@ function getRow (key: string, value: any, index: number, reactKey: string) {
   )
 }
 
-function isEdgeList (elements: Node[] | Edge[]): elements is Edge[] {
-  return (elements[0] as Edge).from !== undefined
+function isEdgeList (elementSet: ElementSetType<Node> | ElementSetType<Edge>): elementSet is ElementSetType<Edge> {
+  return (Object.values(elementSet)[0] as Edge).from !== undefined
 }
 
 function getRowKey (id: string, key: string) {

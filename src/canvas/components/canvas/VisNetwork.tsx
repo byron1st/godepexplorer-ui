@@ -9,8 +9,8 @@ import { graphActions, uiActions } from '../../Actions'
 type VisNetworkProps = {
   elementSet: ElementSet
   compID: string
-  selections: Graph
-  selectElement: (selectedGraph: Graph) => any
+  selectionSet: ElementSet
+  selectElement: (selectionSet: ElementSet) => any
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
@@ -83,13 +83,20 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   }
 
   showInfo (params: any) {
-    const graph: Graph = {
-      nodes: params.nodes.map((nodeId: string) => this.nodes.get(nodeId)),
-      edges: params.edges.map((edgeId: string) => this.edges.get(edgeId))
+    
+    const selectionSet = {
+      nodeSet: params.nodes.reduce((accumulated: { [id: string]: Node | Edge }, currentNodeId: string) => {
+        accumulated[currentNodeId] = this.nodes.get(currentNodeId)
+        return accumulated
+      }, {}),
+      edgeSet: params.edges.reduce((accumulated: { [id: string]: Node | Edge }, currentEdgeId: string) => {
+        accumulated[currentEdgeId] = this.edges.get(currentEdgeId)
+        return accumulated
+      }, {})
     }
 
-    if (graph.nodes.length !== 0 || graph.edges.length !== 0) {
-      this.props.selectElement(graph)
+    if (Object.keys(selectionSet.nodeSet).length !== 0 || Object.keys(selectionSet.edgeSet).length !== 0) {
+      this.props.selectElement(selectionSet)
     }
   }
 
@@ -105,14 +112,14 @@ function isResetCommand (elementSet: ElementSet) {
 function mapStateToProps (state: RootState) {
   return {
     elementSet: state.graphState.elementSet,
-    selections: state.graphState.selections
+    selectionSet: state.graphState.selectionSet
   }
 }
 
 function mapDispatchToProps (dispatch: any) {
   return {
-    selectElement: (selectedGraph: Graph) => {
-      dispatch(graphActions.selectElement(selectedGraph))
+    selectElement: (selectionSet: ElementSet) => {
+      dispatch(graphActions.selectElement(selectionSet))
     },
     turnOnLoadingIndicator: (packagePath: string) => {
       dispatch(uiActions.turnOnLoadingIndicator(packagePath))
