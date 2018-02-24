@@ -9,6 +9,8 @@ export type UIState = {
   readonly isEdgeVisible: boolean
   readonly loadingPath: string
   readonly isLoading: boolean
+  readonly isStdVisible: boolean
+  readonly isExtVisible: boolean
 }
 
 const INITIAL_STATE: UIState = {
@@ -17,7 +19,9 @@ const INITIAL_STATE: UIState = {
   isNodeVisible: true,
   isEdgeVisible: true,
   loadingPath: '',
-  isLoading: false
+  isLoading: false,
+  isStdVisible: true,
+  isExtVisible: true
 }
 
 export function uiReducers (state = INITIAL_STATE, action: UIAction) {
@@ -34,6 +38,10 @@ export function uiReducers (state = INITIAL_STATE, action: UIAction) {
       return { ...state, loadingPath: action.payload, isLoading: true }
     case getType(uiActions.turnOffLoadingIndicator):
       return { ...state, loadingPath: '', isLoading: false }
+    case getType(uiActions.changeStdVisible):
+      return { ...state, isStdVisible: !state.isStdVisible }
+    case getType(uiActions.changeExtVisible):
+      return { ...state, isExtVisible: !state.isExtVisible }
     default:
       return state
   }

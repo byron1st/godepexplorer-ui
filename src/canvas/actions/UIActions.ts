@@ -16,7 +16,9 @@ export const uiActions = {
     type: 'TURNON_LOADING_INDICATOR',
     payload: packagePath
   })),
-  turnOffLoadingIndicator: createAction('TURNOFF_LOADING_INDICATOR')
+  turnOffLoadingIndicator: createAction('TURNOFF_LOADING_INDICATOR'),
+  changeStdVisible: createAction('CHANGE_STD_VISIBLE'),
+  changeExtVisible: createAction('CHANGE_EXT_VISIBLE')
 }
 
 const returnsOfActions = Object.values(uiActions).map($call)

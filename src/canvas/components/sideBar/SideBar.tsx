@@ -5,6 +5,7 @@ import { uiActions } from '../../Actions'
 import { RootState } from'../../Reducers'
 import { SetGraph } from '../../../GlobalTypes'
 import SideBarList from './SideBarList'
+import ViewConfig from './ViewConfig'
 
 interface SideBarProps {
   width: number
@@ -31,6 +32,7 @@ class SideBar extends React.Component<SideBarProps> {
         minWidth={200}
         maxWidth={800}
       >
+        <ViewConfig />
         <SideBarList header='Visible nodes' nodeList={visibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
         <SideBarList header='Invisible nodes' nodeList={invisibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
       </Resizable>
