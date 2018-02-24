@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
 import { graphActions, GraphAction } from '../Actions'
-import { Node, Edge, SetGraph } from '../../GlobalTypes'
+import { Node, Edge, SetGraph, ElementSet } from '../../GlobalTypes'
 
 const INITIAL_STATE: SetGraph = {
   nodeSet: {},
@@ -11,9 +11,10 @@ const INITIAL_STATE: SetGraph = {
 export function elementSetReducers (state = INITIAL_STATE, action: GraphAction) {
   switch(action.type) {
     case getType(graphActions.updateGraph):
-      let initNodeSet: {[ID: string]: Node} = {}
-      let initEdgeSet: {[ID: string]: Edge} = {}
+      let initNodeSet: ElementSet<Node> = {}
+      let initEdgeSet: ElementSet<Edge> = {}
       const newNodeSet = action.payload.nodes.reduce((accumulated, currentNode) => {
+        currentNode.isVisible = true
         accumulated[currentNode.id] = currentNode
         return accumulated
       }, initNodeSet)

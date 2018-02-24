@@ -48,7 +48,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   }
 
   updateGraph (graph: ListGraph) {
-    this.nodes.update(graph.nodes)
+    this.nodes.update(graph.nodes.filter(node => node.isVisible))
     this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.COMP))
     this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
       edge.arrows = 'to'

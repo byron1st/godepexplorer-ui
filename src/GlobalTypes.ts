@@ -2,6 +2,7 @@ import * as vis from 'vis'
 
 export interface Node extends vis.Node {
   id: string
+  isVisible: boolean
   meta: NodeMetaInfo
 }
 
