@@ -18,7 +18,13 @@ export default class SideBarList extends React.Component<SideBarListProps> {
         <h3 className='text-light'>{this.props.header}</h3>
         <div className='list-group'>
           {
-            Object.values(this.props.nodeSet).map(node => <SideBarListItem node={node} selectedNodeSet={this.props.selectedNodeSet} />)
+            Object.values(this.props.nodeSet).map(node => (
+              <SideBarListItem
+                node={node}
+                selectedNodeSet={this.props.selectedNodeSet}
+                key={node.id + 'sidebarbutton'}
+              />
+            ))
           }
         </div>
       </div>
