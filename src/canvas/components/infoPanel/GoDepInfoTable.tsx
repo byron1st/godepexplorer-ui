@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Node, Edge, ElementSetType } from '../../../GlobalTypes'
+import { Node, Edge, ElementSet } from '../../../GlobalTypes'
 
 const keyLabelMap:{[key: string]: string} = {
   id: 'ID',
@@ -21,7 +21,7 @@ const keyLabelMap:{[key: string]: string} = {
 const edgeType = ['Composition', 'Import-Relation']
 
 type TableProps = {
-  elementSet: ElementSetType<Node> | ElementSetType<Edge>
+  elementSet: ElementSet<Node> | ElementSet<Edge>
   header: string
 }
 
@@ -48,7 +48,7 @@ const style = {
   }
 }
 
-function getNodeElements (elementSet: ElementSetType<Node>) {
+function getNodeElements (elementSet: ElementSet<Node>) {
   const jsxElements: JSX.Element[] = []
 
   Object.values(elementSet).forEach(node => {
@@ -67,7 +67,7 @@ function getNodeElements (elementSet: ElementSetType<Node>) {
   return jsxElements
 }
 
-function getEdgeElements (elementSet: ElementSetType<Edge>) {
+function getEdgeElements (elementSet: ElementSet<Edge>) {
   const jsxElements: JSX.Element[] = []
 
   Object.values(elementSet).forEach((edge, edgeIndex) => {
@@ -143,7 +143,7 @@ function getRow (key: string, value: any, index: number, reactKey: string) {
   )
 }
 
-function isEdgeList (elementSet: ElementSetType<Node> | ElementSetType<Edge>): elementSet is ElementSetType<Edge> {
+function isEdgeList (elementSet: ElementSet<Node> | ElementSet<Edge>): elementSet is ElementSet<Edge> {
   return (Object.values(elementSet)[0] as Edge).from !== undefined
 }
 

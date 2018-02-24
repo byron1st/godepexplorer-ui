@@ -2,15 +2,15 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import * as vis from 'vis'
 import * as ipc from '../../IPC'
-import { Graph, Node, Edge, ElementSet, EdgeType } from '../../../GlobalTypes'
+import { ListGraph, Node, Edge, SetGraph, EdgeType } from '../../../GlobalTypes'
 import { RootState } from '../../Reducers'
 import { graphActions, uiActions } from '../../Actions'
 
 type VisNetworkProps = {
-  elementSet: ElementSet
+  elementSet: SetGraph
   compID: string
-  selectionSet: ElementSet
-  selectElement: (selectionSet: ElementSet) => any
+  selectionSet: SetGraph
+  selectElement: (selectionSet: SetGraph) => any
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
@@ -47,7 +47,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     this.visnetwork.on('click', this.showInfo.bind(this))
   }
 
-  updateGraph (graph: Graph) {
+  updateGraph (graph: ListGraph) {
     this.nodes.update(graph.nodes)
     this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.COMP))
     this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
@@ -61,7 +61,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     this.edges.clear()
   }
 
-  selectGraph (selectionSet: ElementSet) {
+  selectGraph (selectionSet: SetGraph) {
     if (this.visnetwork) {
       this.visnetwork.unselectAll()
       this.visnetwork.setSelection({
@@ -105,7 +105,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   }
 }
 
-function isResetCommand (elementSet: ElementSet) {
+function isResetCommand (elementSet: SetGraph) {
   return Object.keys(elementSet.nodeSet).length === 0 && Object.keys(elementSet.edgeSet).length === 0
 }
 
@@ -118,7 +118,7 @@ function mapStateToProps (state: RootState) {
 
 function mapDispatchToProps (dispatch: any) {
   return {
-    selectElement: (selectionSet: ElementSet) => {
+    selectElement: (selectionSet: SetGraph) => {
       dispatch(graphActions.selectElement(selectionSet))
     },
     turnOnLoadingIndicator: (packagePath: string) => {

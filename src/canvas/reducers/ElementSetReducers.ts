@@ -1,14 +1,9 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
 import { graphActions, GraphAction } from '../Actions'
-import { Node, Edge } from '../../GlobalTypes'
+import { Node, Edge, SetGraph } from '../../GlobalTypes'
 
-export type ElementSetState = {
-  readonly nodeSet: { [ID: string]: Node }
-  readonly edgeSet: { [ID: string]: Edge }
-}
-
-const INITIAL_STATE: ElementSetState = {
+const INITIAL_STATE: SetGraph = {
   nodeSet: {},
   edgeSet: {}
 }

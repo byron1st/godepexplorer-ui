@@ -1,13 +1,13 @@
 import { $call } from 'utility-types'
 import { createAction } from 'typesafe-actions'
-import { Graph, ElementSet } from '../../GlobalTypes'
+import { ListGraph, SetGraph } from '../../GlobalTypes'
 
 export const graphActions = {
-  updateGraph: createAction('UPDATE_GRAPH', (newGraph: Graph) => ({
+  updateGraph: createAction('UPDATE_GRAPH', (newGraph: ListGraph) => ({
     type: 'UPDATE_GRAPH',
     payload: newGraph
   })),
-  selectElement: createAction('SELECT_ELEMENT', (selectionSet: ElementSet) => ({
+  selectElement: createAction('SELECT_ELEMENT', (selectionSet: SetGraph) => ({
     type: 'SELECT_ELEMENT',
     payload: selectionSet
   })),

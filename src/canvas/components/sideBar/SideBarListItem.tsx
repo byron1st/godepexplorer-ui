@@ -1,22 +1,22 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Node, Edge, ElementSetType, ElementSet } from '../../../GlobalTypes'
+import { Node, Edge, ElementSet, SetGraph } from '../../../GlobalTypes'
 import { graphActions } from '../../Actions'
 import { RootState } from '../../Reducers'
 
 type SideBarListItemProps = {
   node: Node
-  selectedNodeSet: ElementSetType<Node>
-  elementSet: ElementSet
-  selectElement: (selectionSet: ElementSet) => any
+  selectedNodeSet: ElementSet<Node>
+  elementSet: SetGraph
+  selectElement: (selectionSet: SetGraph) => any
 }
 
 class SideBarListItem extends React.Component<SideBarListItemProps> {
   selectItem () {
-    let selectionSet: ElementSet = { nodeSet: {}, edgeSet: {} }
+    let selectionSet: SetGraph = { nodeSet: {}, edgeSet: {} }
     selectionSet.nodeSet[this.props.node.id] = this.props.node
 
-    let initialEdgeSet: ElementSetType<Edge> = {}
+    let initialEdgeSet: ElementSet<Edge> = {}
     selectionSet.edgeSet = Object.values(this.props.elementSet.edgeSet)
     .filter(edge => edge.from === this.props.node.id || edge.to === this.props.node.id)
     .reduce((accumulator, currentEdge) => {
@@ -46,7 +46,7 @@ function mapStateToProps (state: RootState) {
 
 function mapDispatchToProps (dispatch: any) {
   return {
-    selectElement: (selectionSet: ElementSet) => {
+    selectElement: (selectionSet: SetGraph) => {
       dispatch(graphActions.selectElement(selectionSet))
     }
   }

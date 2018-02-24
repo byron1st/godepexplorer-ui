@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Node, Edge, ElementSetType, ElementSet } from '../../../GlobalTypes'
+import { Node, Edge, ElementSet, SetGraph } from '../../../GlobalTypes'
 import { graphActions } from '../../Actions'
 import { RootState } from '../../Reducers'
 import SideBarListItem from './SideBarListItem'
 
 type SideBarListProps = {
   header: string
-  nodeSet: ElementSetType<Node>
-  selectedNodeSet: ElementSetType<Node>
+  nodeSet: ElementSet<Node>
+  selectedNodeSet: ElementSet<Node>
 }
 
 export default class SideBarList extends React.Component<SideBarListProps> {

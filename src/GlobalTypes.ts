@@ -13,17 +13,17 @@ export interface Edge extends vis.Edge {
   meta: EdgeMetaInfo
 }
 
-export interface Graph {
+export interface ListGraph {
   nodes: Node[]
   edges: Edge[]
 }
 
-export interface ElementSet {
-  nodeSet: ElementSetType<Node>
-  edgeSet: ElementSetType<Edge>
+export interface SetGraph {
+  nodeSet: ElementSet<Node>
+  edgeSet: ElementSet<Edge>
 }
 
-export interface ElementSetType<T> {
+export interface ElementSet<T> {
   [id: string]: T
 }
 
@@ -40,17 +40,21 @@ interface NodeMetaInfo {
   isPkg: boolean
   isExternal: boolean
   isStd: boolean
-  funcSet: { [func: string]: boolean }
+  funcSet: StringSet
 }
 
 interface EdgeMetaInfo {
   [key: string]: number | { [key: string]: boolean } | string
   type: EdgeType
   count: number
-  depAtFunc: { [key: string]: boolean }
+  depAtFunc: StringSet
   arrows?: 'to' | 'from' | 'middle'
+}
+
+interface StringSet {
+  [key: string]: boolean
 }
 
 // Network-level type compositions (used by the controller module)
 export interface Request { pkgName: string }
-export interface Response extends Graph {}
+export interface Response extends ListGraph {}

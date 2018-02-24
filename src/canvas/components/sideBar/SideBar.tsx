@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import Resizable from 're-resizable'
 import { uiActions } from '../../Actions'
 import { RootState } from'../../Reducers'
-import { ElementSet } from '../../../GlobalTypes'
+import { SetGraph } from '../../../GlobalTypes'
 import SideBarList from './SideBarList'
 
 interface SideBarProps {
   width: number
-  elementSet: ElementSet
-  selectionSet: ElementSet
+  elementSet: SetGraph
+  selectionSet: SetGraph
   updateWidth: (newWidth: number) => any
 }
 

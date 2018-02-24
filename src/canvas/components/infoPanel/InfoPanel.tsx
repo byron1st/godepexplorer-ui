@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import Resizable from 're-resizable'
-import { Graph, ElementSet } from '../../../GlobalTypes'
+import { SetGraph } from '../../../GlobalTypes'
 import { RootState } from '../../Reducers'
 import { uiActions } from '../../Actions'
 import InfoTableContainer from './InfoTableContainer'
@@ -11,7 +11,7 @@ type InfoPanelProps = {
   isNodeVisible: boolean,
   isEdgeVisible: boolean,
   sideBarWidth: number,
-  selectionSet: ElementSet,
+  selectionSet: SetGraph,
   updateHeight: (newHeight: number) => any,
   changeNodeVisible: () => any,
   changeEdgeVisible: () => any
