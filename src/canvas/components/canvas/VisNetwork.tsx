@@ -33,6 +33,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
         nodes: Object.values(nextProps.elementSet.nodeSet),
         edges: Object.values(nextProps.elementSet.edgeSet)
       })
+      this.selectGraph(nextProps.selectionSet)
     }
   }
 
@@ -60,12 +61,12 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     this.edges.clear()
   }
 
-  selectGraph (selections: Graph) {
+  selectGraph (selectionSet: ElementSet) {
     if (this.visnetwork) {
       this.visnetwork.unselectAll()
       this.visnetwork.setSelection({
-        nodes: selections.nodes.map(node => node.id),
-        edges: selections.edges.map(edge => edge.id)
+        nodes: Object.values(selectionSet.nodeSet).map(node => node.id),
+        edges: Object.values(selectionSet.edgeSet).map(edge => edge.id)
       })
     }
   }
@@ -83,7 +84,6 @@ class VisNetwork extends React.Component<VisNetworkProps> {
   }
 
   showInfo (params: any) {
-    
     const selectionSet = {
       nodeSet: params.nodes.reduce((accumulated: { [id: string]: Node | Edge }, currentNodeId: string) => {
         accumulated[currentNodeId] = this.nodes.get(currentNodeId)
