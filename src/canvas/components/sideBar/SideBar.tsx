@@ -19,6 +19,8 @@ class SideBar extends React.Component<SideBarProps> {
   }
 
   render () {
+    const visibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(node => node.isVisible)
+    const invisibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(node => !node.isVisible)
     return (
       <Resizable
         className='position-fixed fixed-top bg-secondary'
@@ -29,7 +31,8 @@ class SideBar extends React.Component<SideBarProps> {
         minWidth={200}
         maxWidth={800}
       >
-        <SideBarList header='Nodes' nodeSet={this.props.elementSet.nodeSet} selectedNodeSet={this.props.selectionSet.nodeSet} />
+        <SideBarList header='Visible' nodeList={visibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
+        <SideBarList header='Invisible' nodeList={invisibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
       </Resizable>
     )
   }
