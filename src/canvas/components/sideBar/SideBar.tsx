@@ -9,6 +9,7 @@ import SideBarList from './SideBarList'
 interface SideBarProps {
   width: number
   elementSet: ElementSet
+  selectionSet: ElementSet
   updateWidth: (newWidth: number) => any
 }
 
@@ -28,7 +29,7 @@ class SideBar extends React.Component<SideBarProps> {
         minWidth={200}
         maxWidth={800}
       >
-        <SideBarList header='Nodes' nodeSet={this.props.elementSet.nodeSet} />
+        <SideBarList header='Nodes' nodeSet={this.props.elementSet.nodeSet} selectedNodeSet={this.props.selectionSet.nodeSet} />
       </Resizable>
     )
   }
@@ -47,7 +48,8 @@ const resizeEnabled = { top:false, right:true, bottom:false, left:false, topRigh
 function mapStateToProps (state: RootState) {
   return {
     width: state.uiState.sideBarWidth,
-    elementSet: state.graphState.elementSet
+    elementSet: state.graphState.elementSet,
+    selectionSet: state.graphState.selectionSet
   }
 }
 
