@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 import Resizable from 're-resizable'
 import { uiActions } from '../../Actions'
 import { RootState } from'../../Reducers'
-
+import { ElementSet } from '../../../GlobalTypes'
+import SideBarList from './SideBarList'
 
 interface SideBarProps {
   width: number
+  elementSet: ElementSet
   updateWidth: (newWidth: number) => any
 }
 
@@ -19,14 +21,14 @@ class SideBar extends React.Component<SideBarProps> {
     return (
       <Resizable
         className='position-fixed fixed-top bg-secondary'
-        style={style.ResizableComp}
+        style={{ ...style.ResizableComp, overflowY: 'auto', overflowX: 'hidden' }}
         size={{ height: '100%', width: this.props.width }}
         enable={resizeEnabled}
         onResizeStop={this.updateWidth.bind(this)}
         minWidth={200}
         maxWidth={800}
       >
-        
+        <SideBarList header='Nodes' nodeSet={this.props.elementSet.nodeSet} />
       </Resizable>
     )
   }
@@ -35,7 +37,8 @@ class SideBar extends React.Component<SideBarProps> {
 const style = {
   ResizableComp: {
     zIndex: 1010,
-    borderStyle: 'none outset none none'
+    borderStyle: 'none outset none none',
+    padding: '66px 10px 10px 10px'
   }
 }
 
@@ -43,7 +46,8 @@ const resizeEnabled = { top:false, right:true, bottom:false, left:false, topRigh
 
 function mapStateToProps (state: RootState) {
   return {
-    width: state.uiState.sideBarWidth
+    width: state.uiState.sideBarWidth,
+    elementSet: state.graphState.elementSet
   }
 }
 
