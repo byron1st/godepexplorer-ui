@@ -29,13 +29,13 @@ class MenuList extends React.Component<MenuListProps> {
 
   render () {
     return [
-      <div className='collapse navbar-collapse' id='mainMenu'>
+      <div className='collapse navbar-collapse' id='mainMenu' key='menu-list-key'>
         <div className='navbar-nav'>
             <a className='nav-item nav-link' onClick={this.openSelectDirectoryDialog.bind(this)}>Load</a>
             <a className='nav-item nav-link' onClick={this.props.resetGraph}>Reset</a>
         </div>
       </div>,
-      <span className='navbar-text'>{this.props.isLoading ? <span><i className='fas fa-spinner fa-pulse' /> {this.props.loadingPath}</span> : null}</span>
+      <span className='navbar-text' key='loading-indicator-key'>{this.props.isLoading ? <span><i className='fas fa-spinner fa-pulse' /> {this.props.loadingPath}</span> : null}</span>
     ]
   }
 }
