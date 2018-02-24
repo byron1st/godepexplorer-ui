@@ -5,11 +5,14 @@ import * as ipc from '../../IPC'
 import { ListGraph, Node, Edge, SetGraph, EdgeType } from '../../../GlobalTypes'
 import { RootState } from '../../Reducers'
 import { graphActions, uiActions } from '../../Actions'
+import { filterNodeVisibility } from '../../util'
 
 type VisNetworkProps = {
   elementSet: SetGraph
   compID: string
   selectionSet: SetGraph
+  isStdVisible: boolean
+  isExtVisible: boolean
   selectElement: (selectionSet: SetGraph) => any
   turnOnLoadingIndicator: (packagePath: string) => any
 }
@@ -29,10 +32,8 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     if (isResetCommand(nextProps.elementSet)) {
       this.resetGraph()
     } else {
-      this.updateGraph({
-        nodes: Object.values(nextProps.elementSet.nodeSet),
-        edges: Object.values(nextProps.elementSet.edgeSet)
-      })
+      console.log(nextProps)
+      this.updateGraph(nextProps)
       this.selectGraph(nextProps.selectionSet)
     }
   }
@@ -47,8 +48,14 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     this.visnetwork.on('click', this.showInfo.bind(this))
   }
 
-  updateGraph (graph: ListGraph) {
-    this.nodes.update(graph.nodes.filter(node => node.isVisible))
+  updateGraph (nextProps: VisNetworkProps) {
+    this.resetGraph()
+
+    const graph = {
+      nodes: Object.values(nextProps.elementSet.nodeSet),
+      edges: Object.values(nextProps.elementSet.edgeSet)
+    }
+    this.nodes.update(graph.nodes.filter(node => filterNodeVisibility(node, nextProps.isStdVisible, nextProps.isExtVisible)))
     this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.COMP))
     this.edges.update(graph.edges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
       edge.arrows = 'to'
@@ -112,7 +119,9 @@ function isResetCommand (elementSet: SetGraph) {
 function mapStateToProps (state: RootState) {
   return {
     elementSet: state.graphState.elementSet,
-    selectionSet: state.graphState.selectionSet
+    selectionSet: state.graphState.selectionSet,
+    isStdVisible: state.uiState.isStdVisible,
+    isExtVisible: state.uiState.isExtVisible
   }
 }
 

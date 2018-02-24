@@ -9,6 +9,7 @@ type SideBarListItemProps = {
   node: Node
   selectedNodeSet: ElementSet<Node>
   elementSet: SetGraph
+  isClickable: boolean
   selectElement: (selectionSet: SetGraph) => any
 }
 
@@ -26,14 +27,6 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
     }, initialEdgeSet)
 
     this.props.selectElement(selectionSet)
-  }
-
-  getVisibilityText (isVisible: boolean): JSX.Element {
-    let text: JSX.Element
-    isVisible
-    ? text = <span className='badge badge-primary badge-pill'>visible</span>
-    : text = <span className='badge badge-secondary badge-pill'>hide</span>
-    return text
   }
 
   getMenuTemplate (nodeId: string) {
@@ -61,11 +54,10 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
       <button
         type='button'
         className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
-        onClick={this.selectItem.bind(this)}
+        onClick={this.props.isClickable ? this.selectItem.bind(this) : null}
         onContextMenu={this.openContextMenu.bind(this)}
       >
         {this.props.node.label}
-        {this.getVisibilityText(this.props.node.isVisible)}
       </button>
     )
   }

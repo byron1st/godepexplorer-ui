@@ -9,6 +9,7 @@ type SideBarListProps = {
   header: string
   nodeList: Node[]
   selectedNodeSet: ElementSet<Node>
+  isClickable: boolean
 }
 
 export default class SideBarList extends React.Component<SideBarListProps> {
@@ -23,6 +24,7 @@ export default class SideBarList extends React.Component<SideBarListProps> {
                 node={node}
                 selectedNodeSet={this.props.selectedNodeSet}
                 key={node.id + 'sidebarbutton'}
+                isClickable={this.props.isClickable}
               />
             ))
           }

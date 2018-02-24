@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import Resizable from 're-resizable'
 import { uiActions } from '../../Actions'
 import { RootState } from'../../Reducers'
-import { SetGraph } from '../../../GlobalTypes'
+import { SetGraph, Node } from '../../../GlobalTypes'
+import { filterNodeVisibility } from '../../util'
 import SideBarList from './SideBarList'
 import ViewConfig from './ViewConfig'
 
@@ -11,6 +12,8 @@ interface SideBarProps {
   width: number
   elementSet: SetGraph
   selectionSet: SetGraph
+  isStdVisible: boolean
+  isExtVisible: boolean
   updateWidth: (newWidth: number) => any
 }
 
@@ -20,8 +23,8 @@ class SideBar extends React.Component<SideBarProps> {
   }
 
   render () {
-    const visibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(node => node.isVisible)
-    const invisibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(node => !node.isVisible)
+    const visibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(node => filterNodeVisibility(node, this.props.isStdVisible, this.props.isExtVisible))
+    const invisibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(node => !filterNodeVisibility(node, this.props.isStdVisible, this.props.isExtVisible))
     return (
       <Resizable
         className='position-fixed fixed-top bg-secondary'
@@ -33,8 +36,8 @@ class SideBar extends React.Component<SideBarProps> {
         maxWidth={800}
       >
         <ViewConfig />
-        <SideBarList header='Visible nodes' nodeList={visibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
-        <SideBarList header='Invisible nodes' nodeList={invisibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} />
+        <SideBarList header='Visible nodes' nodeList={visibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} isClickable={true} />
+        <SideBarList header='Invisible nodes' nodeList={invisibleNodeList} selectedNodeSet={this.props.selectionSet.nodeSet} isClickable={false} />
       </Resizable>
     )
   }
@@ -54,7 +57,9 @@ function mapStateToProps (state: RootState) {
   return {
     width: state.uiState.sideBarWidth,
     elementSet: state.graphState.elementSet,
-    selectionSet: state.graphState.selectionSet
+    selectionSet: state.graphState.selectionSet,
+    isStdVisible: state.uiState.isStdVisible,
+    isExtVisible: state.uiState.isExtVisible
   }
 }
 
