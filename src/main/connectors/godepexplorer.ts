@@ -3,7 +3,7 @@ import { SocketConnector, gatherResponse } from './socketConnector'
 
 class GoDepExplorerConn implements SocketConnector {
   send(data: string, path: string): Promise<string> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const PostOpts: http.RequestOptions = {
         host: 'localhost',
         port: '1111',

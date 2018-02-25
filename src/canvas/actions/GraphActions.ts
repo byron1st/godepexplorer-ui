@@ -12,10 +12,13 @@ export const graphActions = {
     payload: selectionSet
   })),
   resetGraph: createAction('RESET_GRAPH'),
-  changeSingleNodeVisible: createAction('CHANGE_SINGLE_NODE_VISIBLE', (node: Node) => ({
-    type: 'CHANGE_SINGLE_NODE_VISIBLE',
-    payload: node
-  }))
+  changeSingleNodeVisible: createAction(
+    'CHANGE_SINGLE_NODE_VISIBLE',
+    (node: Node) => ({
+      type: 'CHANGE_SINGLE_NODE_VISIBLE',
+      payload: node
+    })
+  )
 }
 
 const returnsOfActions = Object.values(graphActions).map($call)

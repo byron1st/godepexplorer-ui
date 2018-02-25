@@ -7,7 +7,7 @@ type CanvasProps = {
 
 export default (props: CanvasProps) => (
   <div style={style.container}>
-    <div id={props.compID} style={style.canvas} key='canvas-vis' />,
+    <div id={props.compID} style={style.canvas} key="canvas-vis" />,
     <VisNetwork compID={props.compID} />
   </div>
 )

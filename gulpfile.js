@@ -11,14 +11,14 @@ gulp.task('del', () => {
 })
 
 gulp.task('ts', ['del'], () => {
-  return tsProject.src()
+  return tsProject
+    .src()
     .pipe(tsProject())
     .js.pipe(gulp.dest(DEST))
 })
 
 gulp.task('copy', ['del'], () => {
-  return gulp.src(COPY_FILES)
-    .pipe(gulp.dest(DEST))
+  return gulp.src(COPY_FILES).pipe(gulp.dest(DEST))
 })
 
 gulp.task('default', ['copy', 'ts'])

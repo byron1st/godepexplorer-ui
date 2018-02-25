@@ -24,8 +24,8 @@ const INITIAL_STATE: UIState = {
   isExtVisible: true
 }
 
-export function uiReducers (state = INITIAL_STATE, action: UIAction) {
-  switch(action.type) {
+export function uiReducers(state = INITIAL_STATE, action: UIAction) {
+  switch (action.type) {
     case getType(uiActions.updateWidth):
       return { ...state, sideBarWidth: action.payload }
     case getType(uiActions.updateHeight):

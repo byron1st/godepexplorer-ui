@@ -57,5 +57,7 @@ interface StringSet {
 }
 
 // Network-level type compositions (used by the controller module)
-export interface Request { pkgName: string }
+export interface Request {
+  pkgName: string
+}
 export interface Response extends ListGraph {}

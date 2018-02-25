@@ -10,13 +10,13 @@ import * as IPCType from '../IPCTypes'
 const CanvasIndexUrl = url.format({
   pathname: path.join(__dirname, '../canvas/index.html'),
   protocol: 'file:',
-  slashes: true,
+  slashes: true
 })
 
 let canvasWindow: Electron.BrowserWindow
 
 // Declare global functions
-function createCanvasWindow () {
+function createCanvasWindow() {
   const windowOpts = {
     height: 800,
     width: 1200
@@ -46,12 +46,12 @@ function createCanvasWindow () {
   })
 }
 
-function initializeApp (app: App) {
+function initializeApp(app: App) {
   // Subscribe the app events
   app.on('ready', createCanvasWindow)
 
   app.on('window-all-closed', () => {
-    if (process.platform !== "darwin") {
+    if (process.platform !== 'darwin') {
       app.quit()
     }
   })
@@ -63,18 +63,23 @@ function initializeApp (app: App) {
   })
 }
 
-function initializeIPC () {
+function initializeIPC() {
   // Connect to Godepexplorer
-  ipcMain.on(IPCType.GetDepOfPkg.Request, getBasicHandlerForGodepexplorer('/dep', IPCType.GetDepOfPkg.Response))
+  ipcMain.on(
+    IPCType.GetDepOfPkg.Request,
+    getBasicHandlerForGodepexplorer('/dep', IPCType.GetDepOfPkg.Response)
+  )
 }
 
-function getBasicHandlerForGodepexplorer (targetPath: string, returnEventType: string) {
+function getBasicHandlerForGodepexplorer(
+  targetPath: string,
+  returnEventType: string
+) {
   return (event: any, pkgName: string) => {
     const data: types.Request = { pkgName }
 
     // Connect to godepexplorer
-    godepexplorer.send(JSON.stringify(data), targetPath)
-    .then(responseData => {
+    godepexplorer.send(JSON.stringify(data), targetPath).then(responseData => {
       const dirStruct: types.Response = JSON.parse(responseData)
 
       // Return

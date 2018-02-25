@@ -12,10 +12,13 @@ export const uiActions = {
   })),
   changeNodeVisible: createAction('CHANGE_NODE_VISIBLE'),
   changeEdgeVisible: createAction('CHANGE_EDGE_VISIBLE'),
-  turnOnLoadingIndicator: createAction('TURNON_LOADING_INDICATOR', (packagePath: string) => ({
-    type: 'TURNON_LOADING_INDICATOR',
-    payload: packagePath
-  })),
+  turnOnLoadingIndicator: createAction(
+    'TURNON_LOADING_INDICATOR',
+    (packagePath: string) => ({
+      type: 'TURNON_LOADING_INDICATOR',
+      payload: packagePath
+    })
+  ),
   turnOffLoadingIndicator: createAction('TURNOFF_LOADING_INDICATOR'),
   changeStdVisible: createAction('CHANGE_STD_VISIBLE'),
   changeExtVisible: createAction('CHANGE_EXT_VISIBLE')

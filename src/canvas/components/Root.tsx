@@ -17,28 +17,31 @@ type RootProps = {
 }
 
 class Root extends React.Component<RootProps> {
-  constructor (props: RootProps) {
+  constructor(props: RootProps) {
     super(props)
 
-    ipcRenderer.on(IPCType.GetDepOfPkg.Response, (event: any, newGraph: ListGraph) => {
-      this.props.turnOffLoadingIndicator()
-      this.props.updateGraph(newGraph)
-    })
+    ipcRenderer.on(
+      IPCType.GetDepOfPkg.Response,
+      (event: any, newGraph: ListGraph) => {
+        this.props.turnOffLoadingIndicator()
+        this.props.updateGraph(newGraph)
+      }
+    )
   }
 
-  render () {
+  render() {
     return (
-      <div style={{width: 'inherit', height: 'inherit'}}>
+      <div style={{ width: 'inherit', height: 'inherit' }}>
         <SideBar />
-        <MenuBar appTitle='GoDepExplorer UI' />
+        <MenuBar appTitle="GoDepExplorer UI" />
         <InfoPanel />
-        <Canvas compID={VisNetworkCompID}/>
+        <Canvas compID={VisNetworkCompID} />
       </div>
     )
   }
 }
 
-function mapDispatchToProps (dispatch: any) {
+function mapDispatchToProps(dispatch: any) {
   return {
     updateGraph: (newGraph: ListGraph) => {
       dispatch(graphActions.updateGraph(newGraph))

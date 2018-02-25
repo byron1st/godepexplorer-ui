@@ -5,7 +5,7 @@ import { SetGraph } from '../../GlobalTypes'
 import { elementSetReducers } from './ElementSetReducers'
 
 export type GraphState = {
-  readonly elementSet: SetGraph,
+  readonly elementSet: SetGraph
   readonly selectionSet: SetGraph
 }
 
@@ -17,7 +17,7 @@ const INITIAL_SELECTIONSET: SetGraph = {
 export const graphReducers = combineReducers<GraphState>({
   elementSet: elementSetReducers,
   selectionSet: (state = INITIAL_SELECTIONSET, action: GraphAction) => {
-    switch(action.type) {
+    switch (action.type) {
       case getType(graphActions.selectElement):
         return action.payload
       default:
