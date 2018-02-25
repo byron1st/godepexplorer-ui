@@ -1,18 +1,18 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
-import { graphActions, GraphAction } from '../Actions'
-import { Node, Edge, SetGraph, ElementSet } from '../../GlobalTypes'
+import { IEdge, IElementSet, INode, ISetGraph } from '../../GlobalTypes'
+import { GraphAction, graphActions } from '../Actions'
 
-const INITIAL_STATE: SetGraph = {
-  nodeSet: {},
-  edgeSet: {}
+const INITIAL_STATE: ISetGraph = {
+  edgeSet: {},
+  nodeSet: {}
 }
 
 export function elementSetReducers(state = INITIAL_STATE, action: GraphAction) {
   switch (action.type) {
     case getType(graphActions.updateGraph):
-      let initNodeSet: ElementSet<Node> = {}
-      let initEdgeSet: ElementSet<Edge> = {}
+      const initNodeSet: IElementSet<INode> = {}
+      const initEdgeSet: IElementSet<IEdge> = {}
       const newNodeSet = action.payload.nodes.reduce(
         (accumulated, currentNode) => {
           currentNode.isVisible = true
@@ -29,20 +29,20 @@ export function elementSetReducers(state = INITIAL_STATE, action: GraphAction) {
         initEdgeSet
       )
       return {
-        nodeSet: { ...state.nodeSet, ...newNodeSet },
-        edgeSet: { ...state.edgeSet, ...newEdgeSet }
+        edgeSet: { ...state.edgeSet, ...newEdgeSet },
+        nodeSet: { ...state.nodeSet, ...newNodeSet }
       }
     case getType(graphActions.resetGraph):
       return INITIAL_STATE
     case getType(graphActions.changeSingleNodeVisible):
-      let newSet = { ...state.nodeSet }
+      const newSet = { ...state.nodeSet }
       newSet[action.payload.id] = {
         ...state.nodeSet[action.payload.id],
         isVisible: !state.nodeSet[action.payload.id].isVisible
       }
       return {
-        nodeSet: newSet,
-        edgeSet: state.edgeSet
+        edgeSet: state.edgeSet,
+        nodeSet: newSet
       }
     default:
       return state

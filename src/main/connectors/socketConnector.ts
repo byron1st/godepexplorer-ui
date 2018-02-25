@@ -1,6 +1,6 @@
 import * as http from 'http'
 
-export interface SocketConnector {
+export interface ISocketConnector {
   send(data: string, path: string): Promise<string>
 }
 

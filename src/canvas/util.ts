@@ -1,13 +1,13 @@
-import { Node } from '../GlobalTypes'
+import { INode } from '../GlobalTypes'
 
 export function filterNodeVisibility(
-  node: Node,
+  node: INode,
   isStdVisible: boolean,
   isExtVisible: boolean
 ): boolean {
   if (node.isVisible) {
-    let stdVisibility = isStdVisible && node.meta.isStd
-    let extVisibility = isExtVisible && node.meta.isExternal
+    const stdVisibility = isStdVisible && node.meta.isStd
+    const extVisibility = isExtVisible && node.meta.isExternal
 
     return (
       (!node.meta.isStd && !node.meta.isExternal) ||

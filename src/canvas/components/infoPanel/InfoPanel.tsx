@@ -1,33 +1,29 @@
+import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import Resizable from 're-resizable'
-import { SetGraph } from '../../../GlobalTypes'
-import { RootState } from '../../Reducers'
+import { ISetGraph } from '../../../GlobalTypes'
 import { uiActions } from '../../Actions'
+import { IRootState } from '../../Reducers'
 import InfoTableContainer from './InfoTableContainer'
 
-type InfoPanelProps = {
+interface IInfoPanelProps {
   height: number
   isNodeVisible: boolean
   isEdgeVisible: boolean
   sideBarWidth: number
-  selectionSet: SetGraph
+  selectionSet: ISetGraph
   updateHeight: (newHeight: number) => any
   changeNodeVisible: () => any
   changeEdgeVisible: () => any
 }
 
-class InfoPanel extends React.Component<InfoPanelProps> {
-  updateHeight(
-    event: MouseEvent,
-    direction: string,
-    ref: HTMLElement,
-    delta: { width: number; height: number }
-  ) {
-    this.props.updateHeight(this.props.height + delta.height)
-  }
+class InfoPanel extends React.Component<IInfoPanelProps> {
+  constructor(props: IInfoPanelProps) {
+    super(props)
 
-  render() {
+    this.updateHeight = this.updateHeight.bind(this)
+  }
+  public render() {
     return (
       <Resizable
         // @ts-ignore
@@ -37,7 +33,7 @@ class InfoPanel extends React.Component<InfoPanelProps> {
         style={{ ...style.ResizableComp, paddingLeft: this.props.sideBarWidth }}
         size={{ width: '100%', height: this.props.height }}
         enable={resizeEnabled}
-        onResizeStop={this.updateHeight.bind(this)}
+        onResizeStop={this.updateHeight}
         minHeight={200}
         maxHeight={800}
       >
@@ -56,48 +52,57 @@ class InfoPanel extends React.Component<InfoPanelProps> {
       </Resizable>
     )
   }
+
+  private updateHeight(
+    event: MouseEvent,
+    direction: string,
+    ref: HTMLElement,
+    delta: { width: number; height: number }
+  ) {
+    this.props.updateHeight(this.props.height + delta.height)
+  }
 }
 
 const style = {
   ResizableComp: {
-    zIndex: 1009,
     borderStyle: 'outset none none none',
+    overflowY: 'auto',
     position: 'fixed',
-    overflowY: 'auto'
+    zIndex: 1009
   }
 }
 
 const resizeEnabled = {
-  top: true,
-  right: false,
   bottom: false,
-  left: false,
-  topRight: false,
-  bottomRight: false,
   bottomLeft: false,
-  topLeft: false
+  bottomRight: false,
+  left: false,
+  right: false,
+  top: true,
+  topLeft: false,
+  topRight: false
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(state: IRootState) {
   return {
     height: state.uiState.infoPanelHeight,
-    sideBarWidth: state.uiState.sideBarWidth,
-    isNodeVisible: state.uiState.isNodeVisible,
     isEdgeVisible: state.uiState.isEdgeVisible,
-    selectionSet: state.graphState.selectionSet
+    isNodeVisible: state.uiState.isNodeVisible,
+    selectionSet: state.graphState.selectionSet,
+    sideBarWidth: state.uiState.sideBarWidth
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    updateHeight: (newHeight: number) => {
-      dispatch(uiActions.updateHeight(newHeight))
+    changeEdgeVisible: () => {
+      dispatch(uiActions.changeEdgeVisible())
     },
     changeNodeVisible: () => {
       dispatch(uiActions.changeNodeVisible())
     },
-    changeEdgeVisible: () => {
-      dispatch(uiActions.changeEdgeVisible())
+    updateHeight: (newHeight: number) => {
+      dispatch(uiActions.updateHeight(newHeight))
     }
   }
 }

@@ -1,10 +1,10 @@
-import { app, ipcMain, BrowserWindow, App } from 'electron'
-import * as url from 'url'
+import { App, app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
-import * as util from './util'
-import godepexplorer from './connectors/godepexplorer'
+import * as url from 'url'
 import * as types from '../GlobalTypes'
 import * as IPCType from '../IPCTypes'
+import godepexplorer from './connectors/godepexplorer'
+import * as util from './util'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -46,7 +46,7 @@ function createCanvasWindow() {
   })
 }
 
-function initializeApp(app: App) {
+function initializeApp() {
   // Subscribe the app events
   app.on('ready', createCanvasWindow)
 
@@ -76,11 +76,11 @@ function getBasicHandlerForGodepexplorer(
   returnEventType: string
 ) {
   return (event: any, pkgName: string) => {
-    const data: types.Request = { pkgName }
+    const data: types.IRequest = { pkgName }
 
     // Connect to godepexplorer
     godepexplorer.send(JSON.stringify(data), targetPath).then(responseData => {
-      const dirStruct: types.Response = JSON.parse(responseData)
+      const dirStruct: types.IListGraph = JSON.parse(responseData)
 
       // Return
       event.sender.send(returnEventType, dirStruct)
@@ -89,5 +89,5 @@ function getBasicHandlerForGodepexplorer(
 }
 
 // Running scripts
-initializeApp(app)
+initializeApp()
 initializeIPC()

@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Node, Edge } from '../../../GlobalTypes'
+import { IEdge, INode } from '../../../GlobalTypes'
 import Table from './GoDepInfoTable'
 
-type InfoTableProps = {
-  elementSet: { [id: string]: Node } | { [id: string]: Edge }
+interface IInfoTableProps {
+  elementSet: { [id: string]: INode } | { [id: string]: IEdge }
   header: string
   isVisible: boolean
   changeVisibility: () => any
 }
 
-export default (props: InfoTableProps) => (
+export default (props: IInfoTableProps) => (
   <div>
     <h3 className="text-dark" onClick={props.changeVisibility}>
       {props.header}

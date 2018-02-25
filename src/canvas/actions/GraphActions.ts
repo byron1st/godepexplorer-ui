@@ -1,20 +1,20 @@
-import { $call } from 'utility-types'
 import { createAction } from 'typesafe-actions'
-import { ListGraph, SetGraph, Node } from '../../GlobalTypes'
+import { $call } from 'utility-types'
+import { INode, IListGraph, ISetGraph } from '../../GlobalTypes'
 
 export const graphActions = {
-  updateGraph: createAction('UPDATE_GRAPH', (newGraph: ListGraph) => ({
+  updateGraph: createAction('UPDATE_GRAPH', (newGraph: IListGraph) => ({
     type: 'UPDATE_GRAPH',
     payload: newGraph
   })),
-  selectElement: createAction('SELECT_ELEMENT', (selectionSet: SetGraph) => ({
+  selectElement: createAction('SELECT_ELEMENT', (selectionSet: ISetGraph) => ({
     type: 'SELECT_ELEMENT',
     payload: selectionSet
   })),
   resetGraph: createAction('RESET_GRAPH'),
   changeSingleNodeVisible: createAction(
     'CHANGE_SINGLE_NODE_VISIBLE',
-    (node: Node) => ({
+    (node: INode) => ({
       type: 'CHANGE_SINGLE_NODE_VISIBLE',
       payload: node
     })

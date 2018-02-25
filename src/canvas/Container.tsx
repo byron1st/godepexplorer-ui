@@ -1,17 +1,17 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { rootReducers } from './Reducers'
-import { Provider, connect } from 'react-redux'
+import { connect, Provider } from 'react-redux'
 import { createStore } from 'redux'
 import Root from './components/Root'
+import { rootReducers } from './Reducers'
 
 class Container extends React.Component {
-  render() {
+  public render() {
     const store = createStore(
       rootReducers,
-      //@ts-ignore: window. ... for ReduxDevTool
+      // @ts-ignore: window. ... for ReduxDevTool
       window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        //@ts-ignore: window. ... for ReduxDevTool
+        // @ts-ignore: window. ... for ReduxDevTool
         window.__REDUX_DEVTOOLS_EXTENSION__()
     )
     return (
@@ -22,5 +22,5 @@ class Container extends React.Component {
   }
 }
 
-//@ts-ignore: 'document' is working well.
+// @ts-ignore: 'document' is working well.
 ReactDOM.render(<Container />, document.getElementById('container'))

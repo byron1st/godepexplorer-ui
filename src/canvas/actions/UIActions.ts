@@ -1,5 +1,5 @@
-import { $call } from 'utility-types'
 import { createAction } from 'typesafe-actions'
+import { $call } from 'utility-types'
 
 export const uiActions = {
   updateWidth: createAction('UPDATE_WIDTH', (newWidth: number) => ({

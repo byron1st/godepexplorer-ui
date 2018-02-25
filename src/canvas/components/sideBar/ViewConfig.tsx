@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { RootState } from '../../Reducers'
 import { uiActions } from '../../Actions'
+import { IRootState } from '../../Reducers'
 import UnaryViewConfig from './UnaryViewConfig'
 
-type ViewConfigProps = {
+interface IViewConfigProps {
   isStdVisible: boolean
   isExtVisible: boolean
   changeStdVisible: () => any
   changeExtVisible: () => any
 }
 
-class ViewConfig extends React.Component<ViewConfigProps> {
-  render() {
+class ViewConfig extends React.Component<IViewConfigProps> {
+  public render() {
     return (
       <div>
         <UnaryViewConfig
@@ -34,17 +34,17 @@ class ViewConfig extends React.Component<ViewConfigProps> {
   }
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(state: IRootState) {
   return {
-    isStdVisible: state.uiState.isStdVisible,
-    isExtVisible: state.uiState.isExtVisible
+    isExtVisible: state.uiState.isExtVisible,
+    isStdVisible: state.uiState.isStdVisible
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    changeStdVisible: () => dispatch(uiActions.changeStdVisible()),
-    changeExtVisible: () => dispatch(uiActions.changeExtVisible())
+    changeExtVisible: () => dispatch(uiActions.changeExtVisible()),
+    changeStdVisible: () => dispatch(uiActions.changeStdVisible())
   }
 }
 

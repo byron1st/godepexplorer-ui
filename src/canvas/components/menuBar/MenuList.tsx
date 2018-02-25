@@ -1,36 +1,25 @@
+import { remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { remote } from 'electron'
-import * as IPC from '../../ipc'
 import { graphActions, uiActions } from '../../Actions'
-import { RootState } from '../../Reducers'
+import * as IPC from '../../ipc'
+import { IRootState } from '../../Reducers'
 
-type MenuListProps = {
+interface IMenuListProps {
   loadingPath: string
   isLoading: boolean
   resetGraph: () => any
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
-class MenuList extends React.Component<MenuListProps> {
-  openSelectDirectoryDialog() {
-    remote.dialog.showOpenDialog(
-      {
-        properties: ['openDirectory']
-      },
-      (filepaths: string[]) => {
-        if (filepaths) {
-          const packagePath = extractRootPath(filepaths[0])
-          if (packagePath) {
-            this.props.turnOnLoadingIndicator(packagePath)
-            IPC.sendDepReq(packagePath)
-          }
-        }
-      }
-    )
+class MenuList extends React.Component<IMenuListProps> {
+  constructor(props: IMenuListProps) {
+    super(props)
+
+    this.openSelectDirectoryDialog = this.openSelectDirectoryDialog.bind(this)
   }
 
-  render() {
+  public render() {
     return [
       <div
         className="collapse navbar-collapse"
@@ -40,7 +29,7 @@ class MenuList extends React.Component<MenuListProps> {
         <div className="navbar-nav">
           <a
             className="nav-item nav-link"
-            onClick={this.openSelectDirectoryDialog.bind(this)}
+            onClick={this.openSelectDirectoryDialog}
           >
             Load
           </a>
@@ -57,6 +46,23 @@ class MenuList extends React.Component<MenuListProps> {
         ) : null}
       </span>
     ]
+  }
+
+  private openSelectDirectoryDialog() {
+    remote.dialog.showOpenDialog(
+      {
+        properties: ['openDirectory']
+      },
+      (filepaths: string[]) => {
+        if (filepaths) {
+          const packagePath = extractRootPath(filepaths[0])
+          if (packagePath) {
+            this.props.turnOnLoadingIndicator(packagePath)
+            IPC.sendDepReq(packagePath)
+          }
+        }
+      }
+    )
   }
 }
 
@@ -77,10 +83,10 @@ function extractRootPath(filePath: string) {
   }
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(state: IRootState) {
   return {
-    loadingPath: state.uiState.loadingPath,
-    isLoading: state.uiState.isLoading
+    isLoading: state.uiState.isLoading,
+    loadingPath: state.uiState.loadingPath
   }
 }
 

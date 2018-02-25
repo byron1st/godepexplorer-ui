@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
-import { uiActions, UIAction } from '../Actions'
+import { UIAction, uiActions } from '../Actions'
 
-export type UIState = {
+export interface IUIState {
   readonly sideBarWidth: number
   readonly infoPanelHeight: number
   readonly isNodeVisible: boolean
@@ -13,15 +13,15 @@ export type UIState = {
   readonly isExtVisible: boolean
 }
 
-const INITIAL_STATE: UIState = {
-  sideBarWidth: 300,
+const INITIAL_STATE: IUIState = {
   infoPanelHeight: 300,
-  isNodeVisible: true,
   isEdgeVisible: true,
-  loadingPath: '',
+  isExtVisible: true,
   isLoading: false,
+  isNodeVisible: true,
   isStdVisible: true,
-  isExtVisible: true
+  loadingPath: '',
+  sideBarWidth: 300
 }
 
 export function uiReducers(state = INITIAL_STATE, action: UIAction) {

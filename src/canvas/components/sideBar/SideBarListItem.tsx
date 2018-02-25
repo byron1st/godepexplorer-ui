@@ -1,25 +1,54 @@
+import { remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { remote } from 'electron'
-import { Node, Edge, ElementSet, SetGraph } from '../../../GlobalTypes'
+import { IEdge, IElementSet, INode, ISetGraph } from '../../../GlobalTypes'
 import { graphActions } from '../../Actions'
-import { RootState } from '../../Reducers'
+import { IRootState } from '../../Reducers'
 
-type SideBarListItemProps = {
-  node: Node
-  selectedNodeSet: ElementSet<Node>
-  elementSet: SetGraph
+interface ISideBarListItemProps {
+  node: INode
+  selectedNodeSet: IElementSet<INode>
+  elementSet: ISetGraph
   isClickable: boolean
-  selectElement: (selectionSet: SetGraph) => any
-  changeSingleNodeVisible: (node: Node) => any
+  selectElement: (selectionSet: ISetGraph) => any
+  changeSingleNodeVisible: (node: INode) => any
 }
 
-class SideBarListItem extends React.Component<SideBarListItemProps> {
-  selectItem() {
-    let selectionSet: SetGraph = { nodeSet: {}, edgeSet: {} }
+class SideBarListItem extends React.Component<ISideBarListItemProps> {
+  constructor(props: ISideBarListItemProps) {
+    super(props)
+
+    this.openContextMenu = this.openContextMenu.bind(this)
+  }
+  public render() {
+    let isActive = ''
+    if (this.props.selectedNodeSet[this.props.node.id] !== undefined) {
+      isActive = 'active'
+    }
+
+    return (
+      <button
+        type="button"
+        className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
+        onClick={this.props.isClickable ? this.selectItem.bind(this) : null}
+        onContextMenu={this.openContextMenu}
+      >
+        {this.props.node.label}
+        <span className="badge badge-primary badge-pill">
+          {this.props.node.meta.isStd ? 'standard' : ''}
+        </span>
+        <span className="badge badge-secondary badge-pill">
+          {this.props.node.meta.isExternal ? 'external' : ''}
+        </span>
+      </button>
+    )
+  }
+
+  private selectItem() {
+    const selectionSet: ISetGraph = { nodeSet: {}, edgeSet: {} }
     selectionSet.nodeSet[this.props.node.id] = this.props.node
 
-    let initialEdgeSet: ElementSet<Edge> = {}
+    const initialEdgeSet: IElementSet<IEdge> = {}
     selectionSet.edgeSet = Object.values(this.props.elementSet.edgeSet)
       .filter(
         edge =>
@@ -33,7 +62,7 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
     this.props.selectElement(selectionSet)
   }
 
-  getMenuTemplate(node: Node, handleChange: (node: Node) => any) {
+  private getMenuTemplate(node: INode, handleChange: (node: INode) => any) {
     if (this.props.isClickable) {
       return [
         {
@@ -55,7 +84,7 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
     }
   }
 
-  openContextMenu(e: any) {
+  private openContextMenu(e: any) {
     const menu = remote.Menu.buildFromTemplate(
       this.getMenuTemplate(this.props.node, this.props.changeSingleNodeVisible)
     )
@@ -63,33 +92,9 @@ class SideBarListItem extends React.Component<SideBarListItemProps> {
     e.preventDefault()
     menu.popup(remote.getCurrentWindow())
   }
-
-  render() {
-    let isActive = ''
-    if (this.props.selectedNodeSet[this.props.node.id] !== undefined) {
-      isActive = 'active'
-    }
-
-    return (
-      <button
-        type="button"
-        className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
-        onClick={this.props.isClickable ? this.selectItem.bind(this) : null}
-        onContextMenu={this.openContextMenu.bind(this)}
-      >
-        {this.props.node.label}
-        <span className="badge badge-primary badge-pill">
-          {this.props.node.meta.isStd ? 'standard' : ''}
-        </span>
-        <span className="badge badge-secondary badge-pill">
-          {this.props.node.meta.isExternal ? 'external' : ''}
-        </span>
-      </button>
-    )
-  }
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(state: IRootState) {
   return {
     elementSet: state.graphState.elementSet
   }
@@ -97,11 +102,11 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    selectElement: (selectionSet: SetGraph) => {
-      dispatch(graphActions.selectElement(selectionSet))
-    },
-    changeSingleNodeVisible: (node: Node) => {
+    changeSingleNodeVisible: (node: INode) => {
       dispatch(graphActions.changeSingleNodeVisible(node))
+    },
+    selectElement: (selectionSet: ISetGraph) => {
+      dispatch(graphActions.selectElement(selectionSet))
     }
   }
 }

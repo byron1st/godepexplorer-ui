@@ -1,31 +1,31 @@
 import * as React from 'react'
-import { Node, Edge, ElementSet } from '../../../GlobalTypes'
+import { IEdge, IElementSet, INode } from '../../../GlobalTypes'
 
 const keyLabelMap: { [key: string]: string } = {
-  id: 'ID',
-  label: 'Label',
-  packagePath: 'Package Path',
-  packageName: 'Package Name',
-  packageDir: 'Package Dir',
-  isPkg: 'Package?',
-  isExternal: 'External Pkg?',
-  isStd: 'Standard Pkg?',
-  funcSet: 'Functions',
-  from: 'From(ID)',
-  to: 'To(ID)',
-  type: 'Type',
   count: 'Count',
-  depAtFunc: 'Function-level'
+  depAtFunc: 'Function-level',
+  from: 'From(ID)',
+  funcSet: 'Functions',
+  id: 'ID',
+  isExternal: 'External Pkg?',
+  isPkg: 'Package?',
+  isStd: 'Standard Pkg?',
+  label: 'Label',
+  packageDir: 'Package Dir',
+  packageName: 'Package Name',
+  packagePath: 'Package Path',
+  to: 'To(ID)',
+  type: 'Type'
 }
 
 const edgeType = ['Composition', 'Import-Relation']
 
-type TableProps = {
-  elementSet: ElementSet<Node> | ElementSet<Edge>
+interface ITableProps {
+  elementSet: IElementSet<INode> | IElementSet<IEdge>
   header: string
 }
 
-export default (props: TableProps) => {
+export default (props: ITableProps) => {
   let jsxElements: JSX.Element[] = null
 
   if (Object.keys(props.elementSet).length !== 0) {
@@ -46,7 +46,7 @@ const style = {
   }
 }
 
-function getNodeElements(elementSet: ElementSet<Node>) {
+function getNodeElements(elementSet: IElementSet<INode>) {
   const jsxElements: JSX.Element[] = []
 
   Object.values(elementSet).forEach(node => {
@@ -65,7 +65,7 @@ function getNodeElements(elementSet: ElementSet<Node>) {
   return jsxElements
 }
 
-function getEdgeElements(elementSet: ElementSet<Edge>) {
+function getEdgeElements(elementSet: IElementSet<IEdge>) {
   const jsxElements: JSX.Element[] = []
 
   Object.values(elementSet).forEach((edge, edgeIndex) => {
@@ -84,7 +84,7 @@ function getEdgeElements(elementSet: ElementSet<Edge>) {
   return jsxElements
 }
 
-function getNodeMetaElements(node: Node) {
+function getNodeMetaElements(node: INode) {
   const rows: JSX.Element[] = []
 
   rows.push(getRow('id', node.id, 0, getRowKey(node.id, 'ID')))
@@ -105,7 +105,7 @@ function getNodeMetaElements(node: Node) {
   return rows
 }
 
-function getEdgeMetaElements(edge: Edge) {
+function getEdgeMetaElements(edge: IEdge) {
   const rows: JSX.Element[] = []
 
   rows.push(getRow('from', edge.from, 0, getRowKey(edge.id, 'from')))
@@ -133,11 +133,7 @@ function getEdgeMetaElements(edge: Edge) {
 function getRow(key: string, value: any, index: number, reactKey: string) {
   let visibleValue = value
   if (typeof value === 'boolean') {
-    if (value) {
-      visibleValue = 'Yes'
-    } else {
-      visibleValue = 'No'
-    }
+    visibleValue = value ? 'Yes' : 'No'
   }
 
   return (
@@ -154,9 +150,9 @@ function getRow(key: string, value: any, index: number, reactKey: string) {
 }
 
 function isEdgeList(
-  elementSet: ElementSet<Node> | ElementSet<Edge>
-): elementSet is ElementSet<Edge> {
-  return (Object.values(elementSet)[0] as Edge).from !== undefined
+  elementSet: IElementSet<INode> | IElementSet<IEdge>
+): elementSet is IElementSet<IEdge> {
+  return (Object.values(elementSet)[0] as IEdge).from !== undefined
 }
 
 function getRowKey(id: string, key: string) {

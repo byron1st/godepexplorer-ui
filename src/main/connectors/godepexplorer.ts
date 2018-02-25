@@ -1,18 +1,18 @@
 import * as http from 'http'
-import { SocketConnector, gatherResponse } from './socketConnector'
+import { gatherResponse, ISocketConnector } from './socketConnector'
 
-class GoDepExplorerConn implements SocketConnector {
-  send(data: string, path: string): Promise<string> {
+class GoDepExplorerConn implements ISocketConnector {
+  public send(data: string, path: string): Promise<string> {
     return new Promise(resolve => {
       const PostOpts: http.RequestOptions = {
-        host: 'localhost',
-        port: '1111',
-        method: 'POST',
-        path: path,
         headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(data)
-        }
+          'Content-Length': Buffer.byteLength(data),
+          'Content-Type': 'application/json'
+        },
+        host: 'localhost',
+        method: 'POST',
+        path,
+        port: '1111'
       }
 
       const postReq = http.request(PostOpts, gatherResponse(resolve))

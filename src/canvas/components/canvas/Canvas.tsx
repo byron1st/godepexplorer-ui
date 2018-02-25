@@ -1,11 +1,11 @@
 import * as React from 'react'
 import VisNetwork from './VisNetwork'
 
-type CanvasProps = {
+interface ICanvasProps {
   compID: string
 }
 
-export default (props: CanvasProps) => (
+export default (props: ICanvasProps) => (
   <div style={style.container}>
     <div id={props.compID} style={style.canvas} key="canvas-vis" />,
     <VisNetwork compID={props.compID} />
@@ -13,13 +13,13 @@ export default (props: CanvasProps) => (
 )
 
 const style = {
-  container: {
-    width: 'inherit',
-    height: 'inherit',
-    marginTop: '-150px'
-  },
   canvas: {
-    width: 'inherit',
-    height: 'inherit'
+    height: 'inherit',
+    width: 'inherit'
+  },
+  container: {
+    height: 'inherit',
+    marginTop: '-150px',
+    width: 'inherit'
   }
 }

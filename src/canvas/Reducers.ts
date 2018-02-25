@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux'
-import { uiReducers, UIState } from './reducers/UIReducers'
-import { graphReducers, GraphState } from './reducers/GraphReducers'
+import { graphReducers, IGraphState } from './reducers/GraphReducers'
+import { IUIState, uiReducers } from './reducers/UIReducers'
 
-export type RootState = {
-  readonly uiState: UIState
-  readonly graphState: GraphState
+export interface IRootState {
+  readonly uiState: IUIState
+  readonly graphState: IGraphState
 }
 
-export const rootReducers = combineReducers<RootState>({
-  uiState: uiReducers,
-  graphState: graphReducers
+export const rootReducers = combineReducers<IRootState>({
+  graphState: graphReducers,
+  uiState: uiReducers
 })
 
 export * from './reducers/UIReducers'

@@ -1,35 +1,41 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import * as vis from 'vis'
-import * as ipc from '../../IPC'
-import { ListGraph, Node, Edge, SetGraph, EdgeType } from '../../../GlobalTypes'
-import { RootState } from '../../Reducers'
+import {
+  EdgeType,
+  IEdge,
+  IListGraph,
+  INode,
+  ISetGraph
+} from '../../../GlobalTypes'
 import { graphActions, uiActions } from '../../Actions'
+import * as ipc from '../../IPC'
+import { IRootState } from '../../Reducers'
 import { filterNodeVisibility } from '../../util'
 
-type VisNetworkProps = {
-  elementSet: SetGraph
+interface IVisNetworkProps {
+  elementSet: ISetGraph
   compID: string
-  selectionSet: SetGraph
+  selectionSet: ISetGraph
   isStdVisible: boolean
   isExtVisible: boolean
-  selectElement: (selectionSet: SetGraph) => any
+  selectElement: (selectionSet: ISetGraph) => any
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
-class VisNetwork extends React.Component<VisNetworkProps> {
-  nodes: vis.DataSet<Node> = new vis.DataSet([])
-  edges: vis.DataSet<Edge> = new vis.DataSet([])
-  visnetwork: vis.Network
-  visGraphSet: SetGraph = { nodeSet: {}, edgeSet: {} }
+class VisNetwork extends React.Component<IVisNetworkProps> {
+  private nodes: vis.DataSet<INode> = new vis.DataSet([])
+  private edges: vis.DataSet<IEdge> = new vis.DataSet([])
+  private visnetwork: vis.Network
+  private visGraphSet: ISetGraph = { nodeSet: {}, edgeSet: {} }
 
-  componentDidMount() {
-    //@ts-ignore: 'document' is working well.
+  public componentDidMount() {
+    // @ts-ignore: 'document' is working well.
     const htmlElement: HTMLElement = document.getElementById(this.props.compID)
     this.initNetwork(htmlElement)
   }
 
-  componentWillUpdate(nextProps: VisNetworkProps) {
+  public componentWillUpdate(nextProps: IVisNetworkProps) {
     if (isResetCommand(nextProps.elementSet)) {
       this.resetGraph()
     } else {
@@ -38,12 +44,16 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     }
   }
 
-  initNetwork(htmlElement: HTMLElement) {
+  public render() {
+    return ''
+  }
+
+  private initNetwork(htmlElement: HTMLElement) {
     this.visnetwork = new vis.Network(
       htmlElement,
       {
-        nodes: this.nodes,
-        edges: this.edges
+        edges: this.edges,
+        nodes: this.nodes
       },
       {}
     )
@@ -52,7 +62,7 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     this.visnetwork.on('click', this.showInfo.bind(this))
   }
 
-  updateGraph(nextProps: VisNetworkProps) {
+  private updateGraph(nextProps: IVisNetworkProps) {
     // first remove nodes which become invisible.
     this.nodes.forEach((node, nodeId) => {
       if (
@@ -88,26 +98,16 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     )
   }
 
-  resetGraph() {
+  private resetGraph() {
     this.nodes.clear()
     this.edges.clear()
   }
 
-  selectGraph(nextProps: VisNetworkProps) {
+  private selectGraph(nextProps: IVisNetworkProps) {
     if (this.visnetwork) {
       this.visnetwork.unselectAll()
 
       this.visnetwork.setSelection({
-        nodes: Object.values(nextProps.selectionSet.nodeSet)
-          .filter(node => {
-            const result = filterNodeVisibility(
-              nextProps.elementSet.nodeSet[node.id],
-              nextProps.isStdVisible,
-              nextProps.isExtVisible
-            )
-            return result
-          })
-          .map(node => node.id),
         edges: Object.values(nextProps.selectionSet.edgeSet)
           .filter(
             edge =>
@@ -122,12 +122,22 @@ class VisNetwork extends React.Component<VisNetworkProps> {
                 nextProps.isExtVisible
               )
           )
-          .map(edge => edge.id)
+          .map(edge => edge.id),
+        nodes: Object.values(nextProps.selectionSet.nodeSet)
+          .filter(node => {
+            const result = filterNodeVisibility(
+              nextProps.elementSet.nodeSet[node.id],
+              nextProps.isStdVisible,
+              nextProps.isExtVisible
+            )
+            return result
+          })
+          .map(node => node.id)
       })
     }
   }
 
-  getDepsForPkg(params: any) {
+  private getDepsForPkg(params: any) {
     if (params.nodes.length === 0) {
       return
     }
@@ -139,18 +149,24 @@ class VisNetwork extends React.Component<VisNetworkProps> {
     ipc.sendDepReq(pkg.meta.packagePath)
   }
 
-  showInfo(params: any) {
+  private showInfo(params: any) {
     const selectionSet = {
-      nodeSet: params.nodes.reduce(
-        (accumulated: { [id: string]: Node | Edge }, currentNodeId: string) => {
-          accumulated[currentNodeId] = this.nodes.get(currentNodeId)
+      edgeSet: params.edges.reduce(
+        (
+          accumulated: { [id: string]: INode | IEdge },
+          currentEdgeId: string
+        ) => {
+          accumulated[currentEdgeId] = this.edges.get(currentEdgeId)
           return accumulated
         },
         {}
       ),
-      edgeSet: params.edges.reduce(
-        (accumulated: { [id: string]: Node | Edge }, currentEdgeId: string) => {
-          accumulated[currentEdgeId] = this.edges.get(currentEdgeId)
+      nodeSet: params.nodes.reduce(
+        (
+          accumulated: { [id: string]: INode | IEdge },
+          currentNodeId: string
+        ) => {
+          accumulated[currentNodeId] = this.nodes.get(currentNodeId)
           return accumulated
         },
         {}
@@ -164,31 +180,27 @@ class VisNetwork extends React.Component<VisNetworkProps> {
       this.props.selectElement(selectionSet)
     }
   }
-
-  render() {
-    return ''
-  }
 }
 
-function isResetCommand(elementSet: SetGraph) {
+function isResetCommand(elementSet: ISetGraph) {
   return (
     Object.keys(elementSet.nodeSet).length === 0 &&
     Object.keys(elementSet.edgeSet).length === 0
   )
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(state: IRootState) {
   return {
     elementSet: state.graphState.elementSet,
-    selectionSet: state.graphState.selectionSet,
+    isExtVisible: state.uiState.isExtVisible,
     isStdVisible: state.uiState.isStdVisible,
-    isExtVisible: state.uiState.isExtVisible
+    selectionSet: state.graphState.selectionSet
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    selectElement: (selectionSet: SetGraph) => {
+    selectElement: (selectionSet: ISetGraph) => {
       dispatch(graphActions.selectElement(selectionSet))
     },
     turnOnLoadingIndicator: (packagePath: string) => {

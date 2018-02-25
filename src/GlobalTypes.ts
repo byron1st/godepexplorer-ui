@@ -1,30 +1,30 @@
 import * as vis from 'vis'
 
-export interface Node extends vis.Node {
+export interface INode extends vis.Node {
   id: string
   isVisible: boolean
-  meta: NodeMetaInfo
+  meta: INodeMetaInfo
 }
 
-export interface Edge extends vis.Edge {
+export interface IEdge extends vis.Edge {
   id: string
   from: string
   to: string
   arrows?: string // optional type that is not defined in vis.Edge, but actually can be used.
-  meta: EdgeMetaInfo
+  meta: IEdgeMetaInfo
 }
 
-export interface ListGraph {
-  nodes: Node[]
-  edges: Edge[]
+export interface IListGraph {
+  nodes: INode[]
+  edges: IEdge[]
 }
 
-export interface SetGraph {
-  nodeSet: ElementSet<Node>
-  edgeSet: ElementSet<Edge>
+export interface ISetGraph {
+  nodeSet: IElementSet<INode>
+  edgeSet: IElementSet<IEdge>
 }
 
-export interface ElementSet<T> {
+export interface IElementSet<T> {
   [id: string]: T
 }
 
@@ -33,7 +33,7 @@ export enum EdgeType {
   REL
 }
 
-interface NodeMetaInfo {
+interface INodeMetaInfo {
   [key: string]: string | boolean | { [func: string]: boolean }
   packagePath: string
   packageName: string
@@ -41,23 +41,22 @@ interface NodeMetaInfo {
   isPkg: boolean
   isExternal: boolean
   isStd: boolean
-  funcSet: StringSet
+  funcSet: IStringSet
 }
 
-interface EdgeMetaInfo {
+interface IEdgeMetaInfo {
   [key: string]: number | { [key: string]: boolean } | string
   type: EdgeType
   count: number
-  depAtFunc: StringSet
+  depAtFunc: IStringSet
   arrows?: 'to' | 'from' | 'middle'
 }
 
-interface StringSet {
+interface IStringSet {
   [key: string]: boolean
 }
 
 // Network-level type compositions (used by the controller module)
-export interface Request {
+export interface IRequest {
   pkgName: string
 }
-export interface Response extends ListGraph {}

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-type ViewConfigItemProps = {
+interface IViewConfigItemProps {
   header: string
   trueLabel: string
   falseLabel: string
@@ -8,7 +8,7 @@ type ViewConfigItemProps = {
   handleChange: () => any
 }
 
-export default (props: ViewConfigItemProps) => (
+export default (props: IViewConfigItemProps) => (
   <div className="card" style={{ margin: '5px' }}>
     <div className="card-body" style={{ padding: '5px' }}>
       <h5 className="card-title">{props.header}</h5>

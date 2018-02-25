@@ -1,20 +1,20 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
-import { graphActions, GraphAction } from '../Actions'
-import { SetGraph } from '../../GlobalTypes'
+import { ISetGraph } from '../../GlobalTypes'
+import { GraphAction, graphActions } from '../Actions'
 import { elementSetReducers } from './ElementSetReducers'
 
-export type GraphState = {
-  readonly elementSet: SetGraph
-  readonly selectionSet: SetGraph
+export interface IGraphState {
+  readonly elementSet: ISetGraph
+  readonly selectionSet: ISetGraph
 }
 
-const INITIAL_SELECTIONSET: SetGraph = {
-  nodeSet: {},
-  edgeSet: {}
+const INITIAL_SELECTIONSET: ISetGraph = {
+  edgeSet: {},
+  nodeSet: {}
 }
 
-export const graphReducers = combineReducers<GraphState>({
+export const graphReducers = combineReducers<IGraphState>({
   elementSet: elementSetReducers,
   selectionSet: (state = INITIAL_SELECTIONSET, action: GraphAction) => {
     switch (action.type) {

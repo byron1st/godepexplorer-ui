@@ -1,19 +1,19 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Node, Edge, ElementSet, SetGraph } from '../../../GlobalTypes'
+import { IEdge, IElementSet, INode, ISetGraph } from '../../../GlobalTypes'
 import { graphActions } from '../../Actions'
-import { RootState } from '../../Reducers'
+import { IRootState } from '../../Reducers'
 import SideBarListItem from './SideBarListItem'
 
-type SideBarListProps = {
+interface ISideBarListProps {
   header: string
-  nodeList: Node[]
-  selectedNodeSet: ElementSet<Node>
+  nodeList: INode[]
+  selectedNodeSet: IElementSet<INode>
   isClickable: boolean
 }
 
-export default class SideBarList extends React.Component<SideBarListProps> {
-  render() {
+export default class SideBarList extends React.Component<ISideBarListProps> {
+  public render() {
     return (
       <div>
         <h3 className="text-light">{this.props.header}</h3>

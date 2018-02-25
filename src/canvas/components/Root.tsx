@@ -1,35 +1,35 @@
+import { ipcRenderer } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { ipcRenderer } from 'electron'
+import { IListGraph } from '../../GlobalTypes'
 import * as IPCType from '../../IPCTypes'
-import { ListGraph } from '../../GlobalTypes'
 import { graphActions, uiActions } from '../Actions'
-import SideBar from './sideBar/SideBar'
-import MenuBar from './menuBar/MenuBar'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
+import MenuBar from './menuBar/MenuBar'
+import SideBar from './sideBar/SideBar'
 
 const VisNetworkCompID = 'vis-canvas'
 
-type RootProps = {
-  updateGraph: (newGraph: ListGraph) => any
+interface IRootProps {
+  updateGraph: (newGraph: IListGraph) => any
   turnOffLoadingIndicator: () => any
 }
 
-class Root extends React.Component<RootProps> {
-  constructor(props: RootProps) {
+class Root extends React.Component<IRootProps> {
+  constructor(props: IRootProps) {
     super(props)
 
     ipcRenderer.on(
       IPCType.GetDepOfPkg.Response,
-      (event: any, newGraph: ListGraph) => {
+      (event: any, newGraph: IListGraph) => {
         this.props.turnOffLoadingIndicator()
         this.props.updateGraph(newGraph)
       }
     )
   }
 
-  render() {
+  public render() {
     return (
       <div style={{ width: 'inherit', height: 'inherit' }}>
         <SideBar />
@@ -43,10 +43,11 @@ class Root extends React.Component<RootProps> {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    updateGraph: (newGraph: ListGraph) => {
+    turnOffLoadingIndicator: () =>
+      dispatch(uiActions.turnOffLoadingIndicator()),
+    updateGraph: (newGraph: IListGraph) => {
       dispatch(graphActions.updateGraph(newGraph))
-    },
-    turnOffLoadingIndicator: () => dispatch(uiActions.turnOffLoadingIndicator())
+    }
   }
 }
 

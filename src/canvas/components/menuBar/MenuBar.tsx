@@ -1,11 +1,11 @@
 import * as React from 'react'
 import MenuList from './MenuList'
 
-type MenuBarProps = {
+interface IMenuBarProps {
   appTitle: string
 }
 
-export default (props: MenuBarProps) => (
+export default (props: IMenuBarProps) => (
   <nav className="navbar fixed-top navbar-expand-sm navbar-dark bg-dark">
     <div className="navbar-brand">{props.appTitle}</div>
     <button

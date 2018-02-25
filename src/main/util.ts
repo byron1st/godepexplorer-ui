@@ -1,6 +1,6 @@
-import * as path from 'path'
-import * as os from 'os'
 import * as fs from 'fs'
+import * as os from 'os'
+import * as path from 'path'
 
 export function getReactDevToolPath(): string {
   const appID = 'fmkadmapgofadopljbjfkapdkoienihi'
@@ -20,8 +20,11 @@ function getDevToolPath(appID: string): string {
       .readdirSync(appPath)
       .filter(file => fs.statSync(path.join(appPath, file)).isDirectory())
       .sort((prev, next) => {
-        if (next > prev) return 1
-        else return -1
+        if (next > prev) {
+          return 1
+        } else {
+          return -1
+        }
       })[0]
 
     return path.join(appPath, appVersion)
@@ -33,12 +36,7 @@ function getDevToolPath(appID: string): string {
 function getAppPath(appID: string): string {
   for (let i = 0; i < 10; i++) {
     let appPath: string = ''
-    let profile: string = ''
-    if (i == 0) {
-      profile = 'Default'
-    } else {
-      profile = `Profile ${i}`
-    }
+    const profile: string = i === 0 ? 'Default' : `Profile ${i}`
 
     if (os.platform() === 'darwin') {
       appPath = path.join(
