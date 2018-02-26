@@ -58,7 +58,7 @@ class MenuList extends React.Component<IMenuListProps> {
           const packagePath = extractRootPath(filepaths[0])
           if (packagePath) {
             this.props.turnOnLoadingIndicator(packagePath)
-            IPC.sendDepReq(packagePath)
+            IPC.sendDepReq(packagePath, true, {})
           }
         }
       }

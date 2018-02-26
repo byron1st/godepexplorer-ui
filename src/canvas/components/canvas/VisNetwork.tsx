@@ -146,7 +146,7 @@ class VisNetwork extends React.Component<IVisNetworkProps> {
     const pkg = this.nodes.get(id)
 
     this.props.turnOnLoadingIndicator(pkg.meta.packagePath)
-    ipc.sendDepReq(pkg.meta.packagePath)
+    ipc.sendDepReq(pkg.meta.packagePath, false, pkg.meta.funcSet)
   }
 
   private showInfo(params: any) {
