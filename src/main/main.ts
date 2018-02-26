@@ -80,10 +80,14 @@ function getBasicHandlerForGodepexplorer(
 
     // Connect to godepexplorer
     godepexplorer.send(JSON.stringify(data), targetPath).then(responseData => {
-      const dirStruct: types.IListGraph = JSON.parse(responseData)
+      const response: types.IResponse = JSON.parse(responseData)
+
+      /* tslint:disable */
+      console.log(response.pkgName)
+      /* tslint:enable */
 
       // Return
-      event.sender.send(returnEventType, dirStruct)
+      event.sender.send(returnEventType, response.graph)
     })
   }
 }
