@@ -62,8 +62,6 @@ export interface IStringSet {
 // Network-level type compositions (used by the controller module)
 export interface IRequest {
   pkgName: string
-  isNewlyAdded: boolean
-  funcSet: IStringSet
 }
 
 export interface IResponse {

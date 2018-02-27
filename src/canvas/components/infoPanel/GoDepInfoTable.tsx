@@ -5,7 +5,6 @@ const keyLabelMap: { [key: string]: string } = {
   count: 'Count',
   depAtFunc: 'Function-level',
   from: 'From(ID)',
-  funcSet: 'Functions',
   id: 'ID',
   isExternal: 'External Pkg?',
   isPkg: 'Package?',
@@ -15,7 +14,9 @@ const keyLabelMap: { [key: string]: string } = {
   packageName: 'Package Name',
   packagePath: 'Package Path',
   to: 'To(ID)',
-  type: 'Type'
+  type: 'Type',
+  children: 'Sub-packages',
+  parent: 'Parent-package'
 }
 
 const edgeType = ['Composition', 'Import-Relation']
@@ -90,13 +91,15 @@ function getNodeMetaElements(node: INode) {
   rows.push(getRow('id', node.id, 0, getRowKey(node.id, 'ID')))
 
   Object.keys(node.meta).forEach((key, index) => {
-    if (key === 'funcSet') {
-      const funcList = Object.keys(node.meta[key]).map(func => (
-        <li key={node.id + func}>{func}</li>
+    if (key === 'children') {
+      const children = Object.keys(node.meta[key]).map(childID => (
+        <li key={node.id + childID}>{childID}</li>
       ))
       rows.push(
-        getRow(key, <ul>{funcList}</ul>, index + 1, getRowKey(node.id, key))
+        getRow(key, <ul>{children}</ul>, index + 1, getRowKey(node.id, key))
       )
+    } else if (key === 'sinkEdgeIDSet' || key === 'sourceEdgeIDSet') {
+      // TODO: do something.
     } else {
       rows.push(getRow(key, node.meta[key], index + 1, getRowKey(node.id, key)))
     }

@@ -75,16 +75,8 @@ function getBasicHandlerForGodepexplorer(
   targetPath: string,
   returnEventType: string
 ) {
-  return (
-    event: any,
-    pkgName: string,
-    isNewlyAdded: boolean,
-    funcSet: types.IStringSet
-  ) => {
-    const data: types.IRequest = { pkgName, isNewlyAdded, funcSet }
-    /* tslint:disable */
-    console.log(data)
-    /* tslint:enable */
+  return (event: any, pkgName: string) => {
+    const data: types.IRequest = { pkgName }
 
     // Connect to godepexplorer
     godepexplorer
