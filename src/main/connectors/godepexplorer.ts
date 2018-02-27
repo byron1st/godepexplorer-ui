@@ -3,7 +3,7 @@ import { gatherResponse, ISocketConnector } from './socketConnector'
 
 class GoDepExplorerConn implements ISocketConnector {
   public send(data: string, path: string): Promise<string> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const PostOpts: http.RequestOptions = {
         headers: {
           'Content-Length': Buffer.byteLength(data),
@@ -15,7 +15,7 @@ class GoDepExplorerConn implements ISocketConnector {
         port: '1111'
       }
 
-      const postReq = http.request(PostOpts, gatherResponse(resolve))
+      const postReq = http.request(PostOpts, gatherResponse(resolve, reject))
       postReq.write(data)
       postReq.end()
     })

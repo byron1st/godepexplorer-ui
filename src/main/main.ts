@@ -1,4 +1,4 @@
-import { App, app, BrowserWindow, ipcMain } from 'electron'
+import { App, app, BrowserWindow, ipcMain, dialog } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
 import * as types from '../GlobalTypes'
@@ -87,12 +87,18 @@ function getBasicHandlerForGodepexplorer(
     /* tslint:enable */
 
     // Connect to godepexplorer
-    godepexplorer.send(JSON.stringify(data), targetPath).then(responseData => {
-      const response: types.IResponse = JSON.parse(responseData)
+    godepexplorer
+      .send(JSON.stringify(data), targetPath)
+      .then(responseData => {
+        const response: types.IResponse = JSON.parse(responseData)
 
-      // Return
-      event.sender.send(returnEventType, response.graph)
-    })
+        // Return
+        event.sender.send(returnEventType, response.graph)
+      })
+      .catch(errorMessage => {
+        dialog.showErrorBox('Error from the main process', errorMessage)
+        event.sender.send(returnEventType)
+      })
   }
 }
 

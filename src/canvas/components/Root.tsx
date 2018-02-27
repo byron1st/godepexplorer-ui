@@ -24,7 +24,10 @@ class Root extends React.Component<IRootProps> {
       IPCType.GetDepOfPkg.Response,
       (event: any, newGraph: IListGraph) => {
         this.props.turnOffLoadingIndicator()
-        this.props.updateGraph(newGraph)
+
+        if (newGraph) {
+          this.props.updateGraph(newGraph)
+        }
       }
     )
   }
