@@ -64,13 +64,18 @@ class VisNetwork extends React.Component<IVisNetworkProps> {
         ext: {
           color: '#292D34'
         }
+      },
+      layout: {
+        randomSeed: 1,
+        improvedLayout: true
+      },
+      interaction: {
+        multiselect: true
+      },
+      physics: {
+        stabilization: false,
+        solver: 'forceAtlas2Based'
       }
-      // layout: {
-      //   hierarchical: {
-      //     enabled: true,
-      //     sortMethod: 'directed'
-      //   }
-      // }
     }
 
     this.visnetwork = new vis.Network(
@@ -125,12 +130,6 @@ class VisNetwork extends React.Component<IVisNetworkProps> {
         })
     )
 
-    this.edges.update(
-      newEdges.filter(edge => edge.meta.type === EdgeType.COMP).map(edge => {
-        edge.color = { color: '#292D34' }
-        return edge
-      })
-    )
     this.edges.update(
       newEdges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
         edge.arrows = 'to'
