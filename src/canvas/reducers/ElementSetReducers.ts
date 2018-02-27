@@ -21,13 +21,12 @@ export function elementSetReducers(state = INITIAL_STATE, action: GraphAction) {
         },
         initNodeSet
       )
-      const newEdgeSet = action.payload.edges.reduce(
-        (accumulated, currentEdge) => {
+      const newEdgeSet = action.payload.edges
+        .filter(edge => edge.from !== edge.to)
+        .reduce((accumulated, currentEdge) => {
           accumulated[currentEdge.id] = currentEdge
           return accumulated
-        },
-        initEdgeSet
-      )
+        }, initEdgeSet)
       return {
         edgeSet: { ...state.edgeSet, ...newEdgeSet },
         nodeSet: { ...state.nodeSet, ...newNodeSet }
