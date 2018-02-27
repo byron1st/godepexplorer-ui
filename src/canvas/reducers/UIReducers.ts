@@ -16,10 +16,10 @@ export interface IUIState {
 const INITIAL_STATE: IUIState = {
   infoPanelHeight: 300,
   isEdgeVisible: true,
-  isExtVisible: true,
+  isExtVisible: false,
   isLoading: false,
   isNodeVisible: true,
-  isStdVisible: true,
+  isStdVisible: false,
   loadingPath: '',
   sideBarWidth: 300
 }
