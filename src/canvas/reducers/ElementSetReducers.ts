@@ -11,25 +11,9 @@ const INITIAL_STATE: ISetGraph = {
 export function elementSetReducers(state = INITIAL_STATE, action: GraphAction) {
   switch (action.type) {
     case getType(graphActions.updateGraph):
-      const initNodeSet: IElementSet<INode> = {}
-      const initEdgeSet: IElementSet<IEdge> = {}
-      const newNodeSet = action.payload.nodes.reduce(
-        (accumulated, currentNode) => {
-          currentNode.isVisible = true
-          accumulated[currentNode.id] = currentNode
-          return accumulated
-        },
-        initNodeSet
-      )
-      const newEdgeSet = action.payload.edges
-        .filter(edge => edge.from !== edge.to)
-        .reduce((accumulated, currentEdge) => {
-          accumulated[currentEdge.id] = currentEdge
-          return accumulated
-        }, initEdgeSet)
       return {
-        edgeSet: { ...state.edgeSet, ...newEdgeSet },
-        nodeSet: { ...state.nodeSet, ...newNodeSet }
+        edgeSet: { ...state.edgeSet, ...getNewNodeSet(action.payload.nodes) },
+        nodeSet: { ...state.nodeSet, ...getNewEdgeSet(action.payload.edges) }
       }
     case getType(graphActions.resetGraph):
       return INITIAL_STATE
@@ -46,4 +30,25 @@ export function elementSetReducers(state = INITIAL_STATE, action: GraphAction) {
     default:
       return state
   }
+}
+
+function getNewEdgeSet(edges: IEdge[]) {
+  const initEdgeSet: IElementSet<IEdge> = {}
+
+  return edges
+    .filter(edge => edge.from !== edge.to)
+    .reduce((accumulated, currentEdge) => {
+      accumulated[currentEdge.id] = currentEdge
+      return accumulated
+    }, initEdgeSet)
+}
+
+function getNewNodeSet(nodes: INode[]) {
+  const initNodeSet: IElementSet<INode> = {}
+
+  return nodes.reduce((accumulated, currentNode) => {
+    currentNode.isVisible = true
+    accumulated[currentNode.id] = currentNode
+    return accumulated
+  }, initNodeSet)
 }
