@@ -49,13 +49,37 @@ class VisNetwork extends React.Component<IVisNetworkProps> {
   }
 
   private initNetwork(htmlElement: HTMLElement) {
+    const networkOpt: vis.Options = {
+      nodes: {
+        shape: 'dot',
+        size: 10
+      },
+      groups: {
+        normal: {
+          color: '#5CC9F5'
+        },
+        std: {
+          color: '#A1A9B8'
+        },
+        ext: {
+          color: '#292D34'
+        }
+      }
+      // layout: {
+      //   hierarchical: {
+      //     enabled: true,
+      //     sortMethod: 'directed'
+      //   }
+      // }
+    }
+
     this.visnetwork = new vis.Network(
       htmlElement,
       {
         edges: this.edges,
         nodes: this.nodes
       },
-      {}
+      networkOpt
     )
 
     this.visnetwork.on('doubleClick', this.getDepsForPkg.bind(this))
@@ -80,16 +104,33 @@ class VisNetwork extends React.Component<IVisNetworkProps> {
     const newEdges = Object.values(nextProps.elementSet.edgeSet)
     // then add all visible nodes from new elementSet.
     this.nodes.update(
-      newNodes.filter(node =>
-        filterNodeVisibility(
-          node,
-          nextProps.isStdVisible,
-          nextProps.isExtVisible
+      newNodes
+        .filter(node =>
+          filterNodeVisibility(
+            node,
+            nextProps.isStdVisible,
+            nextProps.isExtVisible
+          )
         )
-      )
+        .map(node => {
+          if (node.meta.isStd) {
+            node.group = 'std'
+          } else if (node.meta.isExternal) {
+            node.group = 'ext'
+          } else {
+            node.group = 'normal'
+          }
+
+          return node
+        })
     )
 
-    this.edges.update(newEdges.filter(edge => edge.meta.type === EdgeType.COMP))
+    this.edges.update(
+      newEdges.filter(edge => edge.meta.type === EdgeType.COMP).map(edge => {
+        edge.color = { color: '#292D34' }
+        return edge
+      })
+    )
     this.edges.update(
       newEdges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
         edge.arrows = 'to'
