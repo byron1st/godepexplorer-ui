@@ -130,12 +130,7 @@ class VisNetwork extends React.Component<IVisNetworkProps> {
         })
     )
 
-    this.edges.update(
-      newEdges.filter(edge => edge.meta.type === EdgeType.REL).map(edge => {
-        edge.arrows = 'to'
-        return edge
-      })
-    )
+    this.edges.update(newEdges.map(edge => styleEdge(edge)))
   }
 
   private resetGraph() {
@@ -227,6 +222,23 @@ function isResetCommand(elementSet: ISetGraph) {
     Object.keys(elementSet.nodeSet).length === 0 &&
     Object.keys(elementSet.edgeSet).length === 0
   )
+}
+
+function styleEdge(edge: IEdge) {
+  if (edge.meta.type === EdgeType.COMP) {
+    edge.color = { color: '#292D34' }
+    edge.arrows = {
+      from: {
+        enabled: true,
+        type: 'circle',
+        scaleFactor: 0.5
+      }
+    }
+  } else if (edge.meta.type === EdgeType.REL) {
+    edge.arrows = 'to'
+  }
+
+  return edge
 }
 
 function mapStateToProps(state: IRootState) {

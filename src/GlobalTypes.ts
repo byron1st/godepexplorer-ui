@@ -11,7 +11,7 @@ export interface IEdge extends vis.Edge {
   id: string
   from: string
   to: string
-  arrows?: 'to' | 'from' | 'middle' // optional type that is not defined in vis.Edge, but actually can be used.
+  arrows?: 'to' | 'from' | 'middle' | any // optional type that is not defined in vis.Edge, but actually can be used.
   color?: any // http://visjs.org/docs/network/edges.html
   meta: IEdgeMetaInfo
 }
