@@ -3,16 +3,15 @@ import * as vis from 'vis'
 export interface INode extends vis.Node {
   id: string
   isVisible: boolean
-  isExplorered?: boolean
-  isCollapsed?: boolean
   meta: INodeMetaInfo
+  ui: INodeUIInfo
 }
 
 export interface IEdge extends vis.Edge {
   id: string
   from: string
   to: string
-  arrows?: string // optional type that is not defined in vis.Edge, but actually can be used.
+  arrows?: 'to' | 'from' | 'middle' // optional type that is not defined in vis.Edge, but actually can be used.
   color?: any // http://visjs.org/docs/network/edges.html
   meta: IEdgeMetaInfo
 }
@@ -44,15 +43,24 @@ interface INodeMetaInfo {
   isPkg: boolean
   isExternal: boolean
   isStd: boolean
-  funcSet: IStringSet
 }
 
 interface IEdgeMetaInfo {
-  [key: string]: number | { [key: string]: boolean } | string
+  [key: string]: number | { [id: string]: IDepAtFunc }
   type: EdgeType
-  count: number
-  depAtFunc: IStringSet
-  arrows?: 'to' | 'from' | 'middle'
+  depAtFunc: { [id: string]: IDepAtFunc }
+}
+
+interface IDepAtFunc {
+  id: string
+  from: string
+  to: string
+}
+
+interface INodeUIInfo {
+  [key: string]: boolean | IStringSet
+  isExpanded: boolean
+  childrenEdgeIDSet: IStringSet
 }
 
 export interface IStringSet {
