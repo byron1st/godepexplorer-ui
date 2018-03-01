@@ -9,6 +9,8 @@
   "author": "byron1st",
   "license": "MIT",
   "devDependencies": {
+    "@types/leveldown": "^1.7.0",
+    "@types/levelup": "^0.0.30",
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
     "@types/react-redux": "^5.0.15",
@@ -26,6 +28,8 @@
     "bootstrap": "^4.0.0",
     "electron": "1.8.2",
     "jquery": "^3.3.1",
+    "leveldown": "^3.0.0",
+    "levelup": "^2.0.2",
     "popper.js": "^1.12.9",
     "re-resizable": "^4.3.2",
     "react": "^16.2.0",
