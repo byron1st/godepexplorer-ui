@@ -23,14 +23,15 @@
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "electron": "1.8.2",
     "bootstrap": "^4.0.0",
+    "electron": "1.8.2",
     "jquery": "^3.3.1",
     "popper.js": "^1.12.9",
     "re-resizable": "^4.3.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
+    "realm": "^2.2.12",
     "redux": "^3.7.2",
     "tslib": "^1.9.0",
     "typesafe-actions": "^1.1.2",
