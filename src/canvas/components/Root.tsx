@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { IListGraph } from '../../GlobalTypes'
 import * as IPCType from '../../IPCTypes'
 import { graphActions, uiActions } from '../Actions'
+import Project from '../ldbc/Project'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
 import MenuBar from './menuBar/MenuBar'
@@ -17,6 +18,8 @@ interface IRootProps {
 }
 
 class Root extends React.Component<IRootProps> {
+  private project: Project
+
   constructor(props: IRootProps) {
     super(props)
 
@@ -26,10 +29,16 @@ class Root extends React.Component<IRootProps> {
         this.props.turnOffLoadingIndicator()
 
         if (newGraph) {
-          this.props.updateGraph(newGraph)
+          // this.props.updateGraph(newGraph)
+          // TODO:
+          // 1. insert DB
+          // 2.1 filtering normal (every visible), ext, std (every invisible)
+          // 2.2 call data action
         }
       }
     )
+
+    this.project = new Project('test-db')
   }
 
   public render() {
