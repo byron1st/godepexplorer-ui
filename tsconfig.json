@@ -10,11 +10,7 @@
     },
     "target": "es2015",
     "jsx": "react",
-    "lib": [
-      "es2017"
-    ]
+    "lib": ["es2017"]
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
