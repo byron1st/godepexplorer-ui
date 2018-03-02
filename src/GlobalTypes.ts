@@ -1,5 +1,10 @@
 import * as vis from 'vis'
 
+export interface ISideBarElement {
+  id: string
+  label: string
+}
+
 export interface INode extends vis.Node {
   id: string
   isVisible: boolean

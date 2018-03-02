@@ -1,9 +1,9 @@
 import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { INode, ISetGraph } from '../../../GlobalTypes'
-import { uiActions } from '../../Actions'
-import { IRootState } from '../../Reducers'
+import { INode, ISetGraph, ISideBarElement } from '../../../GlobalTypes'
+import { uiActions, dataActions } from '../../Actions'
+import { IRootState, ISideBarStore } from '../../Reducers'
 import { filterNodeVisibility } from '../../util'
 import SideBarList from './SideBarList'
 import ViewConfig from './ViewConfig'
@@ -14,7 +14,10 @@ interface ISideBarProps {
   selectionSet: ISetGraph
   isStdVisible: boolean
   isExtVisible: boolean
+  dataSet: ISideBarStore
   updateWidth: (newWidth: number) => any
+  displayNormal: (element: ISideBarElement) => any
+  hideNormal: (element: ISideBarElement) => any
 }
 
 class SideBar extends React.Component<ISideBarProps> {
@@ -25,24 +28,26 @@ class SideBar extends React.Component<ISideBarProps> {
   }
 
   public render() {
-    const visibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(
-      node =>
-        filterNodeVisibility(
-          node,
-          this.props.isStdVisible,
-          this.props.isExtVisible
-        )
-    )
-    const invisibleNodeList = Object.values(
-      this.props.elementSet.nodeSet
-    ).filter(
-      node =>
-        !filterNodeVisibility(
-          node,
-          this.props.isStdVisible,
-          this.props.isExtVisible
-        )
-    )
+    // const visibleNodeList = Object.values(this.props.elementSet.nodeSet).filter(
+    //   node =>
+    //     filterNodeVisibility(
+    //       node,
+    //       this.props.isStdVisible,
+    //       this.props.isExtVisible
+    //     )
+    // )
+    const visibleNodeList = this.props.dataSet.normalPkgSet.visibleList
+    // const invisibleNodeList = Object.values(
+    //   this.props.elementSet.nodeSet
+    // ).filter(
+    //   node =>
+    //     !filterNodeVisibility(
+    //       node,
+    //       this.props.isStdVisible,
+    //       this.props.isExtVisible
+    //     )
+    // )
+    const invisibleNodeList = this.props.dataSet.normalPkgSet.invisibleList
     return (
       <Resizable
         className="position-fixed fixed-top bg-secondary"
@@ -61,12 +66,14 @@ class SideBar extends React.Component<ISideBarProps> {
         <SideBarList
           header="Visible nodes"
           nodeList={visibleNodeList}
+          isVisible={true}
           selectedNodeSet={this.props.selectionSet.nodeSet}
           isClickable={true}
         />
         <SideBarList
           header="Invisible nodes"
           nodeList={invisibleNodeList}
+          isVisible={false}
           selectedNodeSet={this.props.selectionSet.nodeSet}
           isClickable={false}
         />
@@ -109,7 +116,8 @@ function mapStateToProps(state: IRootState) {
     isExtVisible: state.uiState.isExtVisible,
     isStdVisible: state.uiState.isStdVisible,
     selectionSet: state.graphState.selectionSet,
-    width: state.uiState.sideBarWidth
+    width: state.uiState.sideBarWidth,
+    dataSet: state.data.sideBarData
   }
 }
 
@@ -117,6 +125,12 @@ function mapDispatchToProps(dispatch: any) {
   return {
     updateWidth: (newWidth: number) => {
       dispatch(uiActions.updateWidth(newWidth))
+    },
+    displayNormal: (element: ISideBarElement) => {
+      dispatch(dataActions.displayNormal(element))
+    },
+    hideNormal: (element: ISideBarElement) => {
+      dispatch(dataActions.hideNormal(element))
     }
   }
 }

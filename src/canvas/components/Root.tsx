@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { IListGraph } from '../../GlobalTypes'
+import { IListGraph, ISideBarElement } from '../../GlobalTypes'
 import * as IPCType from '../../IPCTypes'
-import { graphActions, uiActions } from '../Actions'
+import { graphActions, uiActions, dataActions } from '../Actions'
 import Project from '../ldbc/Project'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
@@ -15,6 +15,7 @@ const VisNetworkCompID = 'vis-canvas'
 interface IRootProps {
   updateGraph: (newGraph: IListGraph) => any
   turnOffLoadingIndicator: () => any
+  initNormalList: (newSideBarNormalList: ISideBarElement[]) => any
 }
 
 class Root extends React.Component<IRootProps> {
@@ -29,11 +30,20 @@ class Root extends React.Component<IRootProps> {
         this.props.turnOffLoadingIndicator()
 
         if (newGraph) {
-          // this.props.updateGraph(newGraph)
+          // TODO: deprecated
+          this.props.updateGraph(newGraph)
+
           // TODO:
           // 1. insert DB
           // 2.1 filtering normal (every visible), ext, std (every invisible)
+          const normalList = newGraph.nodes
+            .filter(node => !node.meta.isExternal && !node.meta.isStd)
+            .map(node => ({
+              id: node.id,
+              label: node.label
+            }))
           // 2.2 call data action
+          this.props.initNormalList(normalList)
         }
       }
     )
@@ -59,6 +69,9 @@ function mapDispatchToProps(dispatch: any) {
       dispatch(uiActions.turnOffLoadingIndicator()),
     updateGraph: (newGraph: IListGraph) => {
       dispatch(graphActions.updateGraph(newGraph))
+    },
+    initNormalList: (newSideBarNormalList: ISideBarElement[]) => {
+      dispatch(dataActions.initNormalList(newSideBarNormalList))
     }
   }
 }
