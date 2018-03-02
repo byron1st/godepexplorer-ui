@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { IListGraph, ISideBarElement } from '../../GlobalTypes'
 import * as IPCType from '../../IPCTypes'
 import { graphActions, uiActions, dataActions } from '../Actions'
-import Project from '../ldbc/Project'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
 import MenuBar from './menuBar/MenuBar'
@@ -19,8 +18,6 @@ interface IRootProps {
 }
 
 class Root extends React.Component<IRootProps> {
-  private project: Project
-
   constructor(props: IRootProps) {
     super(props)
 
@@ -47,8 +44,6 @@ class Root extends React.Component<IRootProps> {
         }
       }
     )
-
-    this.project = new Project('test-db')
   }
 
   public render() {
