@@ -7,7 +7,7 @@ const COPY_FILES = ['src/**/*.html']
 const DEST = 'dist'
 
 gulp.task('del', () => {
-  return del.sync(['dist/**/*'])
+  return del.sync(['dist/**/*', 'level-db/**/*'])
 })
 
 gulp.task('ts', ['del'], () => {
