@@ -1,19 +1,9 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
+import { State } from 'godeptypes'
 import { UIAction, uiActions } from '../Actions'
 
-export interface IUIState {
-  readonly sideBarWidth: number
-  readonly infoPanelHeight: number
-  readonly isNodeVisible: boolean
-  readonly isEdgeVisible: boolean
-  readonly loadingPath: string
-  readonly isLoading: boolean
-  readonly isStdVisible: boolean
-  readonly isExtVisible: boolean
-}
-
-const INITIAL_STATE: IUIState = {
+const INITIAL_STATE: State.IUIState = {
   infoPanelHeight: 300,
   isEdgeVisible: true,
   isExtVisible: false,

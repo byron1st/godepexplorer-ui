@@ -1,12 +1,13 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { IEdge, INode } from '../../../GlobalTypes'
+import { State, Graph } from 'godeptypes'
 import Table from './GoDepInfoTable'
 
 interface IInfoTableProps {
-  elementSet: { [id: string]: INode } | { [id: string]: IEdge }
+  elementList: Graph.INode[] | Graph.IEdge[]
   header: string
   isVisible: boolean
+  isNode: boolean
   changeVisibility: () => any
 }
 
@@ -17,7 +18,7 @@ export default (props: IInfoTableProps) => (
     </h3>
     <hr />
     {props.isVisible ? (
-      <Table elementSet={props.elementSet} header={props.header} />
+      <Table elementList={props.elementList} header={props.header} />
     ) : null}
   </div>
 )

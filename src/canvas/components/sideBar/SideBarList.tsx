@@ -1,41 +1,29 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import {
-  IEdge,
-  IElementSet,
-  INode,
-  ISetGraph,
-  ISideBarElement
-} from '../../../GlobalTypes'
-import { graphActions } from '../../Actions'
-import { IRootState } from '../../Reducers'
+import { State } from 'godeptypes'
 import SideBarListItem from './SideBarListItem'
 
 interface ISideBarListProps {
   header: string
-  nodeList: ISideBarElement[]
+  nodeIDList: string[]
   isVisible: boolean
-  selectedNodeSet: IElementSet<INode>
   isClickable: boolean
+  selectedSet: { [key: string]: boolean }
 }
 
-export default class SideBarList extends React.Component<ISideBarListProps> {
-  public render() {
-    return (
-      <div>
-        <h3 className="text-light">{this.props.header}</h3>
-        <div className="list-group">
-          {this.props.nodeList.map(node => (
-            <SideBarListItem
-              node={node}
-              isVisible={this.props.isVisible}
-              selectedNodeSet={this.props.selectedNodeSet}
-              key={node.id + 'sidebarbutton'}
-              isClickable={this.props.isClickable}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
-}
+export default (props: ISideBarListProps) => (
+  <div>
+    <h3 className="text-light">{props.header}</h3>
+    <div className="list-group">
+      {props.nodeIDList.map(id => (
+        <SideBarListItem
+          id={id}
+          isVisible={props.isVisible}
+          isClickable={props.isClickable}
+          isSelected={props.selectedSet[id] ? true : false}
+          key={`${id}-sidebarbutton`}
+        />
+      ))}
+    </div>
+  </div>
+)

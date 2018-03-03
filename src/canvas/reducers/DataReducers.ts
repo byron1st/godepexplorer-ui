@@ -1,15 +1,11 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
+import { State } from 'godeptypes'
 import { DataAction, dataActions } from '../Actions'
-import { sideBarReducers, ISideBarStore } from './SideBarReducers'
+import SideBarReducers from './SideBarReducers'
+import SelectedReducers from './SelectedReducers'
 
-export interface IDataStore {
-  // readonly infoPanelData: string[] // TODO: node[], edge[]로 구분해야 함.
-  readonly sideBarData: ISideBarStore
-}
-
-export const dataReducers = combineReducers<IDataStore>({
-  sideBarData: sideBarReducers
+export const dataReducers = combineReducers<State.IDataState>({
+  selected: SelectedReducers,
+  sideBarData: SideBarReducers
 })
-
-export { ISideBarStore } from './SideBarReducers'

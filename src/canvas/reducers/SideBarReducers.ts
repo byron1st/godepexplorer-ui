@@ -1,65 +1,77 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
+import { State } from 'godeptypes'
 import { DataAction, dataActions } from '../Actions'
-import { ISideBarElement } from '../../GlobalTypes'
+import DataSet from '../DataSet'
+import VisNetwork from '../VisNetwork'
 
-interface ISideBarDataSet {
-  visibleList: ISideBarElement[]
-  invisibleList: ISideBarElement[]
+const INITIAL_STATE: State.ISideBarState = {
+  nor: { visibleList: [], invisibleList: [] },
+  ext: { visibleList: [], invisibleList: [] },
+  std: { visibleList: [], invisibleList: [] }
 }
 
-export interface ISideBarStore {
-  normalPkgSet: ISideBarDataSet
-  extPkgSet: ISideBarDataSet
-  stdPkgSet: ISideBarDataSet
-}
+export default (state = INITIAL_STATE, action: DataAction) => {
+  switch (action.type) {
+    case getType(dataActions.initSideBarData):
+      const visibleList = getVisibleList(action.payload)
+      VisNetwork.show(visibleList)
 
-const INITIAL_STATE: ISideBarDataSet = {
-  visibleList: [],
-  invisibleList: []
-}
-
-export const sideBarReducers = combineReducers<ISideBarStore>({
-  normalPkgSet: (
-    state: ISideBarDataSet = INITIAL_STATE,
-    action: DataAction
-  ) => {
-    switch (action.type) {
-      case getType(dataActions.initNormalList):
+      return action.payload
+    case getType(dataActions.changeVisibility):
+      if (action.payload.toShow) {
         return {
-          visibleList: action.payload,
-          invisibleList: []
+          ...state,
+          [action.payload.pkgType]: show(
+            state[action.payload.pkgType],
+            action.payload.id
+          )
         }
-      case getType(dataActions.displayNormal):
+      } else {
         return {
-          visibleList: addToList(state.visibleList, action.payload),
-          invisibleList: removeFromList(state.invisibleList, action.payload.id)
+          ...state,
+          [action.payload.pkgType]: hide(
+            state[action.payload.pkgType],
+            action.payload.id
+          )
         }
-      case getType(dataActions.hideNormal):
-        return {
-          visibleList: removeFromList(state.visibleList, action.payload.id),
-          invisibleList: addToList(state.invisibleList, action.payload)
-        }
-      default:
-        return state
-    }
+      }
+    default:
+      return state
   }
-})
-
-function addToList(state: ISideBarElement[], element: ISideBarElement) {
-  const list = state.slice(0)
-  list.push(element)
-  list.sort(sortByLabel)
-  return list
 }
 
-function removeFromList(state: ISideBarElement[], id: string) {
-  const list = state.filter(element => element.id !== id)
-  return list
+function hide(dataSet: State.ISideBarDataSet, id: string) {
+  const visibleList = dataSet.visibleList.filter(element => id !== element)
+  const invisibleList = dataSet.invisibleList.slice(0)
+  invisibleList.push(id)
+  invisibleList.sort(sortByLabel)
+
+  VisNetwork.hide(id)
+
+  return { visibleList, invisibleList }
 }
 
-function sortByLabel(prev: ISideBarElement, next: ISideBarElement) {
-  if (prev.label <= next.label) {
+function show(dataSet: State.ISideBarDataSet, id: string) {
+  const invisibleList = dataSet.invisibleList.filter(element => id !== element)
+  const visibleList = dataSet.visibleList.slice(0)
+  visibleList.push(id)
+  visibleList.sort(sortByLabel)
+
+  VisNetwork.show(id)
+
+  return { visibleList, invisibleList }
+}
+
+function getVisibleList(dataSet: State.ISideBarState) {
+  return dataSet.nor.visibleList.concat(
+    dataSet.ext.visibleList,
+    dataSet.std.visibleList
+  )
+}
+
+function sortByLabel(prev: string, next: string) {
+  if (DataSet.getNode(prev).label <= DataSet.getNode(next).label) {
     return -1
   } else {
     return 1

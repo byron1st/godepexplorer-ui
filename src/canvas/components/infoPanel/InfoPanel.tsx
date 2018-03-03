@@ -1,17 +1,17 @@
 import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { ISetGraph } from '../../../GlobalTypes'
+import { State, Graph } from 'godeptypes'
 import { uiActions } from '../../Actions'
-import { IRootState } from '../../Reducers'
 import InfoTableContainer from './InfoTableContainer'
+import DataSet from '../../DataSet'
 
 interface IInfoPanelProps {
   height: number
   isNodeVisible: boolean
   isEdgeVisible: boolean
   sideBarWidth: number
-  selectionSet: ISetGraph
+  selected: State.ISelectedState
   updateHeight: (newHeight: number) => any
   changeNodeVisible: () => any
   changeEdgeVisible: () => any
@@ -23,7 +23,15 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
 
     this.updateHeight = this.updateHeight.bind(this)
   }
+
   public render() {
+    const nodeList: Graph.INode[] = this.props.selected.nodeList.map(id =>
+      DataSet.getNode(id)
+    )
+    const edgeList: Graph.IEdge[] = this.props.selected.edgeList.map(id =>
+      DataSet.getEdge(id)
+    )
+
     return (
       <Resizable
         // @ts-ignore
@@ -38,15 +46,17 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
         maxHeight={800}
       >
         <InfoTableContainer
-          elementSet={this.props.selectionSet.nodeSet}
+          elementList={nodeList}
           header="Nodes"
           isVisible={this.props.isNodeVisible}
+          isNode={true}
           changeVisibility={this.props.changeNodeVisible}
         />
         <InfoTableContainer
-          elementSet={this.props.selectionSet.edgeSet}
+          elementList={edgeList}
           header="Edges"
           isVisible={this.props.isEdgeVisible}
+          isNode={false}
           changeVisibility={this.props.changeEdgeVisible}
         />
       </Resizable>
@@ -83,13 +93,13 @@ const resizeEnabled = {
   topRight: false
 }
 
-function mapStateToProps(state: IRootState) {
+function mapStateToProps(state: State.IRootState) {
   return {
-    height: state.uiState.infoPanelHeight,
-    isEdgeVisible: state.uiState.isEdgeVisible,
-    isNodeVisible: state.uiState.isNodeVisible,
-    selectionSet: state.graphState.selectionSet,
-    sideBarWidth: state.uiState.sideBarWidth
+    height: state.ui.infoPanelHeight,
+    isEdgeVisible: state.ui.isEdgeVisible,
+    isNodeVisible: state.ui.isNodeVisible,
+    sideBarWidth: state.ui.sideBarWidth,
+    selected: state.data.selected
   }
 }
 

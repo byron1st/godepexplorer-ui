@@ -1,26 +1,17 @@
 import { remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import {
-  IEdge,
-  IElementSet,
-  INode,
-  ISetGraph,
-  ISideBarElement
-} from '../../../GlobalTypes'
-import { graphActions, dataActions } from '../../Actions'
-import { IRootState } from '../../Reducers'
+import { State, Graph } from 'godeptypes'
+import { dataActions } from '../../Actions'
+import DataSet from '../../DataSet'
 
 interface ISideBarListItemProps {
-  node: ISideBarElement
-  selectedNodeSet: IElementSet<INode>
-  elementSet: ISetGraph
+  id: string
   isClickable: boolean
   isVisible: boolean
-  selectElement: (selectionSet: ISetGraph) => any
-  changeSingleNodeVisible: (node: INode) => any
-  display: (node: ISideBarElement) => any
-  hide: (node: ISideBarElement) => any
+  isSelected: boolean
+  select: (selected: State.ISelectedState) => any
+  changeVisibility: (id: string, toShow: boolean, pkgType: Graph.PkgType) => any
 }
 
 class SideBarListItem extends React.Component<ISideBarListItemProps> {
@@ -28,21 +19,20 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     super(props)
 
     this.openContextMenu = this.openContextMenu.bind(this)
+    this.select = this.select.bind(this)
   }
+
   public render() {
-    let isActive = ''
-    if (this.props.selectedNodeSet[this.props.node.id] !== undefined) {
-      isActive = 'active'
-    }
+    const isActive = this.props.isSelected ? 'active' : ''
 
     return (
       <button
         type="button"
         className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
-        // onClick={this.props.isClickable ? this.selectItem.bind(this) : null}
+        onClick={this.props.isClickable ? this.select : null}
         onContextMenu={this.openContextMenu}
       >
-        {this.props.node.label}
+        {DataSet.getNode(this.props.id).label}
         <span className="badge badge-secondary badge-pill">
           {this.props.isVisible ? '' : 'hidden'}
         </span>
@@ -50,81 +40,58 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     )
   }
 
-  // private selectItem() {
-  //   const selectionSet: ISetGraph = { nodeSet: {}, edgeSet: {} }
-  //   selectionSet.nodeSet[this.props.node.id] = this.props.node
+  private select() {
+    this.props.select(DataSet.selectNode(this.props.id))
+  }
 
-  //   const initialEdgeSet: IElementSet<IEdge> = {}
-  //   selectionSet.edgeSet = Object.values(this.props.elementSet.edgeSet)
-  //     .filter(
-  //       edge =>
-  //         edge.from === this.props.node.id || edge.to === this.props.node.id
-  //     )
-  //     .reduce((accumulator, currentEdge) => {
-  //       accumulator[currentEdge.id] = currentEdge
-  //       return accumulator
-  //     }, initialEdgeSet)
+  private openContextMenu(e: any) {
+    const menu = remote.Menu.buildFromTemplate(
+      this.getMenuTemplate(this.props.id, this.props.changeVisibility)
+    )
 
-  //   this.props.selectElement(selectionSet)
-  // }
+    e.preventDefault()
+    menu.popup(remote.getCurrentWindow())
+  }
 
   private getMenuTemplate(
-    node: ISideBarElement,
-    display: (node: ISideBarElement) => any,
-    hide: (node: ISideBarElement) => any
+    id: string,
+    changeVisibility: (
+      id: string,
+      toShow: boolean,
+      pkgType: Graph.PkgType
+    ) => any
   ) {
     if (this.props.isClickable) {
       return [
         {
           label: 'Hide',
           click() {
-            hide(node)
+            changeVisibility(id, false, DataSet.getNode(id).meta.pkgType)
           }
         }
       ]
     } else {
       return [
         {
-          label: 'View',
+          label: 'Show',
           click() {
-            display(node)
+            changeVisibility(id, true, DataSet.getNode(id).meta.pkgType)
           }
         }
       ]
     }
   }
-
-  private openContextMenu(e: any) {
-    const menu = remote.Menu.buildFromTemplate(
-      this.getMenuTemplate(this.props.node, this.props.display, this.props.hide)
-    )
-
-    e.preventDefault()
-    menu.popup(remote.getCurrentWindow())
-  }
-}
-
-function mapStateToProps(state: IRootState) {
-  return {
-    elementSet: state.graphState.elementSet
-  }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    changeSingleNodeVisible: (node: INode) => {
-      dispatch(graphActions.changeSingleNodeVisible(node))
+    select: (selected: State.ISelectedState) => {
+      dispatch(dataActions.select(selected))
     },
-    selectElement: (selectionSet: ISetGraph) => {
-      dispatch(graphActions.selectElement(selectionSet))
-    },
-    display: (node: ISideBarElement) => {
-      dispatch(dataActions.displayNormal(node))
-    },
-    hide: (node: ISideBarElement) => {
-      dispatch(dataActions.hideNormal(node))
+    changeVisibility: (id: string, toShow: boolean, pkgType: Graph.PkgType) => {
+      dispatch(dataActions.changeVisibility(id, toShow, pkgType))
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideBarListItem)
+export default connect(null, mapDispatchToProps)(SideBarListItem)

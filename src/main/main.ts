@@ -1,7 +1,7 @@
 import { App, app, BrowserWindow, ipcMain, dialog } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
-import * as types from '../GlobalTypes'
+import { Network } from 'godeptypes'
 import * as IPCType from '../IPCTypes'
 import godepexplorer from './connectors/godepexplorer'
 import * as util from './util'
@@ -76,13 +76,13 @@ function getBasicHandlerForGodepexplorer(
   returnEventType: string
 ) {
   return (event: any, pkgName: string) => {
-    const data: types.IRequest = { pkgName }
+    const data: Network.IRequest = { pkgName }
 
     // Connect to godepexplorer
     godepexplorer
       .send(JSON.stringify(data), targetPath)
       .then(responseData => {
-        const response: types.IResponse = JSON.parse(responseData)
+        const response: Network.IResponse = JSON.parse(responseData)
 
         // Return
         event.sender.send(returnEventType, response.graph)

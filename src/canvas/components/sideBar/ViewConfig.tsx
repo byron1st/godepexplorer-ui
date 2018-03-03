@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
+import { State } from 'godeptypes'
 import { uiActions } from '../../Actions'
-import { IRootState } from '../../Reducers'
 import UnaryViewConfig from './UnaryViewConfig'
 
 interface IViewConfigProps {
@@ -34,10 +34,10 @@ class ViewConfig extends React.Component<IViewConfigProps> {
   }
 }
 
-function mapStateToProps(state: IRootState) {
+function mapStateToProps(state: State.IRootState) {
   return {
-    isExtVisible: state.uiState.isExtVisible,
-    isStdVisible: state.uiState.isStdVisible
+    isExtVisible: state.ui.isExtVisible,
+    isStdVisible: state.ui.isStdVisible
   }
 }
 

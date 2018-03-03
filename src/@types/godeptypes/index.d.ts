@@ -8,7 +8,6 @@ declare module 'godeptypes' {
     export interface INode extends vis.Node {
       id: string
       label: string
-      isVisible: boolean
       meta: INodeMeta
     }
 
@@ -21,17 +20,16 @@ declare module 'godeptypes' {
       meta: IEdgeMeta
     }
 
-    export enum EdgeType {
-      COMP = 0,
-      REL
-    }
+    export type PkgType = 'nor' | 'ext' | 'std'
+
+    export type EdgeType = 0 | 1
 
     interface INodeMeta {
-      [key: string]: string | ('nor' | 'ext' | 'std')
+      [key: string]: string | PkgType
       pkgPath: string
       pkgName: string
       pkgDir: string
-      pkgType: 'nor' | 'ext' | 'std'
+      pkgType: PkgType
       // TODO: funcSet
     }
 
@@ -45,29 +43,6 @@ declare module 'godeptypes' {
       id: string
       from: string
       to: string
-    }
-  }
-
-  namespace RealmScheme {
-    type INodeMeta = Graph.INodeMeta
-
-    export interface INode {
-      id: string
-      label: string
-      isVisible: boolean
-      meta: INodeMeta
-    }
-
-    export interface IEdge {
-      id: string
-      from: string
-      to: string
-      meta: IEdgeMeta
-    }
-
-    interface IEdgeMeta {
-      type: Graph.EdgeType
-      depAtFunc: Graph.IDepAtFunc[]
     }
   }
 
@@ -89,24 +64,25 @@ declare module 'godeptypes' {
     }
 
     export interface IDataState {
-      readonly selected: string[]
+      readonly selected: ISelectedState
       readonly sideBarData: ISideBarState
     }
 
+    export interface ISelectedState {
+      readonly nodeList: string[]
+      readonly edgeList: string[]
+    }
+
+    // key values are matched with PkgType.
     export interface ISideBarState {
-      readonly normalPkgSet: ISideBarDataSet
-      readonly extPkgSet: ISideBarDataSet
-      readonly stdPkgSet: ISideBarDataSet
+      readonly nor: ISideBarDataSet
+      readonly ext: ISideBarDataSet
+      readonly std: ISideBarDataSet
     }
 
     export interface ISideBarDataSet {
-      readonly visibleList: ISideBarElement[]
-      readonly invisibleList: ISideBarElement[]
-    }
-
-    export interface ISideBarElement {
-      readonly id: string
-      readonly label: string
+      readonly visibleList: string[]
+      readonly invisibleList: string[]
     }
   }
 
@@ -119,5 +95,14 @@ declare module 'godeptypes' {
       pkgName: string
       graph: Graph.IListGraph
     }
+  }
+
+  interface IElementSet<T> {
+    [id: string]: T
+  }
+
+  export interface IGraphDataSet {
+    nodeSet: IElementSet<Graph.INode>
+    edgeSet: IElementSet<Graph.IEdge>
   }
 }

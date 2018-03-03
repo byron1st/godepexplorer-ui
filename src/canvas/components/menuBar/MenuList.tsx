@@ -1,14 +1,13 @@
 import { remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { graphActions, uiActions } from '../../Actions'
+import { State } from 'godeptypes'
+import { uiActions } from '../../Actions'
 import * as IPC from '../../ipc'
-import { IRootState } from '../../Reducers'
 
 interface IMenuListProps {
   loadingPath: string
   isLoading: boolean
-  resetGraph: () => any
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
@@ -31,10 +30,7 @@ class MenuList extends React.Component<IMenuListProps> {
             className="nav-item nav-link"
             onClick={this.openSelectDirectoryDialog}
           >
-            Load
-          </a>
-          <a className="nav-item nav-link" onClick={this.props.resetGraph}>
-            Reset
+            Import
           </a>
         </div>
       </div>,
@@ -83,16 +79,15 @@ function extractRootPath(filePath: string) {
   }
 }
 
-function mapStateToProps(state: IRootState) {
+function mapStateToProps(state: State.IRootState) {
   return {
-    isLoading: state.uiState.isLoading,
-    loadingPath: state.uiState.loadingPath
+    isLoading: state.ui.isLoading,
+    loadingPath: state.ui.loadingPath
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    resetGraph: () => dispatch(graphActions.resetGraph()),
     turnOnLoadingIndicator: (packagePath: string) => {
       dispatch(uiActions.turnOnLoadingIndicator(packagePath))
     }

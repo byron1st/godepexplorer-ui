@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IEdge, IElementSet, INode } from '../../../GlobalTypes'
+import { Graph } from 'godeptypes'
 
 const keyLabelMap: { [key: string]: string } = {
   count: 'Count',
@@ -22,17 +22,17 @@ const keyLabelMap: { [key: string]: string } = {
 const edgeType = ['Composition', 'Import-Relation']
 
 interface ITableProps {
-  elementSet: IElementSet<INode> | IElementSet<IEdge>
+  elementList: Graph.INode[] | Graph.IEdge[]
   header: string
 }
 
 export default (props: ITableProps) => {
   let jsxElements: JSX.Element[] = null
 
-  if (Object.keys(props.elementSet).length !== 0) {
-    isEdgeList(props.elementSet)
-      ? (jsxElements = getEdgeElements(props.elementSet))
-      : (jsxElements = getNodeElements(props.elementSet))
+  if (props.elementList.length !== 0) {
+    isEdgeList(props.elementList)
+      ? (jsxElements = getEdgeElements(props.elementList))
+      : (jsxElements = getNodeElements(props.elementList))
   }
 
   return <div>{jsxElements}</div>
@@ -47,10 +47,10 @@ const style = {
   }
 }
 
-function getNodeElements(elementSet: IElementSet<INode>) {
+function getNodeElements(elementList: Graph.INode[]) {
   const jsxElements: JSX.Element[] = []
 
-  Object.values(elementSet).forEach(node => {
+  elementList.forEach(node => {
     jsxElements.push(
       <div className="card m-3" key={node.id}>
         <div className="card-body">
@@ -66,10 +66,10 @@ function getNodeElements(elementSet: IElementSet<INode>) {
   return jsxElements
 }
 
-function getEdgeElements(elementSet: IElementSet<IEdge>) {
+function getEdgeElements(elementList: Graph.IEdge[]) {
   const jsxElements: JSX.Element[] = []
 
-  Object.values(elementSet).forEach((edge, edgeIndex) => {
+  elementList.forEach((edge, edgeIndex) => {
     jsxElements.push(
       <div className="card m-3" key={edge.id}>
         <div className="card-body">
@@ -85,7 +85,7 @@ function getEdgeElements(elementSet: IElementSet<IEdge>) {
   return jsxElements
 }
 
-function getNodeMetaElements(node: INode) {
+function getNodeMetaElements(node: Graph.INode) {
   const rows: JSX.Element[] = []
 
   rows.push(getRow('id', node.id, 0, getRowKey(node.id, 'ID')))
@@ -108,7 +108,7 @@ function getNodeMetaElements(node: INode) {
   return rows
 }
 
-function getEdgeMetaElements(edge: IEdge) {
+function getEdgeMetaElements(edge: Graph.IEdge) {
   const rows: JSX.Element[] = []
 
   rows.push(getRow('from', edge.from, 0, getRowKey(edge.id, 'from')))
@@ -153,9 +153,9 @@ function getRow(key: string, value: any, index: number, reactKey: string) {
 }
 
 function isEdgeList(
-  elementSet: IElementSet<INode> | IElementSet<IEdge>
-): elementSet is IElementSet<IEdge> {
-  return (Object.values(elementSet)[0] as IEdge).from !== undefined
+  elementList: Graph.INode[] | Graph.IEdge[]
+): elementList is Graph.IEdge[] {
+  return (elementList[0] as Graph.IEdge).from !== undefined
 }
 
 function getRowKey(id: string, key: string) {
