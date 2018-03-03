@@ -5,25 +5,51 @@ import SideBarListItem from './SideBarListItem'
 
 interface ISideBarListProps {
   header: string
-  nodeIDList: string[]
-  isVisible: boolean
-  isClickable: boolean
+  visibleList: string[]
+  invisibleList: string[]
   selectedSet: { [key: string]: boolean }
 }
 
 export default (props: ISideBarListProps) => (
-  <div>
-    <h3 className="text-light">{props.header}</h3>
-    <div className="list-group">
-      {props.nodeIDList.map(id => (
-        <SideBarListItem
-          id={id}
-          isVisible={props.isVisible}
-          isClickable={props.isClickable}
-          isSelected={props.selectedSet[id] ? true : false}
-          key={`${id}-sidebarbutton`}
-        />
-      ))}
+  <div className="card" style={style.card}>
+    <div className="card-header">{props.header}</div>
+    <div className="card-body" style={style.cardBody}>
+      <h6 className="card-title">Visible Nodes</h6>
+      <div className="list-group">
+        {props.visibleList.map(id => (
+          <SideBarListItem
+            id={id}
+            isVisible={true}
+            isClickable={true}
+            isSelected={props.selectedSet[id] ? true : false}
+            key={`${id}-sidebarbutton`}
+          />
+        ))}
+      </div>
+    </div>
+    <div className="card-body" style={style.cardBody}>
+      <h6 className="card-title">Invisible Nodes</h6>
+      <div className="list-group">
+        {props.invisibleList.map(id => (
+          <SideBarListItem
+            id={id}
+            isVisible={false}
+            isClickable={false}
+            isSelected={props.selectedSet[id] ? true : false}
+            key={`${id}-sidebarbutton`}
+          />
+        ))}
+      </div>
     </div>
   </div>
 )
+
+const style = {
+  card: {
+    marginBottom: '10px'
+  },
+  cardBody: {
+    paddingTop: '10px',
+    paddingBottom: '10px'
+  }
+}

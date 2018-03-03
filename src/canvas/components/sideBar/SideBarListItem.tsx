@@ -31,6 +31,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
         className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
         onClick={this.props.isClickable ? this.select : null}
         onContextMenu={this.openContextMenu}
+        style={style.item}
       >
         {DataSet.getNode(this.props.id).label}
         <span className="badge badge-secondary badge-pill">
@@ -80,6 +81,13 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
         }
       ]
     }
+  }
+}
+
+const style = {
+  item: {
+    paddingTop: '0px',
+    paddingBottom: '0px'
   }
 }
 

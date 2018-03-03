@@ -34,60 +34,33 @@ class SideBar extends React.Component<ISideBarProps> {
     return (
       <Resizable
         className="position-fixed fixed-top bg-secondary"
-        style={{
-          ...style.ResizableComp,
-          overflowX: 'hidden',
-          overflowY: 'auto'
-        }}
+        style={style.ResizableComp}
         size={{ height: '100%', width: this.props.width }}
         enable={resizeEnabled}
         onResizeStop={this.updateWidth}
         minWidth={200}
         maxWidth={800}
       >
-        {/* <ViewConfig /> */}
-        <SideBarList
-          header="Visible normal packages"
-          nodeIDList={this.props.sideBarData.nor.visibleList}
-          isVisible={true}
-          isClickable={true}
-          selectedSet={selectedSet}
-        />
-        <SideBarList
-          header="Invisible normal packages"
-          nodeIDList={this.props.sideBarData.nor.invisibleList}
-          isVisible={false}
-          isClickable={false}
-          selectedSet={selectedSet}
-        />
-        <SideBarList
-          header="Visible external packages"
-          nodeIDList={this.props.sideBarData.ext.visibleList}
-          isVisible={true}
-          isClickable={true}
-          selectedSet={selectedSet}
-        />
-        <SideBarList
-          header="Invisible external packages"
-          nodeIDList={this.props.sideBarData.ext.invisibleList}
-          isVisible={false}
-          isClickable={false}
-          selectedSet={selectedSet}
-        />
-        <SideBarList
-          header="Visible standard packages"
-          nodeIDList={this.props.sideBarData.std.visibleList}
-          isVisible={true}
-          isClickable={true}
-          selectedSet={selectedSet}
-        />
-        <SideBarList
-          header="Invisible standard packages"
-          nodeIDList={this.props.sideBarData.std.invisibleList}
-          isVisible={false}
-          isClickable={false}
-          selectedSet={selectedSet}
-        />
+        <div style={style.ContentContainer}>
+          <SideBarList
+            header="Normal packages"
+            visibleList={this.props.sideBarData.nor.visibleList}
+            invisibleList={this.props.sideBarData.nor.invisibleList}
+            selectedSet={selectedSet}
+          />
+          <SideBarList
+            header="External packages"
+            visibleList={this.props.sideBarData.ext.visibleList}
+            invisibleList={this.props.sideBarData.ext.invisibleList}
+            selectedSet={selectedSet}
+          />
+          <SideBarList
+            header="Standard packages"
+            visibleList={this.props.sideBarData.std.visibleList}
+            invisibleList={this.props.sideBarData.std.invisibleList}
+            selectedSet={selectedSet}
+          />
+        </div>
       </Resizable>
     )
   }
@@ -107,6 +80,11 @@ const style = {
     borderStyle: 'none outset none none',
     padding: '66px 10px 10px 10px',
     zIndex: 1010
+  },
+  ContentContainer: {
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    height: '100%'
   }
 }
 
