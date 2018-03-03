@@ -3,6 +3,7 @@ import { Graph, State } from 'godeptypes'
 import DataSet from './DataSet'
 import Store from './Store'
 import { dataActions } from './Actions'
+import { EdgeType } from './enums'
 
 const NETWORK_OPTS: vis.Options = {
   nodes: {
@@ -53,8 +54,14 @@ class VisNetwork {
       ? DataSet.getVisibleElements(id)
       : DataSet.getVisibleElements([id])
 
-    this.nodes.update(dataList.nodeList)
-    this.edges.update(dataList.edgeList)
+    this.nodes.update(
+      dataList.nodeList.map(node => {
+        node.group = node.meta.pkgType
+        return node
+      })
+    )
+
+    this.edges.update(dataList.edgeList.map(styleEdge))
   }
 
   public hide(id: string | string[]) {
@@ -71,6 +78,23 @@ class VisNetwork {
       Store.dispatch(dataActions.select(selected))
     }
   }
+}
+
+function styleEdge(edge: Graph.IEdge) {
+  if (edge.meta.type === EdgeType.COMP) {
+    edge.color = { color: '#292D34' }
+    edge.arrows = {
+      from: {
+        enabled: true,
+        type: 'circle',
+        scaleFactor: 0.5
+      }
+    }
+  } else if (edge.meta.type === EdgeType.REL) {
+    edge.arrows = 'to'
+  }
+
+  return edge
 }
 
 export default new VisNetwork()
