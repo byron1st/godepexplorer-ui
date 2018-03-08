@@ -29,9 +29,9 @@ class DataSet {
 
     graph.edges.forEach(edge => (this.dataSet.edgeSet[edge.id] = edge))
 
-    sideBarState.nor.visibleList.sort(this.sortByLabel.bind(this))
-    sideBarState.ext.invisibleList.sort(this.sortByLabel.bind(this))
-    sideBarState.std.invisibleList.sort(this.sortByLabel.bind(this))
+    sideBarState.nor.visibleList.sort(this.sortByPkgPath.bind(this))
+    sideBarState.ext.invisibleList.sort(this.sortByPkgPath.bind(this))
+    sideBarState.std.invisibleList.sort(this.sortByPkgPath.bind(this))
 
     return sideBarState
   }
@@ -65,8 +65,11 @@ class DataSet {
     return { nodeList, edgeList }
   }
 
-  private sortByLabel(prev: string, next: string) {
-    if (this.dataSet.nodeSet[prev].label <= this.dataSet.nodeSet[next].label) {
+  private sortByPkgPath(prev: string, next: string) {
+    if (
+      this.dataSet.nodeSet[prev].meta.pkgPath <=
+      this.dataSet.nodeSet[next].meta.pkgPath
+    ) {
       return -1
     } else {
       return 1

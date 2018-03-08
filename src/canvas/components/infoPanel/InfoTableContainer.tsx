@@ -13,9 +13,9 @@ interface IInfoTableProps {
 
 export default (props: IInfoTableProps) => (
   <div>
-    <h3 className="text-dark" onClick={props.changeVisibility}>
+    <h5 className="text-dark" onClick={props.changeVisibility}>
       {props.header}
-    </h3>
+    </h5>
     <hr />
     {props.isVisible ? (
       <Table elementList={props.elementList} header={props.header} />

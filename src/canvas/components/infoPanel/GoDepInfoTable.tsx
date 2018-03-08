@@ -6,17 +6,18 @@ const keyLabelMap: { [key: string]: string } = {
   depAtFunc: 'Function-level',
   from: 'From(ID)',
   id: 'ID',
-  isExternal: 'External Pkg?',
-  isPkg: 'Package?',
-  isStd: 'Standard Pkg?',
   label: 'Label',
-  packageDir: 'Package Dir',
-  packageName: 'Package Name',
-  packagePath: 'Package Path',
+  pkgDir: 'Package Dir',
+  pkgName: 'Package Name',
+  pkgPath: 'Package Path',
+  pkgType: 'Package Type',
   to: 'To(ID)',
   type: 'Type',
   children: 'Sub-packages',
-  parent: 'Parent-package'
+  parent: 'Parent-package',
+  nor: 'Normal',
+  ext: 'External',
+  std: 'Standard'
 }
 
 const edgeType = ['Composition', 'Import-Relation']
@@ -100,6 +101,15 @@ function getNodeMetaElements(node: Graph.INode) {
       )
     } else if (key === 'sinkEdgeIDSet' || key === 'sourceEdgeIDSet') {
       // TODO: do something.
+    } else if (key === 'pkgType') {
+      rows.push(
+        getRow(
+          key,
+          keyLabelMap[node.meta[key]],
+          index + 1,
+          getRowKey(node.id, key)
+        )
+      )
     } else {
       rows.push(getRow(key, node.meta[key], index + 1, getRowKey(node.id, key)))
     }

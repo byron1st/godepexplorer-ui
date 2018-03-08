@@ -45,20 +45,22 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
         minHeight={200}
         maxHeight={800}
       >
-        <InfoTableContainer
-          elementList={nodeList}
-          header="Nodes"
-          isVisible={this.props.isNodeVisible}
-          isNode={true}
-          changeVisibility={this.props.changeNodeVisible}
-        />
-        <InfoTableContainer
-          elementList={edgeList}
-          header="Edges"
-          isVisible={this.props.isEdgeVisible}
-          isNode={false}
-          changeVisibility={this.props.changeEdgeVisible}
-        />
+        <div style={style.ContentContainer}>
+          <InfoTableContainer
+            elementList={nodeList}
+            header="Nodes"
+            isVisible={this.props.isNodeVisible}
+            isNode={true}
+            changeVisibility={this.props.changeNodeVisible}
+          />
+          <InfoTableContainer
+            elementList={edgeList}
+            header="Edges"
+            isVisible={this.props.isEdgeVisible}
+            isNode={false}
+            changeVisibility={this.props.changeEdgeVisible}
+          />
+        </div>
       </Resizable>
     )
   }
@@ -79,6 +81,10 @@ const style = {
     overflowY: 'auto',
     position: 'fixed',
     zIndex: 1009
+  },
+  ContentContainer: {
+    marginLeft: '10px',
+    marginRight: '10px'
   }
 }
 

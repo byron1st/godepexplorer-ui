@@ -29,7 +29,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
       <button
         type="button"
         className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
-        onClick={this.props.isClickable ? this.select : null}
+        onClick={this.select}
         onContextMenu={this.openContextMenu}
         style={style.item}
       >

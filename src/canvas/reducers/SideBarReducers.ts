@@ -45,7 +45,7 @@ function hide(dataSet: State.ISideBarDataSet, id: string) {
   const visibleList = dataSet.visibleList.filter(element => id !== element)
   const invisibleList = dataSet.invisibleList.slice(0)
   invisibleList.push(id)
-  invisibleList.sort(sortByLabel)
+  invisibleList.sort(sortByPkgPath)
 
   VisNetwork.hide(id)
 
@@ -56,7 +56,7 @@ function show(dataSet: State.ISideBarDataSet, id: string) {
   const invisibleList = dataSet.invisibleList.filter(element => id !== element)
   const visibleList = dataSet.visibleList.slice(0)
   visibleList.push(id)
-  visibleList.sort(sortByLabel)
+  visibleList.sort(sortByPkgPath)
 
   VisNetwork.show(id)
 
@@ -70,8 +70,10 @@ function getVisibleList(dataSet: State.ISideBarState) {
   )
 }
 
-function sortByLabel(prev: string, next: string) {
-  if (DataSet.getNode(prev).label <= DataSet.getNode(next).label) {
+function sortByPkgPath(prev: string, next: string) {
+  if (
+    DataSet.getNode(prev).meta.pkgPath <= DataSet.getNode(next).meta.pkgPath
+  ) {
     return -1
   } else {
     return 1
