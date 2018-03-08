@@ -1,23 +1,27 @@
 import * as React from 'react'
 import { Graph } from 'godeptypes'
+import * as _ from 'lodash'
+import DataSet from '../../DataSet'
 
 const keyLabelMap: { [key: string]: string } = {
   count: 'Count',
-  depAtFunc: 'Function-level',
-  from: 'From(ID)',
+  depAtFuncSet: 'Function-level',
+  from: 'Source(from)',
   id: 'ID',
   label: 'Label',
-  pkgDir: 'Package Dir',
+  pkgDir: 'Package Directory',
   pkgName: 'Package Name',
   pkgPath: 'Package Path',
   pkgType: 'Package Type',
-  to: 'To(ID)',
+  to: 'Sink(to)',
   type: 'Type',
   children: 'Sub-packages',
   parent: 'Parent-package',
   nor: 'Normal',
   ext: 'External',
-  std: 'Standard'
+  std: 'Standard',
+  sinkEdgeIDSet: 'In-relation (from)',
+  sourceEdgeIDSet: 'Out-relation (to)'
 }
 
 const edgeType = ['Composition', 'Import-Relation']
@@ -39,108 +43,135 @@ export default (props: ITableProps) => {
   return <div>{jsxElements}</div>
 }
 
-const style = {
-  tdKey: {
-    fontWeight: 'bold'
-  },
-  tdValue: {
-    fontFamily: 'monospace'
-  }
-}
-
 function getNodeElements(elementList: Graph.INode[]) {
-  const jsxElements: JSX.Element[] = []
-
-  elementList.forEach(node => {
-    jsxElements.push(
-      <div className="card m-3" key={node.id}>
-        <div className="card-body">
-          <h3 className="card-title">{node.label}</h3>
-          <div className="card-text container-fluid">
-            {getNodeMetaElements(node)}
-          </div>
+  const getCardForNode = (node: Graph.INode) => (
+    <div className="card m-3" key={node.id}>
+      <div className="card-body">
+        <h4 className="card-title">{node.label}</h4>
+        <h6 className="card-subtitle text-muted">{node.meta.pkgPath}</h6>
+        <div className="card-text container-fluid">
+          {getNodeMetaElements(node)}
         </div>
       </div>
-    )
-  })
+    </div>
+  )
 
-  return jsxElements
+  return _.map(elementList, getCardForNode)
 }
 
 function getEdgeElements(elementList: Graph.IEdge[]) {
-  const jsxElements: JSX.Element[] = []
-
-  elementList.forEach((edge, edgeIndex) => {
-    jsxElements.push(
-      <div className="card m-3" key={edge.id}>
-        <div className="card-body">
-          <h3 className="card-title">Edge #{edgeIndex + 1}</h3>
-          <div className="card-text container-fluid">
-            {getEdgeMetaElements(edge)}
-          </div>
+  const getCardForEdge = (edge: Graph.IEdge, edgeIndex: number) => (
+    <div className="card m-3" key={edge.id}>
+      <div className="card-body">
+        <h4 className="card-title">Edge #{edgeIndex + 1}</h4>
+        <div className="card-text container-fluid">
+          {getEdgeMetaElements(edge)}
         </div>
       </div>
-    )
-  })
+    </div>
+  )
 
-  return jsxElements
+  return _.map(elementList, getCardForEdge)
 }
 
 function getNodeMetaElements(node: Graph.INode) {
-  const rows: JSX.Element[] = []
+  return [
+    getRow('id', node.id, 0, getRowKey(node.id, 'ID')),
+    getRow(
+      'pkgType',
+      keyLabelMap[node.meta.pkgType],
+      1,
+      getRowKey(node.id, 'PkgType')
+    ),
+    getRow('parent', node.meta.parent, 2, getRowKey(node.id, 'parent')),
+    getRow(
+      'children',
+      <ul>{getChildrenRow(node.meta.children, node.id)}</ul>,
+      3,
+      getRowKey(node.id, 'children')
+    ),
+    getRow(
+      'sourceEdgeIDSet',
+      <ul>
+        {getSinkSourceEdgeRow(node.meta.sourceEdgeIDSet, node.id, false)}
+      </ul>,
+      4,
+      getRowKey(node.id, 'sourceEdgeIDSet')
+    ),
+    getRow(
+      'sinkEdgeIDSet',
+      <ul>{getSinkSourceEdgeRow(node.meta.sinkEdgeIDSet, node.id, true)}</ul>,
+      5,
+      getRowKey(node.id, 'sinkEdgeIDSet')
+    ),
+    getRow('pkgDir', node.meta.pkgDir, 6, getRowKey(node.id, 'pkgDir'))
+  ]
+}
 
-  rows.push(getRow('id', node.id, 0, getRowKey(node.id, 'ID')))
+function getChildrenRow(children: { [id: string]: boolean }, nodeID: string) {
+  const getPkgPath = (id: string) => DataSet.getNode(id).meta.pkgPath
+  const getChildRow = (pkgPath: string) => (
+    <li key={nodeID + pkgPath}>{pkgPath}</li>
+  )
+  return _.keys(children)
+    .map(getPkgPath)
+    .sort()
+    .map(getChildRow)
+}
 
-  Object.keys(node.meta).forEach((key, index) => {
-    if (key === 'children') {
-      const children = Object.keys(node.meta[key]).map(childID => (
-        <li key={node.id + childID}>{childID}</li>
-      ))
-      rows.push(
-        getRow(key, <ul>{children}</ul>, index + 1, getRowKey(node.id, key))
-      )
-    } else if (key === 'sinkEdgeIDSet' || key === 'sourceEdgeIDSet') {
-      // TODO: do something.
-    } else if (key === 'pkgType') {
-      rows.push(
-        getRow(
-          key,
-          keyLabelMap[node.meta[key]],
-          index + 1,
-          getRowKey(node.id, key)
-        )
-      )
-    } else {
-      rows.push(getRow(key, node.meta[key], index + 1, getRowKey(node.id, key)))
-    }
-  })
+function getSinkSourceEdgeRow(
+  edgeIDSet: { [id: string]: boolean },
+  nodeID: string,
+  isSinkEdge: boolean
+) {
+  const getEdge = (id: string) => DataSet.getEdge(id)
+  const sortEdgeBySource = (prev: Graph.IEdge, next: Graph.IEdge) =>
+    getNodePkgPath(prev.from) <= getNodePkgPath(next.from) ? -1 : 1
+  const getEdgeRowKey = (sourceID: string, sinkID: string) =>
+    nodeID + sourceID + sinkID
+  const getSinkEdgeRow = (edge: Graph.IEdge) => (
+    <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodePkgPath(edge.from)}</li>
+  )
+  const getSourceEdgeRow = (edge: Graph.IEdge) => (
+    <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodePkgPath(edge.to)}</li>
+  )
 
-  return rows
+  return _.keys(edgeIDSet)
+    .map(getEdge)
+    .sort(sortEdgeBySource)
+    .map(isSinkEdge ? getSinkEdgeRow : getSourceEdgeRow)
 }
 
 function getEdgeMetaElements(edge: Graph.IEdge) {
-  const rows: JSX.Element[] = []
+  return [
+    getRow('from', getNodePkgPath(edge.from), 0, getRowKey(edge.id, 'from')),
+    getRow('to', getNodePkgPath(edge.to), 1, getRowKey(edge.id, 'to')),
+    getRow(
+      'type',
+      edgeType[Number(edge.meta.type)],
+      2,
+      getRowKey(edge.id, 'type')
+    ),
+    getRow(
+      'depAtFuncSet',
+      <ul>{getDepAtFunc(edge.meta.depAtFuncSet, edge.id)}</ul>,
+      3,
+      getRowKey(edge.id, 'depAtFuncSet')
+    )
+  ]
+}
 
-  rows.push(getRow('from', edge.from, 0, getRowKey(edge.id, 'from')))
-  rows.push(getRow('to', edge.to, 1, getRowKey(edge.id, 'to')))
+function getDepAtFunc(
+  depAtFuncSet: { [id: string]: Graph.IDepAtFunc },
+  edgeID: string
+) {
+  const getDepAtFuncRow = (depAtFunc: Graph.IDepAtFunc) => (
+    <li key={edgeID + depAtFunc.id}>
+      {`${depAtFunc.from} => ${depAtFunc.to}`}
+    </li>
+  )
 
-  Object.keys(edge.meta).forEach((key, index) => {
-    if (key === 'depAtFuncSet' && edge.meta[key]) {
-      const funcList = Object.keys(edge.meta[key]).map((funcID: any) => (
-        <li key={edge.id + funcID}>{funcID}</li>
-      ))
-      rows.push(
-        getRow(key, <ul>{funcList}</ul>, index, getRowKey(edge.id, key))
-      )
-    } else if (key === 'type') {
-      const value = edgeType[Number(edge.meta[key])]
-      rows.push(getRow(key, value, index, getRowKey(edge.id, key)))
-    } else {
-      rows.push(getRow(key, edge.meta[key], index, getRowKey(edge.id, key)))
-    }
-  })
-
-  return rows
+  return _.values(depAtFuncSet).map(getDepAtFuncRow)
 }
 
 function getRow(key: string, value: any, index: number, reactKey: string) {
@@ -170,4 +201,8 @@ function isEdgeList(
 
 function getRowKey(id: string, key: string) {
   return id + key
+}
+
+function getNodePkgPath(id: string) {
+  return DataSet.getNode(id).meta.pkgPath
 }

@@ -25,18 +25,22 @@ declare module 'godeptypes' {
     export type EdgeType = 0 | 1
 
     interface INodeMeta {
-      [key: string]: string | PkgType
+      [key: string]: string | PkgType | { [id: string]: boolean }
       pkgPath: string
       pkgName: string
       pkgDir: string
       pkgType: PkgType
+      sinkEdgeIDSet: { [id: string]: boolean }
+      sourceEdgeIDSet: { [id: string]: boolean }
+      parent: string
+      children: { [id: string]: boolean }
       // TODO: funcSet
     }
 
     interface IEdgeMeta {
       [key: string]: number | { [id: string]: IDepAtFunc }
       type: EdgeType
-      depAtFunc: { [id: string]: IDepAtFunc }
+      depAtFuncSet: { [id: string]: IDepAtFunc }
     }
 
     interface IDepAtFunc {
