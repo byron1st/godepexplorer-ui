@@ -9,6 +9,7 @@
   "author": "byron1st",
   "license": "MIT",
   "devDependencies": {
+    "@types/lodash": "^4.14.104",
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
     "@types/react-redux": "^5.0.15",
@@ -26,6 +27,7 @@
     "bootstrap": "^4.0.0",
     "electron": "1.8.2",
     "jquery": "^3.3.1",
+    "lodash": "^4.17.5",
     "popper.js": "^1.12.9",
     "re-resizable": "^4.3.2",
     "react": "^16.2.0",
