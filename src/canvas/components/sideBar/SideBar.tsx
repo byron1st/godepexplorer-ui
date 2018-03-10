@@ -41,7 +41,7 @@ class SideBar extends React.Component<ISideBarProps> {
         minWidth={200}
         maxWidth={800}
       >
-        <div style={style.ContentContainer}>
+        <div style={{ ...style.ContentContainer, overflow: 'auto' }}>
           <SideBarList
             header="Normal packages"
             visibleList={this.props.sideBarData.nor.visibleList}
@@ -82,8 +82,6 @@ const style = {
     zIndex: 1010
   },
   ContentContainer: {
-    overflowY: 'auto',
-    overflowX: 'hidden',
     height: '100%'
   }
 }

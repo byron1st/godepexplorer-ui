@@ -23,21 +23,21 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
   }
 
   public render() {
-    const isActive = this.props.isSelected ? 'active' : ''
-
     return (
-      <button
-        type="button"
-        className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive}`}
+      <div
         onClick={this.select}
         onContextMenu={this.openContextMenu}
         style={style.item}
       >
-        {DataSet.getNode(this.props.id).label}
-        <span className="badge badge-secondary badge-pill">
-          {this.props.isVisible ? '' : 'hidden'}
-        </span>
-      </button>
+        <a
+          href="#"
+          style={
+            this.props.isSelected ? style.selectedText : style.unselectedText
+          }
+        >
+          {DataSet.getNode(this.props.id).meta.pkgPath}
+        </a>
+      </div>
     )
   }
 
@@ -86,8 +86,14 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
 
 const style = {
   item: {
-    paddingTop: '0px',
-    paddingBottom: '0px'
+    paddingTop: 0,
+    paddingBottom: 0
+  },
+  unselectedText: {
+    color: 'white'
+  },
+  selectedText: {
+    color: '#18A8CD'
   }
 }
 
