@@ -20,6 +20,10 @@ export const dataActions = {
   select: createAction('SELECT', (selected: State.ISelectedState) => ({
     type: 'SELECT',
     payload: selected
+  })),
+  deselect: createAction('DESELECT', (deselected: State.ISelectedState) => ({
+    type: 'DESELECT',
+    payload: deselected
   }))
 }
 

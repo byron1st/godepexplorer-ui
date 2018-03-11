@@ -11,6 +11,7 @@ interface ISideBarListItemProps {
   isVisible: boolean
   isSelected: boolean
   select: (selected: State.ISelectedState) => any
+  deselect: (deselected: State.ISelectedState) => any
   changeVisibility: (id: string, toShow: boolean, pkgType: Graph.PkgType) => any
 }
 
@@ -19,13 +20,13 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     super(props)
 
     this.openContextMenu = this.openContextMenu.bind(this)
-    this.select = this.select.bind(this)
+    this.click = this.click.bind(this)
   }
 
   public render() {
     return (
       <div
-        onClick={this.select}
+        onClick={this.click}
         onContextMenu={this.openContextMenu}
         style={style.item}
       >
@@ -39,6 +40,14 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
         </a>
       </div>
     )
+  }
+
+  private click() {
+    const selected = DataSet.selectNode(this.props.id)
+
+    this.props.isSelected
+      ? this.props.deselect(selected)
+      : this.props.select(selected)
   }
 
   private select() {
@@ -101,6 +110,9 @@ function mapDispatchToProps(dispatch: any) {
   return {
     select: (selected: State.ISelectedState) => {
       dispatch(dataActions.select(selected))
+    },
+    deselect: (deselected: State.ISelectedState) => {
+      dispatch(dataActions.deselect(deselected))
     },
     changeVisibility: (id: string, toShow: boolean, pkgType: Graph.PkgType) => {
       dispatch(dataActions.changeVisibility(id, toShow, pkgType))
