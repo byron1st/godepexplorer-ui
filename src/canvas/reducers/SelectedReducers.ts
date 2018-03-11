@@ -12,18 +12,16 @@ export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case getType(dataActions.select):
       return {
-        nodeList: [...state.nodeList, ...action.payload.nodeList],
-        edgeList: [...state.edgeList, ...action.payload.edgeList]
+        nodeList: _.union(state.nodeList, action.payload.nodeList),
+        edgeList: _.union(state.edgeList, action.payload.edgeList)
       }
     case getType(dataActions.deselect):
       return {
-        nodeList: _.filter(
-          state.nodeList,
-          nodeID => !_.includes(action.payload.nodeList, nodeID)
+        nodeList: _.reject(state.nodeList, nodeID =>
+          _.includes(action.payload.nodeList, nodeID)
         ),
-        edgeList: _.filter(
-          state.edgeList,
-          edgeID => !_.includes(action.payload.edgeList, edgeID)
+        edgeList: _.reject(state.edgeList, edgeID =>
+          _.includes(action.payload.edgeList, edgeID)
         )
       }
     default:
