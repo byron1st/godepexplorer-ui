@@ -1,5 +1,6 @@
 import * as vis from 'vis'
 import { Graph, State } from 'godeptypes'
+import * as _ from 'lodash'
 import DataSet from './DataSet'
 import Store from './Store'
 import { dataActions } from './Actions'
@@ -77,6 +78,16 @@ class VisNetwork {
     if (selected.nodeList.length !== 0 || selected.edgeList.length !== 0) {
       Store.dispatch(dataActions.select(selected))
     }
+  }
+
+  public select(selected: State.ISelectedState) {
+    this.visNetwork.setSelection({
+      nodes: _.filter(
+        selected.nodeList,
+        nodeID => this.nodes.get(nodeID) !== null
+      ),
+      edges: []
+    })
   }
 }
 
