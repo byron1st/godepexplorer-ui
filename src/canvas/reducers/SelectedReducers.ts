@@ -17,12 +17,8 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       }
     case getType(dataActions.deselect):
       return {
-        nodeList: _.reject(state.nodeList, nodeID =>
-          _.includes(action.payload.nodeList, nodeID)
-        ),
-        edgeList: _.reject(state.edgeList, edgeID =>
-          _.includes(action.payload.edgeList, edgeID)
-        )
+        nodeList: _.difference(state.nodeList, action.payload.nodeList),
+        edgeList: _.difference(state.edgeList, action.payload.edgeList)
       }
     default:
       return state
