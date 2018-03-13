@@ -45,8 +45,13 @@ declare module 'godeptypes' {
 
     interface IDepAtFunc {
       id: string
-      from: string
-      to: string
+      from: IFunc
+      to: IFunc
+    }
+
+    interface IFunc {
+      signature: string
+      filename: string
     }
   }
 

@@ -24,6 +24,14 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
     this.updateHeight = this.updateHeight.bind(this)
   }
 
+  public componentDidUpdate() {
+    // @ts-ignore
+    $(() => {
+      // @ts-ignore
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  }
+
   public render() {
     const nodeList: Graph.INode[] = this.props.selected.nodeList.map(id =>
       DataSet.getNode(id)
