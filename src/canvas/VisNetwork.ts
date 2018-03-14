@@ -1,10 +1,23 @@
 import * as vis from 'vis'
 import { Graph, State } from 'godeptypes'
 import * as _ from 'lodash'
+import { remote } from 'electron'
 import DataSet from './DataSet'
 import Store from './Store'
 import { dataActions } from './Actions'
 import { EdgeType } from './enums'
+
+enum ElemType {
+  node,
+  edge
+}
+
+interface IHoveredElement {
+  type: ElemType
+  ID: string
+}
+
+let hovered: IHoveredElement
 
 const NETWORK_OPTS: vis.Options = {
   nodes: {
@@ -27,7 +40,9 @@ const NETWORK_OPTS: vis.Options = {
     improvedLayout: true
   },
   interaction: {
-    multiselect: true
+    multiselect: true,
+    hover: true,
+    hoverConnectedEdges: false
   },
   physics: {
     stabilization: false,
@@ -47,7 +62,11 @@ class VisNetwork {
       NETWORK_OPTS
     )
 
-    this.visNetwork.on('click', this.click.bind(this))
+    this.visNetwork.on('selectNode', this.click.bind(this))
+    this.visNetwork.on('oncontext', this.openContextMenu.bind(this))
+    this.visNetwork.on('hoverNode', (params: any) => {
+      hovered = { type: ElemType.node, ID: params.node }
+    })
   }
 
   public show(id: string | string[]) {
@@ -88,6 +107,21 @@ class VisNetwork {
       ),
       edges: []
     })
+  }
+
+  private openContextMenu(params: any) {
+    if (hovered.type === ElemType.node && hovered.ID) {
+      const menu = remote.Menu.buildFromTemplate([
+        {
+          label: 'expand',
+          click() {
+            // console.log(hovered.ID)
+          }
+        }
+      ])
+
+      menu.popup(remote.getCurrentWindow())
+    }
   }
 }
 
