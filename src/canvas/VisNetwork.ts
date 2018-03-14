@@ -17,8 +17,6 @@ interface IHoveredElement {
   ID: string
 }
 
-let hovered: IHoveredElement
-
 const NETWORK_OPTS: vis.Options = {
   nodes: {
     shape: 'dot',
@@ -50,6 +48,9 @@ const NETWORK_OPTS: vis.Options = {
   }
 }
 
+let hovered: IHoveredElement
+let releaseParams: any = {}
+
 class VisNetwork {
   private nodes: vis.DataSet<Graph.INode> = new vis.DataSet([])
   private edges: vis.DataSet<Graph.IEdge> = new vis.DataSet([])
@@ -62,11 +63,12 @@ class VisNetwork {
       NETWORK_OPTS
     )
 
-    this.visNetwork.on('click', this.click.bind(this))
-    this.visNetwork.on('oncontext', this.openContextMenu.bind(this))
-    this.visNetwork.on('hoverNode', (params: any) => {
-      hovered = { type: ElemType.node, ID: params.node }
-    })
+    this.visNetwork.on('click', click)
+    this.visNetwork.on('oncontext', openContextMenu)
+    this.visNetwork.on('hoverNode', recordHoveredParams)
+    this.visNetwork.on('deselectNode', deselectNode)
+    this.visNetwork.on('deselectEdge', deselectEdge)
+    this.visNetwork.on('release', recordReleaseParams)
   }
 
   public show(id: string | string[]) {
@@ -88,41 +90,17 @@ class VisNetwork {
     this.nodes.remove(id)
   }
 
-  public click(params: any) {
-    const selected: State.ISelectedState = {
-      nodeList: params.nodes,
-      edgeList: params.edges
-    }
-
-    if (selected.nodeList.length !== 0 || selected.edgeList.length !== 0) {
-      Store.dispatch(dataActions.select(selected))
-    }
-  }
-
-  public select(selected: State.ISelectedState) {
+  public setSelection(selected: State.ISelectedState) {
     this.visNetwork.setSelection({
       nodes: _.filter(
         selected.nodeList,
         nodeID => this.nodes.get(nodeID) !== null
       ),
-      edges: []
+      edges: _.filter(
+        selected.edgeList,
+        edgeID => this.edges.get(edgeID) !== null
+      )
     })
-  }
-
-  private openContextMenu(params: any) {
-    if (hovered.type === ElemType.node && hovered.ID) {
-      const menu = remote.Menu.buildFromTemplate([
-        {
-          label: 'expand',
-          click() {
-            // console.log(hovered.ID)
-            Store.dispatch(dataActions.expand(hovered.ID))
-          }
-        }
-      ])
-
-      menu.popup(remote.getCurrentWindow())
-    }
   }
 }
 
@@ -141,6 +119,79 @@ function styleEdge(edge: Graph.IEdge) {
   }
 
   return edge
+}
+
+function getRelatedEdgeIDs(nodeID: string) {
+  const node = DataSet.getNode(nodeID)
+  return _.concat(
+    _.keys(node.meta.sinkEdgeIDSet),
+    _.keys(node.meta.sourceEdgeIDSet)
+  )
+}
+
+function getRelatedNodeIDs(edgeID: string) {
+  const edge = DataSet.getEdge(edgeID)
+  return [edge.from, edge.to]
+}
+
+function click(params: any) {
+  const selected: State.ISelectedState = {
+    nodeList: params.nodes,
+    edgeList: params.edges
+  }
+
+  if (selected.nodeList.length !== 0 || selected.edgeList.length !== 0) {
+    Store.dispatch(dataActions.select(selected))
+  }
+}
+
+function openContextMenu(params: any) {
+  if (hovered.type === ElemType.node && hovered.ID) {
+    const menu = remote.Menu.buildFromTemplate([
+      {
+        label: 'expand',
+        click() {
+          Store.dispatch(dataActions.expand(hovered.ID))
+        }
+      }
+    ])
+
+    menu.popup(remote.getCurrentWindow())
+  }
+}
+
+function deselectNode(params: any) {
+  if (params.nodes.length === 0) {
+    _.forEach(releaseParams.nodes, nodeID =>
+      Store.dispatch(
+        dataActions.deselect({
+          nodeList: [nodeID],
+          edgeList: getRelatedEdgeIDs(nodeID)
+        })
+      )
+    )
+  }
+}
+
+function deselectEdge(params: any) {
+  if (params.edges.length === 0) {
+    _.forEach(releaseParams.edges, edgeID =>
+      Store.dispatch(
+        dataActions.deselect({
+          nodeList: getRelatedNodeIDs(edgeID),
+          edgeList: [edgeID]
+        })
+      )
+    )
+  }
+}
+
+function recordHoveredParams(params: any) {
+  hovered = { type: ElemType.node, ID: params.node }
+}
+
+function recordReleaseParams(params: any) {
+  releaseParams = params
 }
 
 export default new VisNetwork()

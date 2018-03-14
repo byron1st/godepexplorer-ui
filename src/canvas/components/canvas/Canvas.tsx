@@ -16,7 +16,7 @@ class Canvas extends React.Component<ICanvasProps> {
   }
 
   public componentWillUpdate(nextProps: ICanvasProps) {
-    VisNetwork.select(nextProps.selected)
+    VisNetwork.setSelection(nextProps.selected)
   }
 
   public render() {
