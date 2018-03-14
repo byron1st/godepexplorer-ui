@@ -12,7 +12,8 @@ interface ISideBarListItemProps {
   isSelected: boolean
   select: (selected: State.ISelectedState) => any
   deselect: (deselected: State.ISelectedState) => any
-  changeVisibility: (id: string, toShow: boolean, pkgType: Graph.PkgType) => any
+  showNode: (id: string, pkgType: Graph.PkgType) => any
+  hideNode: (id: string, pkgType: Graph.PkgType) => any
 }
 
 class SideBarListItem extends React.Component<ISideBarListItemProps> {
@@ -56,7 +57,11 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
 
   private openContextMenu(e: any) {
     const menu = remote.Menu.buildFromTemplate(
-      this.getMenuTemplate(this.props.id, this.props.changeVisibility)
+      this.getMenuTemplate(
+        this.props.id,
+        this.props.showNode,
+        this.props.hideNode
+      )
     )
 
     e.preventDefault()
@@ -65,18 +70,15 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
 
   private getMenuTemplate(
     id: string,
-    changeVisibility: (
-      id: string,
-      toShow: boolean,
-      pkgType: Graph.PkgType
-    ) => any
+    showNode: (id: string, pkgType: Graph.PkgType) => any,
+    hideNode: (id: string, pkgType: Graph.PkgType) => any
   ) {
     if (this.props.isClickable) {
       return [
         {
           label: 'Hide',
           click() {
-            changeVisibility(id, false, DataSet.getNode(id).meta.pkgType)
+            hideNode(id, DataSet.getNode(id).meta.pkgType)
           }
         }
       ]
@@ -85,7 +87,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
         {
           label: 'Show',
           click() {
-            changeVisibility(id, true, DataSet.getNode(id).meta.pkgType)
+            showNode(id, DataSet.getNode(id).meta.pkgType)
           }
         }
       ]
@@ -114,8 +116,11 @@ function mapDispatchToProps(dispatch: any) {
     deselect: (deselected: State.ISelectedState) => {
       dispatch(dataActions.deselect(deselected))
     },
-    changeVisibility: (id: string, toShow: boolean, pkgType: Graph.PkgType) => {
-      dispatch(dataActions.changeVisibility(id, toShow, pkgType))
+    showNode: (id: string, pkgType: Graph.PkgType) => {
+      dispatch(dataActions.showNode(id, pkgType))
+    },
+    hideNode: (id: string, pkgType: Graph.PkgType) => {
+      dispatch(dataActions.hideNode(id, pkgType))
     }
   }
 }

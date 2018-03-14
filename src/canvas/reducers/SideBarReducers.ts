@@ -18,27 +18,25 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       VisNetwork.show(getVisibleList(action.payload))
 
       return action.payload
-    case getType(dataActions.changeVisibility):
-      if (action.payload.toShow) {
-        VisNetwork.show(action.payload.id)
+    case getType(dataActions.showNode):
+      VisNetwork.show(action.payload.id)
 
-        return {
-          ...state,
-          [action.payload.pkgType]: show(
-            state[action.payload.pkgType],
-            action.payload.id
-          )
-        }
-      } else {
-        VisNetwork.hide(action.payload.id)
+      return {
+        ...state,
+        [action.payload.pkgType]: show(
+          state[action.payload.pkgType],
+          action.payload.id
+        )
+      }
+    case getType(dataActions.hideNode):
+      VisNetwork.hide(action.payload.id)
 
-        return {
-          ...state,
-          [action.payload.pkgType]: hide(
-            state[action.payload.pkgType],
-            action.payload.id
-          )
-        }
+      return {
+        ...state,
+        [action.payload.pkgType]: hide(
+          state[action.payload.pkgType],
+          action.payload.id
+        )
       }
     case getType(dataActions.expand):
       const updatedState = expandNode(action.payload, state)

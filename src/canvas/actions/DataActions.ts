@@ -10,13 +10,14 @@ export const dataActions = {
       payload: initSideBarState
     })
   ),
-  changeVisibility: createAction(
-    'CHANGE_VISIBILITY',
-    (id: string, toShow: boolean, pkgType: Graph.PkgType) => ({
-      type: 'CHANGE_VISIBILITY',
-      payload: { id, toShow, pkgType }
-    })
-  ),
+  showNode: createAction('SHOW_NODE', (id: string, pkgType: Graph.PkgType) => ({
+    type: 'SHOW_NODE',
+    payload: { id, pkgType }
+  })),
+  hideNode: createAction('HIDE_NODE', (id: string, pkgType: Graph.PkgType) => ({
+    type: 'HIDE_NODE',
+    payload: { id, pkgType }
+  })),
   select: createAction('SELECT', (selected: State.ISelectedState) => ({
     type: 'SELECT',
     payload: selected
