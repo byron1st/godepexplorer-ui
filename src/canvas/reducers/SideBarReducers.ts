@@ -15,12 +15,13 @@ const INITIAL_STATE: State.ISideBarState = {
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case getType(dataActions.initSideBarData):
-      const visibleList = getVisibleList(action.payload)
-      VisNetwork.show(visibleList)
+      VisNetwork.show(getVisibleList(action.payload))
 
       return action.payload
     case getType(dataActions.changeVisibility):
       if (action.payload.toShow) {
+        VisNetwork.show(action.payload.id)
+
         return {
           ...state,
           [action.payload.pkgType]: show(
@@ -29,6 +30,8 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           )
         }
       } else {
+        VisNetwork.hide(action.payload.id)
+
         return {
           ...state,
           [action.payload.pkgType]: hide(
@@ -48,25 +51,17 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 }
 
 function hide(dataSet: State.ISideBarDataSet, id: string) {
-  const visibleList = dataSet.visibleList.filter(element => id !== element)
-  const invisibleList = dataSet.invisibleList.slice(0)
-  invisibleList.push(id)
-  invisibleList.sort(sortByPkgPath)
-
-  VisNetwork.hide(id)
-
-  return { visibleList, invisibleList }
+  return {
+    visibleList: _.without(dataSet.visibleList, id),
+    invisibleList: _.concat(dataSet.invisibleList, id).sort(sortByPkgPath)
+  }
 }
 
 function show(dataSet: State.ISideBarDataSet, id: string) {
-  const invisibleList = dataSet.invisibleList.filter(element => id !== element)
-  const visibleList = dataSet.visibleList.slice(0)
-  visibleList.push(id)
-  visibleList.sort(sortByPkgPath)
-
-  VisNetwork.show(id)
-
-  return { visibleList, invisibleList }
+  return {
+    visibleList: _.concat(dataSet.visibleList, id).sort(sortByPkgPath),
+    invisibleList: _.without(dataSet.invisibleList, id)
+  }
 }
 
 function showAll(dataSet: State.ISideBarDataSet, nodeIDList: string[]) {
