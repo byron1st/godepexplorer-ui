@@ -62,7 +62,7 @@ class VisNetwork {
       NETWORK_OPTS
     )
 
-    this.visNetwork.on('selectNode', this.click.bind(this))
+    this.visNetwork.on('click', this.click.bind(this))
     this.visNetwork.on('oncontext', this.openContextMenu.bind(this))
     this.visNetwork.on('hoverNode', (params: any) => {
       hovered = { type: ElemType.node, ID: params.node }
@@ -116,6 +116,7 @@ class VisNetwork {
           label: 'expand',
           click() {
             // console.log(hovered.ID)
+            Store.dispatch(dataActions.expand(hovered.ID))
           }
         }
       ])

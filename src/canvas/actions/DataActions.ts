@@ -24,6 +24,10 @@ export const dataActions = {
   deselect: createAction('DESELECT', (deselected: State.ISelectedState) => ({
     type: 'DESELECT',
     payload: deselected
+  })),
+  expand: createAction('EXPAND', (nodeID: string) => ({
+    type: 'EXPAND',
+    payload: nodeID
   }))
 }
 

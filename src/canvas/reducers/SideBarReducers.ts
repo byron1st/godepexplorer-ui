@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
-import { State } from 'godeptypes'
+import * as _ from 'lodash'
+import { State, Graph } from 'godeptypes'
 import { DataAction, dataActions } from '../Actions'
 import DataSet from '../DataSet'
 import VisNetwork from '../VisNetwork'
@@ -36,6 +37,11 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           )
         }
       }
+    case getType(dataActions.expand):
+      const updatedState = expandNode(action.payload, state)
+      VisNetwork.show(getVisibleList(updatedState))
+
+      return updatedState
     default:
       return state
   }
@@ -63,8 +69,16 @@ function show(dataSet: State.ISideBarDataSet, id: string) {
   return { visibleList, invisibleList }
 }
 
+function showAll(dataSet: State.ISideBarDataSet, nodeIDList: string[]) {
+  return {
+    visibleList: _.union(dataSet.visibleList, nodeIDList),
+    invisibleList: _.difference(dataSet.invisibleList, nodeIDList)
+  }
+}
+
 function getVisibleList(dataSet: State.ISideBarState) {
-  return dataSet.nor.visibleList.concat(
+  return _.concat(
+    dataSet.nor.visibleList,
     dataSet.ext.visibleList,
     dataSet.std.visibleList
   )
@@ -78,4 +92,43 @@ function sortByPkgPath(prev: string, next: string) {
   } else {
     return 1
   }
+}
+
+function expandNode(nodeID: string, state: State.ISideBarState) {
+  const node = DataSet.getNode(nodeID)
+  const connectedNodeIDList = _.concat(
+    _.map(
+      _.keys(node.meta.sinkEdgeIDSet),
+      edgeID => DataSet.getEdge(edgeID).from
+    ),
+    _.map(
+      _.keys(node.meta.sourceEdgeIDSet),
+      edgeID => DataSet.getEdge(edgeID).to
+    )
+  )
+
+  return {
+    nor: showAll(
+      state.nor,
+      getNodeIDListFilteredByPkgType(connectedNodeIDList, 'nor')
+    ),
+    ext: showAll(
+      state.ext,
+      getNodeIDListFilteredByPkgType(connectedNodeIDList, 'ext')
+    ),
+    std: showAll(
+      state.std,
+      getNodeIDListFilteredByPkgType(connectedNodeIDList, 'std')
+    )
+  }
+}
+
+function getNodeIDListFilteredByPkgType(
+  nodeIDList: string[],
+  pkgType: Graph.PkgType
+) {
+  return _.filter(
+    nodeIDList,
+    nodeID => DataSet.getNode(nodeID).meta.pkgType === pkgType
+  )
 }
