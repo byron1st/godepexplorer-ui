@@ -59,7 +59,7 @@ class DataSet {
     )
 
     const edgeList: Graph.IEdge[] = Object.values(this.dataSet.edgeSet).filter(
-      edge => nodeIDList.includes(edge.from)
+      edge => nodeIDList.includes(edge.from) && nodeIDList.includes(edge.to)
     )
 
     return { nodeList, edgeList }

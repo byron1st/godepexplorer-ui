@@ -72,9 +72,11 @@ class VisNetwork {
   }
 
   public show(id: string | string[]) {
+    // @ts-ignore nodeID is always string in this system.
+    const currentVisibleNodeIDList: string[] = this.nodes.getIds()
     const dataList = Array.isArray(id)
-      ? DataSet.getVisibleElements(id)
-      : DataSet.getVisibleElements([id])
+      ? DataSet.getVisibleElements(_.concat(id, currentVisibleNodeIDList))
+      : DataSet.getVisibleElements([id, ...currentVisibleNodeIDList])
 
     this.nodes.update(
       dataList.nodeList.map(node => {
@@ -88,6 +90,12 @@ class VisNetwork {
 
   public hide(id: string | string[]) {
     this.nodes.remove(id)
+
+    Array.isArray(id)
+      ? _.forEach(id, singleID =>
+          this.edges.remove(DataSet.selectNode(singleID).edgeList)
+        )
+      : this.edges.remove(DataSet.selectNode(id).edgeList)
   }
 
   public setSelection(selected: State.ISelectedState) {
@@ -192,6 +200,10 @@ function recordHoveredParams(params: any) {
 
 function recordReleaseParams(params: any) {
   releaseParams = params
+}
+
+function isIDList(idList: string | string[]): idList is string[] {
+  return Array.isArray(idList)
 }
 
 export default new VisNetwork()
