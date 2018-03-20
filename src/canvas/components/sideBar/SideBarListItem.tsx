@@ -10,6 +10,7 @@ interface ISideBarListItemProps {
   isClickable: boolean
   isVisible: boolean
   isSelected: boolean
+  selected: State.ISelectedState
   select: (selected: State.ISelectedState) => any
   deselect: (deselected: State.ISelectedState) => any
   showNode: (id: string, pkgType: Graph.PkgType) => any
@@ -108,6 +109,12 @@ const style = {
   }
 }
 
+function mapStateToProps(state: State.IRootState) {
+  return {
+    selected: state.data.selected
+  }
+}
+
 function mapDispatchToProps(dispatch: any) {
   return {
     select: (selected: State.ISelectedState) => {
@@ -125,4 +132,4 @@ function mapDispatchToProps(dispatch: any) {
   }
 }
 
-export default connect(null, mapDispatchToProps)(SideBarListItem)
+export default connect(mapStateToProps, mapDispatchToProps)(SideBarListItem)
