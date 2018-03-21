@@ -20,6 +20,9 @@ export default (state = INITIAL_STATE, action: DataAction) => {
         nodeList: _.difference(state.nodeList, action.payload.nodeList),
         edgeList: _.difference(state.edgeList, action.payload.edgeList)
       }
+    case getType(dataActions.showNode):
+    case getType(dataActions.hideNode):
+      return INITIAL_STATE
     default:
       return state
   }
