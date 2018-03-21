@@ -51,13 +51,13 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 function hide(dataSet: State.ISideBarDataSet, id: string) {
   return {
     visibleList: _.without(dataSet.visibleList, id),
-    invisibleList: _.concat(dataSet.invisibleList, id).sort(sortByPkgPath)
+    invisibleList: _.union(dataSet.invisibleList, [id]).sort(sortByPkgPath)
   }
 }
 
 function show(dataSet: State.ISideBarDataSet, id: string) {
   return {
-    visibleList: _.concat(dataSet.visibleList, id).sort(sortByPkgPath),
+    visibleList: _.union(dataSet.visibleList, [id]).sort(sortByPkgPath),
     invisibleList: _.without(dataSet.invisibleList, id)
   }
 }
