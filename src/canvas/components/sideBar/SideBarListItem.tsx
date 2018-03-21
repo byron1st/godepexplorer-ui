@@ -8,6 +8,8 @@ import DataSet from '../../DataSet'
 
 interface ISideBarListItemProps {
   id: string
+  index: number
+  enclosingList: string[]
   isVisible: boolean
   isSelected: boolean
   selected: State.ISelectedState
@@ -44,16 +46,37 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     )
   }
 
-  private click() {
-    const selected = DataSet.selectNode(this.props.id)
+  private click(e: any) {
+    e.preventDefault()
+    if (e.shiftKey) {
+      const closestIndex = getClosestIndex(
+        this.props.selected.nodeList,
+        this.props.enclosingList,
+        this.props.index
+      )
+
+      if (closestIndex !== -1) {
+        const shiftSelectedNodeList = _.slice(
+          this.props.enclosingList,
+          closestIndex,
+          this.props.index + 1
+        )
+
+        shiftSelectedNodeList.forEach(nodeID => this.select(nodeID))
+      } else {
+        this.select(this.props.id)
+      }
+    } else {
+      this.select(this.props.id)
+    }
+  }
+
+  private select(id: string) {
+    const selected = DataSet.selectNode(id)
 
     this.props.isSelected
       ? this.props.deselect(selected)
       : this.props.select(selected)
-  }
-
-  private select() {
-    this.props.select(DataSet.selectNode(this.props.id))
   }
 
   private openContextMenu(e: any) {
@@ -107,6 +130,20 @@ const style = {
   selectedText: {
     color: '#18A8CD'
   }
+}
+
+function getClosestIndex(
+  selectedNodeList: string[],
+  enclosingList: string[],
+  currentNodeIndex: number
+) {
+  for (let i = currentNodeIndex; i >= 0; i--) {
+    if (selectedNodeList.indexOf(enclosingList[i]) !== -1) {
+      return i
+    }
+  }
+
+  return -1
 }
 
 function mapStateToProps(state: State.IRootState) {
