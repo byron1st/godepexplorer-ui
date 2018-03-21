@@ -1,5 +1,6 @@
 import { remote } from 'electron'
 import * as React from 'react'
+import * as _ from 'lodash'
 import { connect } from 'react-redux'
 import { State, Graph } from 'godeptypes'
 import { dataActions } from '../../Actions'
@@ -74,12 +75,15 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     showNode: (id: string, pkgType: Graph.PkgType) => any,
     hideNode: (id: string, pkgType: Graph.PkgType) => any
   ) {
+    const selectedNodeList = this.props.selected.nodeList
     if (this.props.isClickable) {
       return [
         {
           label: 'Hide',
           click() {
-            hideNode(id, DataSet.getNode(id).meta.pkgType)
+            _.forEach(selectedNodeList, nodeID =>
+              hideNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
+            )
           }
         }
       ]
@@ -88,7 +92,9 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
         {
           label: 'Show',
           click() {
-            showNode(id, DataSet.getNode(id).meta.pkgType)
+            _.forEach(selectedNodeList, nodeID =>
+              showNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
+            )
           }
         }
       ]
