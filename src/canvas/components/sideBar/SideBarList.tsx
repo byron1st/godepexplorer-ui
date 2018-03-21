@@ -18,7 +18,6 @@ export default (props: ISideBarListProps) => (
       <SideBarListItem
         id={id}
         isVisible={true}
-        isClickable={true}
         isSelected={props.selectedSet[id] ? true : false}
         key={`${id}-sidebarbutton`}
       />
@@ -28,7 +27,6 @@ export default (props: ISideBarListProps) => (
       <SideBarListItem
         id={id}
         isVisible={false}
-        isClickable={false}
         isSelected={props.selectedSet[id] ? true : false}
         key={`${id}-sidebarbutton`}
       />

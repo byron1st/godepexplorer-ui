@@ -8,7 +8,6 @@ import DataSet from '../../DataSet'
 
 interface ISideBarListItemProps {
   id: string
-  isClickable: boolean
   isVisible: boolean
   isSelected: boolean
   selected: State.ISelectedState
@@ -76,29 +75,24 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     hideNode: (id: string, pkgType: Graph.PkgType) => any
   ) {
     const selectedNodeList = this.props.selected.nodeList
-    if (this.props.isClickable) {
-      return [
-        {
-          label: 'Hide',
-          click() {
-            _.forEach(selectedNodeList, nodeID =>
-              hideNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
-            )
-          }
+    return [
+      {
+        label: 'Show',
+        click() {
+          _.forEach(selectedNodeList, nodeID =>
+            showNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
+          )
         }
-      ]
-    } else {
-      return [
-        {
-          label: 'Show',
-          click() {
-            _.forEach(selectedNodeList, nodeID =>
-              showNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
-            )
-          }
+      },
+      {
+        label: 'Hide',
+        click() {
+          _.forEach(selectedNodeList, nodeID =>
+            hideNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
+          )
         }
-      ]
-    }
+      }
+    ]
   }
 }
 
