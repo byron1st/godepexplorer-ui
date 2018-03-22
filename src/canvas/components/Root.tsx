@@ -12,7 +12,7 @@ import SideBar from './sideBar/SideBar'
 
 interface IRootProps {
   turnOffLoadingIndicator: () => any
-  initSideBarData: (initSideBarState: State.ISideBarState) => any
+  initSideBarData: (initSideBarState: State.ISideBarData) => any
 }
 
 class Root extends React.Component<IRootProps> {
@@ -47,7 +47,7 @@ function mapDispatchToProps(dispatch: any) {
   return {
     turnOffLoadingIndicator: () =>
       dispatch(uiActions.turnOffLoadingIndicator()),
-    initSideBarData: (initSideBarState: State.ISideBarState) => {
+    initSideBarData: (initSideBarState: State.ISideBarData) => {
       dispatch(dataActions.initSideBarData(initSideBarState))
     }
   }

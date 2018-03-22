@@ -82,11 +82,15 @@ declare module 'godeptypes' {
       readonly edgeList: string[]
     }
 
+    export interface ISideBarData {
+      readonly nor: State.ISideBarDataSet
+      readonly ext: State.ISideBarDataSet
+      readonly std: State.ISideBarDataSet
+    }
+
     // key values are matched with PkgType.
-    export interface ISideBarState {
-      readonly nor: ISideBarDataSet
-      readonly ext: ISideBarDataSet
-      readonly std: ISideBarDataSet
+    export interface ISideBarState extends ISideBarData {
+      readonly ignoreStd: boolean
     }
 
     export interface ISideBarDataSet {

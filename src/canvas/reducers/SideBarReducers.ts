@@ -7,6 +7,7 @@ import DataSet from '../DataSet'
 import VisNetwork from '../VisNetwork'
 
 const INITIAL_STATE: State.ISideBarState = {
+  ignoreStd: false,
   nor: { visibleList: [], invisibleList: [] },
   ext: { visibleList: [], invisibleList: [] },
   std: { visibleList: [], invisibleList: [] }
@@ -17,7 +18,10 @@ export default (state = INITIAL_STATE, action: DataAction) => {
     case getType(dataActions.initSideBarData):
       VisNetwork.show(getVisibleList(action.payload))
 
-      return action.payload
+      return {
+        ...INITIAL_STATE,
+        ...action.payload
+      }
     case getType(dataActions.showNode):
       VisNetwork.show(action.payload.id)
 
@@ -67,7 +71,7 @@ function show(dataSet: State.ISideBarDataSet, id: string | string[]) {
       }
 }
 
-function getVisibleList(dataSet: State.ISideBarState) {
+function getVisibleList(dataSet: State.ISideBarData) {
   return _.concat(
     dataSet.nor.visibleList,
     dataSet.ext.visibleList,
@@ -99,6 +103,7 @@ function expandNode(nodeID: string, state: State.ISideBarState) {
   )
 
   return {
+    ignoreStd: state.ignoreStd,
     nor: show(
       state.nor,
       getNodeIDListFilteredByPkgType(connectedNodeIDList, 'nor')

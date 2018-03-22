@@ -1,7 +1,7 @@
 import { IGraphDataSet, Graph, State } from 'godeptypes'
 import { PkgType } from './enums'
 
-const INITIAL_SIDEBARSTATE: State.ISideBarState = {
+const INITIAL_SIDEBARDATA: State.ISideBarData = {
   nor: {
     visibleList: [],
     invisibleList: []
@@ -20,7 +20,7 @@ class DataSet {
   private dataSet: IGraphDataSet = { nodeSet: {}, edgeSet: {} }
 
   public init(graph: Graph.IListGraph) {
-    const sideBarState: State.ISideBarState = INITIAL_SIDEBARSTATE
+    const sideBarState: State.ISideBarData = INITIAL_SIDEBARDATA
 
     graph.nodes.forEach(node => {
       this.dataSet.nodeSet[node.id] = node
@@ -78,7 +78,7 @@ class DataSet {
 }
 
 function dispatchIDToList(
-  sideBarState: State.ISideBarState,
+  sideBarState: State.ISideBarData,
   pkgType: Graph.PkgType,
   id: string
 ) {

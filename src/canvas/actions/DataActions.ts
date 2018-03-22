@@ -5,7 +5,7 @@ import { State, Graph } from 'godeptypes'
 export const dataActions = {
   initSideBarData: createAction(
     'INIT_SIDEBARDATA',
-    (initSideBarState: State.ISideBarState) => ({
+    (initSideBarState: State.ISideBarData) => ({
       type: 'INIT_SIDEBARDATA',
       payload: initSideBarState
     })
