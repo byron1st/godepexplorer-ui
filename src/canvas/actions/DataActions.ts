@@ -29,7 +29,8 @@ export const dataActions = {
   expand: createAction('EXPAND', (nodeID: string) => ({
     type: 'EXPAND',
     payload: nodeID
-  }))
+  })),
+  toggleIgnoreStd: createAction('TOGGLE_IGNORE_STD')
 }
 
 const returnsOfActions = Object.values(dataActions).map($call)

@@ -47,6 +47,11 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       VisNetwork.show(getVisibleList(updatedState))
 
       return updatedState
+    case getType(dataActions.toggleIgnoreStd):
+      return {
+        ...state,
+        ignoreStd: !state.ignoreStd
+      }
     default:
       return state
   }

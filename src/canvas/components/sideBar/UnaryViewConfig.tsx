@@ -2,36 +2,35 @@ import * as React from 'react'
 
 interface IViewConfigItemProps {
   header: string
-  trueLabel: string
-  falseLabel: string
   current: boolean
-  handleChange: () => any
+  toggle: () => any
 }
 
 export default (props: IViewConfigItemProps) => (
-  <div className="card" style={{ margin: '5px' }}>
-    <div className="card-body" style={{ padding: '5px' }}>
-      <h5 className="card-title">{props.header}</h5>
+  <div className="card" style={style.card}>
+    <div className="card-body" style={style.cardBody}>
       <div className="card-text">
-        <div className="form-check form-check-inline">
-          <input
-            className="form-check-input"
-            type="radio"
-            checked={props.current}
-            onChange={props.handleChange}
-          />
-          <label className="form-check-label">{props.trueLabel}</label>
-        </div>
-        <div className="form-check form-check-inline">
-          <input
-            className="form-check-input"
-            type="radio"
-            checked={!props.current}
-            onChange={props.handleChange}
-          />
-          <label className="form-check-label">{props.falseLabel}</label>
+        <div className="d-flex justify-content-between">
+          <div className="d-flex flex-column justify-content-center">
+            <div>Standard Lib</div>
+          </div>
+          <div>
+            <div
+              className={`btn btn-sm ${
+                props.current ? 'btn-secondary' : 'btn-primary'
+              }`}
+              onClick={props.toggle}
+            >
+              {props.current ? 'Ignore' : 'Show'}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 )
+
+const style = {
+  card: { margin: 5 },
+  cardBody: { padding: 5 }
+}

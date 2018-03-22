@@ -1,14 +1,16 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { State } from 'godeptypes'
-import { uiActions } from '../../Actions'
+import { uiActions, dataActions } from '../../Actions'
 import UnaryViewConfig from './UnaryViewConfig'
 
 interface IViewConfigProps {
-  isStdVisible: boolean
-  isExtVisible: boolean
-  changeStdVisible: () => any
-  changeExtVisible: () => any
+  ignoreStd: boolean
+  // isStdVisible: boolean
+  // isExtVisible: boolean
+  toggleIgnoreStd: () => any
+  // changeStdVisible: () => any
+  // changeExtVisible: () => any
 }
 
 class ViewConfig extends React.Component<IViewConfigProps> {
@@ -17,17 +19,8 @@ class ViewConfig extends React.Component<IViewConfigProps> {
       <div>
         <UnaryViewConfig
           header="Standard Library"
-          trueLabel="View"
-          falseLabel="Hide"
-          current={this.props.isStdVisible}
-          handleChange={this.props.changeStdVisible}
-        />
-        <UnaryViewConfig
-          header="External Library"
-          trueLabel="View"
-          falseLabel="Hide"
-          current={this.props.isExtVisible}
-          handleChange={this.props.changeExtVisible}
+          current={this.props.ignoreStd}
+          toggle={this.props.toggleIgnoreStd}
         />
       </div>
     )
@@ -36,15 +29,17 @@ class ViewConfig extends React.Component<IViewConfigProps> {
 
 function mapStateToProps(state: State.IRootState) {
   return {
-    isExtVisible: state.ui.isExtVisible,
-    isStdVisible: state.ui.isStdVisible
+    // isExtVisible: state.ui.isExtVisible,
+    // isStdVisible: state.ui.isStdVisible
+    ignoreStd: state.data.sideBarData.ignoreStd
   }
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    changeExtVisible: () => dispatch(uiActions.changeExtVisible()),
-    changeStdVisible: () => dispatch(uiActions.changeStdVisible())
+    // changeExtVisible: () => dispatch(uiActions.changeExtVisible()),
+    // changeStdVisible: () => dispatch(uiActions.changeStdVisible())
+    toggleIgnoreStd: () => dispatch(dataActions.toggleIgnoreStd())
   }
 }
 
