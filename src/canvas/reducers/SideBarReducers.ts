@@ -55,18 +55,16 @@ function hide(dataSet: State.ISideBarDataSet, id: string) {
   }
 }
 
-function show(dataSet: State.ISideBarDataSet, id: string) {
-  return {
-    visibleList: _.union(dataSet.visibleList, [id]).sort(sortByPkgPath),
-    invisibleList: _.without(dataSet.invisibleList, id)
-  }
-}
-
-function showAll(dataSet: State.ISideBarDataSet, nodeIDList: string[]) {
-  return {
-    visibleList: _.union(dataSet.visibleList, nodeIDList),
-    invisibleList: _.difference(dataSet.invisibleList, nodeIDList)
-  }
+function show(dataSet: State.ISideBarDataSet, id: string | string[]) {
+  return Array.isArray(id)
+    ? {
+        visibleList: _.union(dataSet.visibleList, id).sort(sortByPkgPath),
+        invisibleList: _.difference(dataSet.invisibleList, id)
+      }
+    : {
+        visibleList: _.union(dataSet.visibleList, [id]).sort(sortByPkgPath),
+        invisibleList: _.without(dataSet.invisibleList, id)
+      }
 }
 
 function getVisibleList(dataSet: State.ISideBarState) {
@@ -101,15 +99,15 @@ function expandNode(nodeID: string, state: State.ISideBarState) {
   )
 
   return {
-    nor: showAll(
+    nor: show(
       state.nor,
       getNodeIDListFilteredByPkgType(connectedNodeIDList, 'nor')
     ),
-    ext: showAll(
+    ext: show(
       state.ext,
       getNodeIDListFilteredByPkgType(connectedNodeIDList, 'ext')
     ),
-    std: showAll(
+    std: show(
       state.std,
       getNodeIDListFilteredByPkgType(connectedNodeIDList, 'std')
     )
