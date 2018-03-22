@@ -73,6 +73,7 @@ declare module 'godeptypes' {
     export interface IDataState {
       readonly selected: ISelectedState
       readonly sideBarData: ISideBarState
+      readonly infoPanelData: ISelectedState
     }
 
     export interface ISelectedState {

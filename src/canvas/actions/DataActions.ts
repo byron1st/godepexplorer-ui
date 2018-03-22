@@ -30,7 +30,14 @@ export const dataActions = {
     type: 'EXPAND',
     payload: nodeID
   })),
-  toggleIgnoreStd: createAction('TOGGLE_IGNORE_STD')
+  toggleIgnoreStd: createAction('TOGGLE_IGNORE_STD'),
+  showInfo: createAction(
+    'SHOW_INFO',
+    (infoPanelData: State.ISelectedState) => ({
+      type: 'SHOW_INFO',
+      payload: infoPanelData
+    })
+  )
 }
 
 const returnsOfActions = Object.values(dataActions).map($call)

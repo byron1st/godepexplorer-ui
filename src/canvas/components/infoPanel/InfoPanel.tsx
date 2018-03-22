@@ -11,7 +11,7 @@ interface IInfoPanelProps {
   isNodeVisible: boolean
   isEdgeVisible: boolean
   sideBarWidth: number
-  selected: State.ISelectedState
+  infoPanelData: State.ISelectedState
   updateHeight: (newHeight: number) => any
   changeNodeVisible: () => any
   changeEdgeVisible: () => any
@@ -33,10 +33,10 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
   }
 
   public render() {
-    const nodeList: Graph.INode[] = this.props.selected.nodeList.map(id =>
+    const nodeList: Graph.INode[] = this.props.infoPanelData.nodeList.map(id =>
       DataSet.getNode(id)
     )
-    const edgeList: Graph.IEdge[] = this.props.selected.edgeList.map(id =>
+    const edgeList: Graph.IEdge[] = this.props.infoPanelData.edgeList.map(id =>
       DataSet.getEdge(id)
     )
 
@@ -113,7 +113,7 @@ function mapStateToProps(state: State.IRootState) {
     isEdgeVisible: state.ui.isEdgeVisible,
     isNodeVisible: state.ui.isNodeVisible,
     sideBarWidth: state.ui.sideBarWidth,
-    selected: state.data.selected
+    infoPanelData: state.data.infoPanelData
   }
 }
 

@@ -17,6 +17,7 @@ interface ISideBarListItemProps {
   deselect: (deselected: State.ISelectedState) => any
   showNode: (id: string, pkgType: Graph.PkgType) => any
   hideNode: (id: string, pkgType: Graph.PkgType) => any
+  showInfo: (infoPanelData: State.ISelectedState) => any
 }
 
 class SideBarListItem extends React.Component<ISideBarListItemProps> {
@@ -84,7 +85,8 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
       this.getMenuTemplate(
         this.props.id,
         this.props.showNode,
-        this.props.hideNode
+        this.props.hideNode,
+        this.props.showInfo
       )
     )
 
@@ -95,7 +97,8 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
   private getMenuTemplate(
     id: string,
     showNode: (id: string, pkgType: Graph.PkgType) => any,
-    hideNode: (id: string, pkgType: Graph.PkgType) => any
+    hideNode: (id: string, pkgType: Graph.PkgType) => any,
+    showInfo: (infoPanelData: State.ISelectedState) => any
   ) {
     const selectedNodeList = this.props.selected.nodeList
     return [
@@ -113,6 +116,12 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
           _.forEach(selectedNodeList, nodeID =>
             hideNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
           )
+        }
+      },
+      {
+        label: 'Show Info',
+        click() {
+          showInfo(DataSet.selectNode(id))
         }
       }
     ]
@@ -165,6 +174,9 @@ function mapDispatchToProps(dispatch: any) {
     },
     hideNode: (id: string, pkgType: Graph.PkgType) => {
       dispatch(dataActions.hideNode(id, pkgType))
+    },
+    showInfo: (infoPanelData: State.ISelectedState) => {
+      dispatch(dataActions.showInfo(infoPanelData))
     }
   }
 }
