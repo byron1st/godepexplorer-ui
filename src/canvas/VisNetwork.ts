@@ -43,7 +43,7 @@ const NETWORK_OPTS: vis.Options = {
     hoverConnectedEdges: false
   },
   physics: {
-    stabilization: false,
+    stabilization: true,
     solver: 'forceAtlas2Based'
   }
 }
