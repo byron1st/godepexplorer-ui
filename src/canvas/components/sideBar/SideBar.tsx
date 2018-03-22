@@ -8,8 +8,6 @@ import ViewConfig from './ViewConfig'
 
 interface ISideBarProps {
   width: number
-  isStdVisible: boolean
-  isExtVisible: boolean
   sideBarData: State.ISideBarState
   selected: State.ISelectedState
   updateWidth: (newWidth: number) => any
@@ -100,8 +98,6 @@ const resizeEnabled = {
 
 function mapStateToProps(state: State.IRootState) {
   return {
-    isExtVisible: state.ui.isExtVisible,
-    isStdVisible: state.ui.isStdVisible,
     width: state.ui.sideBarWidth,
     sideBarData: state.data.sideBarData,
     selected: state.data.selected
