@@ -172,6 +172,18 @@ function openContextMenu(params: any) {
 
   if (hovered.type === ElemType.node && hovered.ID) {
     menuTemplate.unshift({
+      label: 'hide',
+      click() {
+        Store.dispatch(
+          dataActions.hideNode(
+            hovered.ID,
+            DataSet.getNode(hovered.ID).meta.pkgType
+          )
+        )
+      }
+    })
+
+    menuTemplate.unshift({
       label: 'expand',
       click() {
         Store.dispatch(dataActions.expand(hovered.ID))
