@@ -66,6 +66,7 @@ class VisNetwork {
     this.visNetwork.on('click', click)
     this.visNetwork.on('oncontext', openContextMenu)
     this.visNetwork.on('hoverNode', recordHoveredParams)
+    this.visNetwork.on('hoverEdge', recordHoveredParams)
     this.visNetwork.on('deselectNode', deselectNode)
     this.visNetwork.on('deselectEdge', deselectEdge)
     this.visNetwork.on('release', recordReleaseParams)
@@ -154,18 +155,32 @@ function click(params: any) {
 }
 
 function openContextMenu(params: any) {
-  if (hovered.type === ElemType.node && hovered.ID) {
-    const menu = remote.Menu.buildFromTemplate([
-      {
-        label: 'expand',
-        click() {
-          Store.dispatch(dataActions.expand(hovered.ID))
+  const menuTemplate = [
+    {
+      label: 'show info',
+      click() {
+        if (hovered.type === ElemType.node) {
+          Store.dispatch(dataActions.showInfo(DataSet.selectNode(hovered.ID)))
+        } else if (hovered.type === ElemType.edge) {
+          Store.dispatch(
+            dataActions.showInfo({ nodeList: [], edgeList: [hovered.ID] })
+          )
         }
       }
-    ])
+    }
+  ]
 
-    menu.popup(remote.getCurrentWindow())
+  if (hovered.type === ElemType.node && hovered.ID) {
+    menuTemplate.unshift({
+      label: 'expand',
+      click() {
+        Store.dispatch(dataActions.expand(hovered.ID))
+      }
+    })
   }
+
+  const menu = remote.Menu.buildFromTemplate(menuTemplate)
+  menu.popup(remote.getCurrentWindow())
 }
 
 function deselectNode(params: any) {
@@ -195,7 +210,9 @@ function deselectEdge(params: any) {
 }
 
 function recordHoveredParams(params: any) {
-  hovered = { type: ElemType.node, ID: params.node }
+  hovered = params.node
+    ? { type: ElemType.node, ID: params.node }
+    : { type: ElemType.edge, ID: params.edge }
 }
 
 function recordReleaseParams(params: any) {
