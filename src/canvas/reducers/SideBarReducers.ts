@@ -5,9 +5,10 @@ import { State, Graph } from 'godeptypes'
 import { DataAction, dataActions } from '../Actions'
 import DataSet from '../DataSet'
 import VisNetwork from '../VisNetwork'
+import { PkgType } from '../enums'
 
 const INITIAL_STATE: State.ISideBarState = {
-  ignoreStd: false,
+  ignoreStd: true,
   nor: { visibleList: [], invisibleList: [] },
   ext: { visibleList: [], invisibleList: [] },
   std: { visibleList: [], invisibleList: [] }
@@ -24,6 +25,10 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       }
     case getType(dataActions.showNode):
       VisNetwork.show(action.payload.id)
+
+      if (action.payload.pkgType === PkgType.STD && state.ignoreStd) {
+        return state
+      }
 
       return {
         ...state,
@@ -107,20 +112,24 @@ function expandNode(nodeID: string, state: State.ISideBarState) {
     )
   )
 
+  const stdSet = state.ignoreStd
+    ? state.std
+    : show(
+        state.std,
+        getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.STD)
+      )
+
   return {
     ignoreStd: state.ignoreStd,
     nor: show(
       state.nor,
-      getNodeIDListFilteredByPkgType(connectedNodeIDList, 'nor')
+      getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.NOR)
     ),
     ext: show(
       state.ext,
-      getNodeIDListFilteredByPkgType(connectedNodeIDList, 'ext')
+      getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.EXT)
     ),
-    std: show(
-      state.std,
-      getNodeIDListFilteredByPkgType(connectedNodeIDList, 'std')
-    )
+    std: stdSet
   }
 }
 
