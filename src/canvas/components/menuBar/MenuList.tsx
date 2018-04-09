@@ -8,6 +8,7 @@ import * as IPC from '../../ipc'
 interface IMenuListProps {
   loadingPath: string
   isLoading: boolean
+  pkgImported: boolean
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
@@ -26,12 +27,21 @@ class MenuList extends React.Component<IMenuListProps> {
         key="menu-list-key"
       >
         <div className="navbar-nav">
-          <a
-            className="nav-item nav-link"
-            onClick={this.openSelectDirectoryDialog}
-          >
-            Import
-          </a>
+          {this.props.pkgImported ? (
+            <a
+              className="nav-item nav-link"
+              onClick={this.openResetWarningDialog}
+            >
+              Reset
+            </a>
+          ) : (
+            <a
+              className="nav-item nav-link"
+              onClick={this.openSelectDirectoryDialog}
+            >
+              Import
+            </a>
+          )}
         </div>
       </div>,
       <span className="navbar-text" key="loading-indicator-key">
@@ -97,7 +107,8 @@ function extractRootPath(filePath: string) {
 function mapStateToProps(state: State.IRootState) {
   return {
     isLoading: state.ui.isLoading,
-    loadingPath: state.ui.loadingPath
+    loadingPath: state.ui.loadingPath,
+    pkgImported: state.ui.pkgImported
   }
 }
 
