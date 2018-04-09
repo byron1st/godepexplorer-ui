@@ -1,4 +1,11 @@
-import { App, app, BrowserWindow, ipcMain, dialog } from 'electron'
+import {
+  App,
+  app,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  globalShortcut
+} from 'electron'
 import * as path from 'path'
 import * as url from 'url'
 import { Network } from 'godeptypes'
@@ -48,7 +55,12 @@ function createCanvasWindow() {
 
 function initializeApp() {
   // Subscribe the app events
-  app.on('ready', createCanvasWindow)
+  app.on('ready', () => {
+    globalShortcut.register('CommandOrControl+R', () => {
+      // @ts-ignore
+    })
+    createCanvasWindow()
+  })
 
   app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
