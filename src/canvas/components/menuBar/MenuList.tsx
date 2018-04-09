@@ -30,7 +30,7 @@ class MenuList extends React.Component<IMenuListProps> {
             className="nav-item nav-link"
             onClick={this.openSelectDirectoryDialog}
           >
-            Import
+            New
           </a>
         </div>
       </div>,
@@ -45,17 +45,28 @@ class MenuList extends React.Component<IMenuListProps> {
   }
 
   private openSelectDirectoryDialog() {
-    remote.dialog.showOpenDialog(
+    remote.dialog.showMessageBox(
       {
-        properties: ['openDirectory']
+        type: 'warning',
+        buttons: ['Ok', 'Cancel'],
+        message: 'This will reset the current diagram. Do you want to proceed?'
       },
-      (filepaths: string[]) => {
-        if (filepaths) {
-          const packagePath = extractRootPath(filepaths[0])
-          if (packagePath) {
-            this.props.turnOnLoadingIndicator(packagePath)
-            IPC.sendDepReq(packagePath)
-          }
+      (response: number) => {
+        if (response === 0) {
+          remote.dialog.showOpenDialog(
+            {
+              properties: ['openDirectory']
+            },
+            (filepaths: string[]) => {
+              if (filepaths) {
+                const packagePath = extractRootPath(filepaths[0])
+                if (packagePath) {
+                  this.props.turnOnLoadingIndicator(packagePath)
+                  IPC.sendDepReq(packagePath)
+                }
+              }
+            }
+          )
         }
       }
     )
