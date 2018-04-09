@@ -68,6 +68,7 @@ declare module 'godeptypes' {
       readonly isEdgeVisible: boolean
       readonly loadingPath: string
       readonly isLoading: boolean
+      readonly pkgImported: boolean
     }
 
     export interface IDataState {

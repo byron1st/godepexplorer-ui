@@ -19,7 +19,8 @@ export const uiActions = {
       payload: packagePath
     })
   ),
-  turnOffLoadingIndicator: createAction('TURNOFF_LOADING_INDICATOR')
+  turnOffLoadingIndicator: createAction('TURNOFF_LOADING_INDICATOR'),
+  togglePkgImported: createAction('TOGGLE_PKG_IMPORTED')
 }
 
 const returnsOfActions = Object.values(uiActions).map($call)
