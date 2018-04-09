@@ -59,6 +59,11 @@ function initializeApp() {
     globalShortcut.register('CommandOrControl+R', () => {
       // @ts-ignore
     })
+    godepexplorer
+      .run()
+      .catch((error: Error) =>
+        dialog.showErrorBox('Failed to run GoDepExplorer', error.message)
+      )
     createCanvasWindow()
   })
 

@@ -1,8 +1,26 @@
 import * as http from 'http'
+import * as path from 'path'
+import { exec } from 'child_process'
 import { gatherResponse, ISocketConnector } from './socketConnector'
 
 class GoDepExplorerConn implements ISocketConnector {
-  public send(data: string, path: string): Promise<string> {
+  public run() {
+    return new Promise((resolve, reject) => {
+      const godepexplorerPath = path.join(
+        __dirname,
+        '../../../static/godepexplorer/godepexplorer-macos'
+      )
+
+      exec(godepexplorerPath, (error, stdout, stderr) => {
+        if (error) {
+          reject(error)
+        }
+        resolve()
+      })
+    })
+  }
+
+  public send(data: string, urlPath: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const PostOpts: http.RequestOptions = {
         headers: {
@@ -11,7 +29,7 @@ class GoDepExplorerConn implements ISocketConnector {
         },
         host: 'localhost',
         method: 'POST',
-        path,
+        path: urlPath,
         port: '1111'
       }
 
