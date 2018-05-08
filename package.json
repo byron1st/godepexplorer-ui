@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "main": "dist/main/main.js",
   "scripts": {
-    "build": "gulp && electron .",
-    "start": "npm run build && electron ."
+    "start": "gulp && electron ."
   },
   "build": {
     "appId": "io.byron1st.godepexplorer",
