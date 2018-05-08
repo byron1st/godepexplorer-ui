@@ -66,5 +66,8 @@ typings/
 # End of https://www.gitignore.io/api/node
 
 dist
+dist-app
 .vscode
 level-db
+app
+.idea
