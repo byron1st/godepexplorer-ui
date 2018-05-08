@@ -6,6 +6,13 @@
     "build": "gulp && electron .",
     "start": "npm run build && electron ."
   },
+  "build": {
+    "appId": "io.byron1st.godepexplorer",
+    "productName": "GoDepExplorer",
+    "directories": {
+      "output": "dist-app"
+    }
+  },
   "author": "byron1st",
   "license": "MIT",
   "devDependencies": {
@@ -16,6 +23,7 @@
     "@types/vis": "^4.21.1",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
+    "electron-builder": "^20.8.1",
     "gulp": "^3.9.1",
     "gulp-typescript": "^4.0.1",
     "tslint": "^5.9.1",
@@ -29,6 +37,7 @@
     "jquery": "^3.3.1",
     "lodash": "^4.17.5",
     "popper.js": "^1.12.9",
+    "prettier": "^1.12.1",
     "re-resizable": "^4.3.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
