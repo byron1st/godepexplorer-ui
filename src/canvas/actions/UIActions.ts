@@ -1,5 +1,5 @@
 import { createAction } from 'typesafe-actions'
-import { $call } from 'utility-types'
+import { getReturnOfExpression } from 'utility-types'
 
 export const uiActions = {
   updateWidth: createAction('UPDATE_WIDTH', (newWidth: number) => ({
@@ -23,5 +23,5 @@ export const uiActions = {
   togglePkgImported: createAction('TOGGLE_PKG_IMPORTED')
 }
 
-const returnsOfActions = Object.values(uiActions).map($call)
+const returnsOfActions = Object.values(uiActions).map(getReturnOfExpression)
 export type UIAction = typeof returnsOfActions[number]

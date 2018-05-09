@@ -3630,9 +3630,9 @@ util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
 
-utility-types@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-1.0.0.tgz#95e0774ed78ffa055fc228591963de3902e36609"
+utility-types@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-2.0.0.tgz#3c9fe26914a1c7b8aff690e8f941e76b091d3149"
 
 uuid@^3.1.0:
   version "3.2.1"

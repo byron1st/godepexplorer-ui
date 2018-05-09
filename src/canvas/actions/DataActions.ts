@@ -1,5 +1,5 @@
 import { createAction } from 'typesafe-actions'
-import { $call } from 'utility-types'
+import { getReturnOfExpression } from 'utility-types'
 import { State, Graph } from 'godeptypes'
 
 export const dataActions = {
@@ -40,5 +40,5 @@ export const dataActions = {
   )
 }
 
-const returnsOfActions = Object.values(dataActions).map($call)
+const returnsOfActions = Object.values(dataActions).map(getReturnOfExpression)
 export type DataAction = typeof returnsOfActions[number]
