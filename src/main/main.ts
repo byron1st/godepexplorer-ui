@@ -27,12 +27,12 @@ function createCanvasWindow() {
   canvasWindow = new BrowserWindow(windowOpts)
   if (BrowserWindow.getDevToolsExtensions() !== null) {
     // Attach dev tools to the windows
-    const reactDevTool = util.getReactDevToolPath()
+    const reactDevTool = util.getDevToolPath(util.ReactDevAppID)
     if (reactDevTool) {
       BrowserWindow.addDevToolsExtension(reactDevTool)
     }
 
-    const reduxDevTool = util.getReduxDevToolPath()
+    const reduxDevTool = util.getDevToolPath(util.ReduxDevAppID)
     if (reduxDevTool) {
       BrowserWindow.addDevToolsExtension(reduxDevTool)
     }
