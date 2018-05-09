@@ -24,6 +24,7 @@
     "devtron": "^1.4.0",
     "electron-builder": "^20.13.2",
     "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.6.4",
     "gulp-typescript": "^4.0.2",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.12.0",

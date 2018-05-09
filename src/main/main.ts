@@ -1,16 +1,10 @@
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  dialog,
-  globalShortcut
-} from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
-import { Network } from 'godeptypes'
+import { execFile } from 'child_process'
 import * as IPCType from '../IPCTypes'
-import godepexplorer from './connectors/godepexplorer'
 import * as util from './util'
+import * as fs from 'fs'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -58,11 +52,6 @@ function initializeApp() {
     globalShortcut.register('CommandOrControl+R', () => {
       // @ts-ignore
     })
-    godepexplorer
-      .run()
-      .catch((error: Error) =>
-        dialog.showErrorBox('Failed to run GoDepExplorer', error.message)
-      )
     createCanvasWindow()
   })
 
@@ -80,34 +69,28 @@ function initializeApp() {
 }
 
 function initializeIPC() {
-  // Connect to Godepexplorer
-  ipcMain.on(
-    IPCType.GetDepOfPkg.Request,
-    getBasicHandlerForGodepexplorer('/dep', IPCType.GetDepOfPkg.Response)
-  )
+  ipcMain.on(IPCType.GetDepOfPkg.Request, sendRequestToGodepexplorer)
 }
 
-function getBasicHandlerForGodepexplorer(
-  targetPath: string,
-  returnEventType: string
-) {
-  return (event: any, pkgName: string) => {
-    const data: Network.IRequest = { pkgName }
+function sendRequestToGodepexplorer(event: any, pkgName: string) {
+  const depPath = path.join(app.getPath('appData'), app.getName(), 'dep.json')
+  fs.closeSync(fs.openSync(depPath, 'w'))
 
-    // Connect to godepexplorer
-    godepexplorer
-      .send(JSON.stringify(data), targetPath)
-      .then(responseData => {
-        const response: Network.IResponse = JSON.parse(responseData)
+  // supported algorithm is only static for now.
+  execFile(
+    'godepexplorer',
+    ['extract', pkgName, '--output', depPath],
+    (error, stdout, stderr) => {
+      if (error) {
+        dialog.showErrorBox('Error during executing godepexplorer', stderr)
+        event.sender.send(IPCType.GetDepOfPkg.Response)
+        return
+      }
 
-        // Return
-        event.sender.send(returnEventType, response.graph)
-      })
-      .catch(errorMessage => {
-        dialog.showErrorBox('Error from the main process', errorMessage)
-        event.sender.send(returnEventType)
-      })
-  }
+      const graph = JSON.parse(fs.readFileSync(depPath, 'utf-8'))
+      event.sender.send(IPCType.GetDepOfPkg.Response, graph)
+    }
+  )
 }
 
 // Running scripts
