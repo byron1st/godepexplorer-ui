@@ -12,6 +12,7 @@ const CanvasIndexUrl = url.format({
   protocol: 'file:',
   slashes: true
 })
+const GodepexplorerVersion = '0.1.0'
 
 let canvasWindow: Electron.BrowserWindow
 
@@ -52,7 +53,25 @@ function initializeApp() {
     globalShortcut.register('CommandOrControl+R', () => {
       // @ts-ignore
     })
-    createCanvasWindow()
+
+    execFile('godepexplorer', ['-v'], (error, stdout) => {
+      if (error) {
+        return openNoGodepexplorerMessage()
+      }
+
+      const out = stdout.split(' ')
+      if (out.length !== 3) {
+        return openNoGodepexplorerMessage()
+      }
+
+      const version = out[2].trim()
+      if (version !== GodepexplorerVersion) {
+        return openNoGodepexplorerMessage()
+      }
+
+      // Only if there is godepexplorer installed,
+      createCanvasWindow()
+    })
   })
 
   app.on('window-all-closed', () => {
@@ -66,6 +85,21 @@ function initializeApp() {
       createCanvasWindow()
     }
   })
+}
+
+function openNoGodepexplorerMessage() {
+  dialog.showMessageBox(
+    {
+      message: 'There is no godepexplorer or wrong version.',
+      detail:
+        'You need to install 1) Go and 2) godepexplorer.\nAfter you install Go, you can get godepexplorer by running "go get github.com/byron1st/godepexplorer".\nThen, you should run "go install" on the project directory.',
+      type: 'error',
+      buttons: ['Quit']
+    },
+    () => {
+      app.quit()
+    }
+  )
 }
 
 function initializeIPC() {
