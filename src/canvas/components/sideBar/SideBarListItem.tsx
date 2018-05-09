@@ -91,7 +91,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     )
 
     e.preventDefault()
-    menu.popup(remote.getCurrentWindow())
+    menu.popup({ window: remote.getCurrentWindow() })
   }
 
   private getMenuTemplate(

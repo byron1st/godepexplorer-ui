@@ -192,7 +192,7 @@ function openContextMenu(params: any) {
   }
 
   const menu = remote.Menu.buildFromTemplate(menuTemplate)
-  menu.popup(remote.getCurrentWindow())
+  menu.popup({ window: remote.getCurrentWindow() })
 }
 
 function deselectNode(params: any) {
