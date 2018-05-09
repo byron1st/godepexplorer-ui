@@ -39,6 +39,9 @@ function createCanvasWindow() {
   }
 
   canvasWindow.loadURL(CanvasIndexUrl)
+
+  // TODO: move to main menu
+  // TODO: add dev flag
   canvasWindow.webContents.openDevTools()
 
   // Subscribe the window events
