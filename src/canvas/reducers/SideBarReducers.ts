@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux'
 import { getType } from 'typesafe-actions'
 import * as _ from 'lodash'
 import { State, Graph } from 'godeptypes'

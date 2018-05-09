@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { State, Graph } from 'godeptypes'
+import { Graph } from 'godeptypes'
 import Table from './GoDepInfoTable'
 
 interface IInfoTableProps {

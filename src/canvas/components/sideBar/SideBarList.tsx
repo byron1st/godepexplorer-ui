@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { State } from 'godeptypes'
 import SideBarListItem from './SideBarListItem'
 
 interface ISideBarListProps {

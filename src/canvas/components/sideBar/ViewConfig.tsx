@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { State } from 'godeptypes'
-import { uiActions, dataActions } from '../../Actions'
+import { dataActions } from '../../Actions'
 import UnaryViewConfig from './UnaryViewConfig'
 
 interface IViewConfigProps {

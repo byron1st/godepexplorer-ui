@@ -1,5 +1,4 @@
 import {
-  App,
   app,
   BrowserWindow,
   ipcMain,

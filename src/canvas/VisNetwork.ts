@@ -154,7 +154,7 @@ function click(params: any) {
   }
 }
 
-function openContextMenu(params: any) {
+function openContextMenu() {
   const menuTemplate = [
     {
       label: 'show info',
@@ -229,10 +229,6 @@ function recordHoveredParams(params: any) {
 
 function recordReleaseParams(params: any) {
   releaseParams = params
-}
-
-function isIDList(idList: string | string[]): idList is string[] {
-  return Array.isArray(idList)
 }
 
 export default new VisNetwork()
