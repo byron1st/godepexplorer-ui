@@ -2,6 +2,8 @@ import { remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { State } from 'godeptypes'
+import fontawesome from '@fortawesome/fontawesome'
+import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { uiActions } from '../../Actions'
 import * as IPC from '../../ipc'
 
@@ -12,11 +14,22 @@ interface IMenuListProps {
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
+const faSpinnerIcon = fontawesome.icon(faSpinner, { classes: ['fa-pulse'] })
+
 class MenuList extends React.Component<IMenuListProps> {
   constructor(props: IMenuListProps) {
     super(props)
 
     this.openSelectDirectoryDialog = this.openSelectDirectoryDialog.bind(this)
+  }
+
+  public componentDidUpdate() {
+    // @ts-ignore
+    const indicatorSpan = document.getElementById('loading-indicator')
+
+    indicatorSpan.innerHTML = this.props.isLoading
+      ? `${faSpinnerIcon.html[0]} ${this.props.loadingPath}`
+      : ''
   }
 
   public render() {
@@ -44,13 +57,11 @@ class MenuList extends React.Component<IMenuListProps> {
           )}
         </div>
       </div>,
-      <span className="navbar-text" key="loading-indicator-key">
-        {this.props.isLoading ? (
-          <span>
-            <i className="fas fa-spinner fa-pulse" /> {this.props.loadingPath}
-          </span>
-        ) : null}
-      </span>
+      <span
+        className="navbar-text"
+        key="loading-indicator-key"
+        id="loading-indicator"
+      />
     ]
   }
 
