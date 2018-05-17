@@ -40,7 +40,9 @@ class SideBar extends React.Component<ISideBarProps> {
         maxWidth={800}
       >
         <div style={{ ...style.ContentContainer, overflow: 'auto' }}>
+          {/* TODO: vpViewConfig */}
           <ViewConfig />
+          {/* ************ */}
           <SideBarList
             header="Normal packages"
             visibleList={this.props.sideBarData.nor.visibleList}

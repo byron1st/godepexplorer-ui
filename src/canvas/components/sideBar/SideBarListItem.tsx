@@ -41,7 +41,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
             this.props.isSelected ? style.selectedText : style.unselectedText
           }
         >
-          {DataSet.getNode(this.props.id).meta.pkgPath}
+          {DataSet.getNode(this.props.id).label}
         </a>
       </div>
     )
@@ -101,6 +101,8 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     showInfo: (infoPanelData: State.ISelectedState) => any
   ) {
     const selectedNodeList = this.props.selected.nodeList
+    // TODO: meta.pkgType 부분.
+    // pkgType을 base로 쓸 거면, meta가 아니라 상위에 존재할 필요 있음.
     return [
       {
         label: 'Show',

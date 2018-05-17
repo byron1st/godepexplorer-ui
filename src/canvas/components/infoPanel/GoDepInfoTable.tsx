@@ -4,6 +4,8 @@ import * as _ from 'lodash'
 import { remote } from 'electron'
 import DataSet from '../../DataSet'
 
+// TODO: 완전 변경 필요.
+
 const keyLabelMap: { [key: string]: string } = {
   count: 'Count',
   depAtFuncSet: 'Function-level',
