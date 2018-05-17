@@ -45,20 +45,20 @@ class SideBar extends React.Component<ISideBarProps> {
           {/* ************ */}
           <SideBarList
             header="Normal packages"
-            visibleList={this.props.sideBarData.nor.visibleList}
-            invisibleList={this.props.sideBarData.nor.invisibleList}
+            visibleList={this.props.sideBarData.data.nor.visibleList}
+            invisibleList={this.props.sideBarData.data.nor.invisibleList}
             selectedSet={selectedSet}
           />
           <SideBarList
             header="External packages"
-            visibleList={this.props.sideBarData.ext.visibleList}
-            invisibleList={this.props.sideBarData.ext.invisibleList}
+            visibleList={this.props.sideBarData.data.ext.visibleList}
+            invisibleList={this.props.sideBarData.data.ext.invisibleList}
             selectedSet={selectedSet}
           />
           <SideBarList
             header="Standard packages"
-            visibleList={this.props.sideBarData.std.visibleList}
-            invisibleList={this.props.sideBarData.std.invisibleList}
+            visibleList={this.props.sideBarData.data.std.visibleList}
+            invisibleList={this.props.sideBarData.data.std.invisibleList}
             selectedSet={selectedSet}
           />
         </div>

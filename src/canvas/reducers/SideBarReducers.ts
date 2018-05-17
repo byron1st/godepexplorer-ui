@@ -7,10 +7,12 @@ import VisNetwork from '../VisNetwork'
 import { PkgType } from '../enums'
 
 const INITIAL_STATE: State.ISideBarState = {
-  ignoreStd: true,
-  nor: { visibleList: [], invisibleList: [] },
-  ext: { visibleList: [], invisibleList: [] },
-  std: { visibleList: [], invisibleList: [] }
+  ignoreStd: true, // TODO: Specific to godepexplorer
+  data: {
+    nor: { visibleList: [], invisibleList: [] },
+    ext: { visibleList: [], invisibleList: [] },
+    std: { visibleList: [], invisibleList: [] }
+  }
 }
 
 export default (state = INITIAL_STATE, action: DataAction) => {
@@ -20,35 +22,41 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 
       return {
         ...INITIAL_STATE,
-        ...action.payload
+        data: action.payload
       }
     case getType(dataActions.showNode):
       VisNetwork.show(action.payload.id)
 
-      if (action.payload.pkgType === PkgType.STD && state.ignoreStd) {
+      if (action.payload.type === PkgType.STD && state.ignoreStd) {
         return state
       }
 
       return {
-        ...state,
-        [action.payload.pkgType]: show(
-          state[action.payload.pkgType],
-          action.payload.id
-        )
+        ignoreStd: state.ignoreStd,
+        data: {
+          ...state.data,
+          [action.payload.type]: show(
+            state.data[action.payload.type],
+            action.payload.id
+          )
+        }
       }
     case getType(dataActions.hideNode):
       VisNetwork.hide(action.payload.id)
 
       return {
-        ...state,
-        [action.payload.pkgType]: hide(
-          state[action.payload.pkgType],
-          action.payload.id
-        )
+        ignoreStd: state.ignoreStd,
+        data: {
+          ...state.data,
+          [action.payload.type]: hide(
+            state.data[action.payload.type],
+            action.payload.id
+          )
+        }
       }
     case getType(dataActions.expand):
       const updatedState = expandNode(action.payload, state)
-      VisNetwork.show(getVisibleList(updatedState))
+      VisNetwork.show(getVisibleList(updatedState.data))
 
       return updatedState
     case getType(dataActions.toggleIgnoreStd):
@@ -98,6 +106,7 @@ function sortByPkgPath(prev: string, next: string) {
   }
 }
 
+// TODO: Specific to godepexplorer
 function expandNode(nodeID: string, state: State.ISideBarState) {
   const node = DataSet.getNode(nodeID)
   const connectedNodeIDList = _.concat(
@@ -112,23 +121,25 @@ function expandNode(nodeID: string, state: State.ISideBarState) {
   )
 
   const stdSet = state.ignoreStd
-    ? state.std
+    ? state.data.std
     : show(
-        state.std,
+        state.data.std,
         getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.STD)
       )
 
   return {
     ignoreStd: state.ignoreStd,
-    nor: show(
-      state.nor,
-      getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.NOR)
-    ),
-    ext: show(
-      state.ext,
-      getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.EXT)
-    ),
-    std: stdSet
+    data: {
+      nor: show(
+        state.data.nor,
+        getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.NOR)
+      ),
+      ext: show(
+        state.data.ext,
+        getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.EXT)
+      ),
+      std: stdSet
+    }
   }
 }
 

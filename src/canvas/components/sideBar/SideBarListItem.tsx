@@ -15,8 +15,8 @@ interface ISideBarListItemProps {
   selected: State.ISelectedState
   select: (selected: State.ISelectedState) => any
   deselect: (deselected: State.ISelectedState) => any
-  showNode: (id: string, pkgType: Graph.PkgType) => any
-  hideNode: (id: string, pkgType: Graph.PkgType) => any
+  showNode: (id: string, type: string) => any
+  hideNode: (id: string, type: string) => any
   showInfo: (infoPanelData: State.ISelectedState) => any
 }
 
@@ -96,8 +96,8 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
 
   private getMenuTemplate(
     id: string,
-    showNode: (id: string, pkgType: Graph.PkgType) => any,
-    hideNode: (id: string, pkgType: Graph.PkgType) => any,
+    showNode: (id: string, type: string) => any,
+    hideNode: (id: string, type: string) => any,
     showInfo: (infoPanelData: State.ISelectedState) => any
   ) {
     const selectedNodeList = this.props.selected.nodeList
@@ -108,7 +108,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
         label: 'Show',
         click() {
           _.forEach(selectedNodeList, nodeID =>
-            showNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
+            showNode(nodeID, DataSet.getNode(nodeID).type)
           )
         }
       },
@@ -116,7 +116,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
         label: 'Hide',
         click() {
           _.forEach(selectedNodeList, nodeID =>
-            hideNode(nodeID, DataSet.getNode(nodeID).meta.pkgType)
+            hideNode(nodeID, DataSet.getNode(nodeID).type)
           )
         }
       },
@@ -171,11 +171,11 @@ function mapDispatchToProps(dispatch: any) {
     deselect: (deselected: State.ISelectedState) => {
       dispatch(dataActions.deselect(deselected))
     },
-    showNode: (id: string, pkgType: Graph.PkgType) => {
-      dispatch(dataActions.showNode(id, pkgType))
+    showNode: (id: string, type: string) => {
+      dispatch(dataActions.showNode(id, type))
     },
-    hideNode: (id: string, pkgType: Graph.PkgType) => {
-      dispatch(dataActions.hideNode(id, pkgType))
+    hideNode: (id: string, type: string) => {
+      dispatch(dataActions.hideNode(id, type))
     },
     showInfo: (infoPanelData: State.ISelectedState) => {
       dispatch(dataActions.showInfo(infoPanelData))

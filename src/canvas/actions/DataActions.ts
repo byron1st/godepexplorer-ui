@@ -10,13 +10,13 @@ export const dataActions = {
       payload: initSideBarState
     })
   ),
-  showNode: createAction('SHOW_NODE', (id: string, pkgType: Graph.PkgType) => ({
+  showNode: createAction('SHOW_NODE', (id: string, type: string) => ({
     type: 'SHOW_NODE',
-    payload: { id, pkgType }
+    payload: { id, type }
   })),
-  hideNode: createAction('HIDE_NODE', (id: string, pkgType: Graph.PkgType) => ({
+  hideNode: createAction('HIDE_NODE', (id: string, type: string) => ({
     type: 'HIDE_NODE',
-    payload: { id, pkgType }
+    payload: { id, type }
   })),
   select: createAction('SELECT', (selected: State.ISelectedState) => ({
     type: 'SELECT',

@@ -8,6 +8,7 @@ declare module 'godeptypes' {
     export interface INode extends vis.Node {
       id: string
       label: string
+      type: string
       meta: INodeMeta
     }
 
@@ -89,8 +90,9 @@ declare module 'godeptypes' {
     }
 
     // key values are matched with PkgType.
-    export interface ISideBarState extends ISideBarData {
+    export interface ISideBarState {
       readonly ignoreStd: boolean
+      readonly data: { [type: string]: ISideBarDataSet }
     }
 
     export interface ISideBarDataSet {
