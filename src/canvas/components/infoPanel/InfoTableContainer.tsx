@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Graph } from 'godeptypes'
-import Table from './GoDepInfoTable'
+import Table from './infoTable/Loader'
 
 interface IInfoTableProps {
   elementList: Graph.INode[] | Graph.IEdge[]

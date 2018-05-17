@@ -2,9 +2,7 @@ import * as React from 'react'
 import { Graph } from 'godeptypes'
 import * as _ from 'lodash'
 import { remote } from 'electron'
-import DataSet from '../../DataSet'
-
-// TODO: 완전 변경 필요.
+import DataSet from '../../../DataSet'
 
 const keyLabelMap: { [key: string]: string } = {
   count: 'Count',
