@@ -48,18 +48,21 @@ class SideBar extends React.Component<ISideBarProps> {
             visibleList={this.props.graphData.data.nor.visibleList}
             invisibleList={this.props.graphData.data.nor.invisibleList}
             selectedSet={selectedSet}
+            selectedNodeList={this.props.selected.nodeList}
           />
           <SideBarList
             header="External packages"
             visibleList={this.props.graphData.data.ext.visibleList}
             invisibleList={this.props.graphData.data.ext.invisibleList}
             selectedSet={selectedSet}
+            selectedNodeList={this.props.selected.nodeList}
           />
           <SideBarList
             header="Standard packages"
             visibleList={this.props.graphData.data.std.visibleList}
             invisibleList={this.props.graphData.data.std.invisibleList}
             selectedSet={selectedSet}
+            selectedNodeList={this.props.selected.nodeList}
           />
         </div>
       </Resizable>

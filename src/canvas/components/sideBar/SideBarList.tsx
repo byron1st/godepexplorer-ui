@@ -6,6 +6,7 @@ interface ISideBarListProps {
   visibleList: string[]
   invisibleList: string[]
   selectedSet: { [key: string]: boolean }
+  selectedNodeList: string[]
 }
 
 export default (props: ISideBarListProps) => (
@@ -20,6 +21,7 @@ export default (props: ISideBarListProps) => (
         enclosingList={visibleList}
         isVisible={true}
         isSelected={props.selectedSet[id] ? true : false}
+        selectedNodeList={props.selectedNodeList}
         key={`${id}-sidebarbutton`}
       />
     ))}
@@ -31,6 +33,7 @@ export default (props: ISideBarListProps) => (
         enclosingList={invisibleList}
         isVisible={false}
         isSelected={props.selectedSet[id] ? true : false}
+        selectedNodeList={props.selectedNodeList}
         key={`${id}-sidebarbutton`}
       />
     ))}

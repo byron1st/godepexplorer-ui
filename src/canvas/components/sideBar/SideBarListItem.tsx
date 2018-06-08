@@ -12,7 +12,7 @@ interface ISideBarListItemProps {
   enclosingList: string[]
   isVisible: boolean
   isSelected: boolean
-  selected: StateType.ISelectedState
+  selectedNodeList: string[]
   select: (selected: StateType.ISelectedState) => any
   deselect: (deselected: StateType.ISelectedState) => any
   showNode: (id: string, type: string) => any
@@ -51,7 +51,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     e.preventDefault()
     if (e.shiftKey) {
       const closestIndex = getClosestIndex(
-        this.props.selected.nodeList,
+        this.props.selectedNodeList,
         this.props.enclosingList,
         this.props.index
       )
@@ -100,7 +100,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     hideNode: (id: string, type: string) => any,
     showInfo: (infoPanelData: StateType.ISelectedState) => any
   ) {
-    const selectedNodeList = this.props.selected.nodeList
+    const selectedNodeList = this.props.selectedNodeList
     // TODO: meta.pkgType 부분.
     // pkgType을 base로 쓸 거면, meta가 아니라 상위에 존재할 필요 있음.
     return [
@@ -157,12 +157,6 @@ function getClosestIndex(
   return -1
 }
 
-function mapStateToProps(state: StateType.IRootState) {
-  return {
-    selected: state.data.selected
-  }
-}
-
 function mapDispatchToProps(dispatch: any) {
   return {
     select: (selected: StateType.ISelectedState) => {
@@ -183,4 +177,4 @@ function mapDispatchToProps(dispatch: any) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideBarListItem)
+export default connect(null, mapDispatchToProps)(SideBarListItem)
