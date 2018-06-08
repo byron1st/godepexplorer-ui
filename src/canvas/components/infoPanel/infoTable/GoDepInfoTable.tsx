@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Graph } from 'godeptypes'
 import * as _ from 'lodash'
 import { remote } from 'electron'
-import DataSet from '../../../DataSet'
+import DataSet from '../../../graph/DataSet'
 
 const keyLabelMap: { [key: string]: string } = {
   count: 'Count',

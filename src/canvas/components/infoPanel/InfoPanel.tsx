@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { State, Graph } from 'godeptypes'
 import { uiActions } from '../../Actions'
 import InfoTableContainer from './InfoTableContainer'
-import DataSet from '../../DataSet'
+import DataSet from '../../graph/DataSet'
 
 interface IInfoPanelProps {
   height: number

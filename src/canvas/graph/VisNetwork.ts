@@ -3,9 +3,9 @@ import { Graph, State } from 'godeptypes'
 import * as _ from 'lodash'
 import { remote } from 'electron'
 import DataSet from './DataSet'
-import Store from './Store'
-import { dataActions } from './Actions'
-import { EdgeType } from './enums'
+import Store from '../Store'
+import { dataActions } from '../Actions'
+import { EdgeType } from '../enums'
 
 enum ElemType {
   node,

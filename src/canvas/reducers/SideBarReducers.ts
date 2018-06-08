@@ -2,8 +2,8 @@ import { getType } from 'typesafe-actions'
 import * as _ from 'lodash'
 import { State, Graph } from 'godeptypes'
 import { DataAction, dataActions } from '../Actions'
-import DataSet from '../DataSet'
-import VisNetwork from '../VisNetwork'
+import DataSet from '../graph/DataSet'
+import VisNetwork from '../graph/VisNetwork'
 import { PkgType } from '../enums'
 
 const INITIAL_STATE: State.ISideBarState = {

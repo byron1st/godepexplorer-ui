@@ -1,5 +1,5 @@
 import { IGraphDataSet, Graph, State } from 'godeptypes'
-import { PkgType } from './enums'
+import { PkgType } from '../enums'
 
 const INITIAL_SIDEBARDATA: State.ISideBarData = {
   nor: {

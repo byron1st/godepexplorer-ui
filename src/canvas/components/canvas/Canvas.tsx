@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { State } from 'godeptypes'
-import VisNetwork from '../../VisNetwork'
+import VisNetwork from '../../graph/VisNetwork'
 
 interface ICanvasProps {
   selected: State.ISelectedState
