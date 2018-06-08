@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
-import { State, Graph } from 'godeptypes'
+import { State } from 'godeptypes'
+import * as GraphType from '../graph/Type'
 import { DataActionTypeKey, DataAction } from '../actions'
 import DataSet from '../graph/DataSet'
 import VisNetwork from '../graph/VisNetwork'
@@ -147,7 +148,7 @@ function expandNode(nodeID: string, state: State.ISideBarState) {
 
 function getNodeIDListFilteredByPkgType(
   nodeIDList: string[],
-  pkgType: Graph.PkgType
+  pkgType: GraphType.PkgType
 ) {
   return _.filter(
     nodeIDList,
@@ -155,7 +156,7 @@ function getNodeIDListFilteredByPkgType(
   )
 }
 
-function buildSideBarData(graph: Graph.IListGraph): State.ISideBarData {
+function buildSideBarData(graph: GraphType.IListGraph): State.ISideBarData {
   const sideBarState: State.ISideBarData = {
     nor: {
       visibleList: [],

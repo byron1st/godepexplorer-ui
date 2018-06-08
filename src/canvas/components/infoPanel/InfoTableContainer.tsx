@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Graph } from 'godeptypes'
+import * as GraphType from '../../graph/Type'
 import Table from './infoTable/Loader'
 
 interface IInfoTableProps {
-  elementList: Graph.INode[] | Graph.IEdge[]
+  elementList: GraphType.INode[] | GraphType.IEdge[]
   header: string
   isVisible: boolean
   isNode: boolean

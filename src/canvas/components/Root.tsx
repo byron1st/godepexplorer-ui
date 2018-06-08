@@ -1,8 +1,8 @@
 import { ipcRenderer } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Graph } from 'godeptypes'
 import * as IPCType from '../../IPCTypes'
+import * as GraphType from '../graph/Type'
 import {
   turnOffLoadingIndicator,
   togglePkgImported,
@@ -15,7 +15,7 @@ import SideBar from './sideBar/SideBar'
 
 interface IRootProps {
   turnOffLoadingIndicator: () => any
-  initSideBarData: (initSideBarState: Graph.IListGraph) => any
+  initSideBarData: (initSideBarState: GraphType.IListGraph) => any
   togglePkgImported: () => any
 }
 
@@ -25,7 +25,7 @@ class Root extends React.Component<IRootProps> {
 
     ipcRenderer.on(
       IPCType.GetDepOfPkg.Response,
-      (event: any, newGraph: Graph.IListGraph) => {
+      (event: any, newGraph: GraphType.IListGraph) => {
         this.props.turnOffLoadingIndicator()
 
         if (newGraph) {
@@ -51,7 +51,7 @@ class Root extends React.Component<IRootProps> {
 function mapDispatchToProps(dispatch: any) {
   return {
     turnOffLoadingIndicator: () => dispatch(turnOffLoadingIndicator()),
-    initSideBarData: (initSideBarState: Graph.IListGraph) => {
+    initSideBarData: (initSideBarState: GraphType.IListGraph) => {
       dispatch(initSideBarData(initSideBarState))
     },
     togglePkgImported: () => dispatch(togglePkgImported())

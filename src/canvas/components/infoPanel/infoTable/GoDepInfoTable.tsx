@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Graph } from 'godeptypes'
 import * as _ from 'lodash'
 import { remote } from 'electron'
+import * as GraphType from '../../../graph/Type'
 import DataSet from '../../../graph/DataSet'
 
 const keyLabelMap: { [key: string]: string } = {
@@ -28,7 +28,7 @@ const keyLabelMap: { [key: string]: string } = {
 const edgeType = ['Composition', 'Import-Relation']
 
 interface ITableProps {
-  elementList: Graph.INode[] | Graph.IEdge[]
+  elementList: GraphType.INode[] | GraphType.IEdge[]
   header: string
 }
 
@@ -44,8 +44,8 @@ export default (props: ITableProps) => {
   return <div>{jsxElements}</div>
 }
 
-function getNodeElements(elementList: Graph.INode[]) {
-  const getCardForNode = (node: Graph.INode) => (
+function getNodeElements(elementList: GraphType.INode[]) {
+  const getCardForNode = (node: GraphType.INode) => (
     <div className="card m-3" key={node.id}>
       <div className="card-body">
         <h4 className="card-title">{node.label}</h4>
@@ -60,8 +60,8 @@ function getNodeElements(elementList: Graph.INode[]) {
   return _.map(elementList, getCardForNode)
 }
 
-function getEdgeElements(elementList: Graph.IEdge[]) {
-  const getCardForEdge = (edge: Graph.IEdge, edgeIndex: number) => (
+function getEdgeElements(elementList: GraphType.IEdge[]) {
+  const getCardForEdge = (edge: GraphType.IEdge, edgeIndex: number) => (
     <div className="card m-3" key={edge.id}>
       <div className="card-body">
         <h4 className="card-title">Edge #{edgeIndex + 1}</h4>
@@ -75,7 +75,7 @@ function getEdgeElements(elementList: Graph.IEdge[]) {
   return _.map(elementList, getCardForEdge)
 }
 
-function getNodeMetaElements(node: Graph.INode) {
+function getNodeMetaElements(node: GraphType.INode) {
   return [
     getRow('id', node.id, 0, getRowKey(node.id, 'ID')),
     getRow(
@@ -126,14 +126,14 @@ function getSinkSourceEdgeRow(
   isSinkEdge: boolean
 ) {
   const getEdge = (id: string) => DataSet.getEdge(id)
-  const sortEdgeBySource = (prev: Graph.IEdge, next: Graph.IEdge) =>
+  const sortEdgeBySource = (prev: GraphType.IEdge, next: GraphType.IEdge) =>
     getNodePkgPath(prev.from) <= getNodePkgPath(next.from) ? -1 : 1
   const getEdgeRowKey = (sourceID: string, sinkID: string) =>
     nodeID + sourceID + sinkID
-  const getSinkEdgeRow = (edge: Graph.IEdge) => (
+  const getSinkEdgeRow = (edge: GraphType.IEdge) => (
     <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodePkgPath(edge.from)}</li>
   )
-  const getSourceEdgeRow = (edge: Graph.IEdge) => (
+  const getSourceEdgeRow = (edge: GraphType.IEdge) => (
     <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodePkgPath(edge.to)}</li>
   )
 
@@ -143,7 +143,7 @@ function getSinkSourceEdgeRow(
     .map(isSinkEdge ? getSinkEdgeRow : getSourceEdgeRow)
 }
 
-function getEdgeMetaElements(edge: Graph.IEdge) {
+function getEdgeMetaElements(edge: GraphType.IEdge) {
   return [
     getRow('from', getNodePkgPath(edge.from), 0, getRowKey(edge.id, 'from')),
     getRow('to', getNodePkgPath(edge.to), 1, getRowKey(edge.id, 'to')),
@@ -163,10 +163,10 @@ function getEdgeMetaElements(edge: Graph.IEdge) {
 }
 
 function getDepAtFunc(
-  depAtFuncSet: { [id: string]: Graph.IDepAtFunc },
+  depAtFuncSet: { [id: string]: GraphType.IDepAtFunc },
   edgeID: string
 ) {
-  const getDepAtFuncRow = (depAtFunc: Graph.IDepAtFunc) => {
+  const getDepAtFuncRow = (depAtFunc: GraphType.IDepAtFunc) => {
     const openFromFile = () => {
       remote.shell.openItem(depAtFunc.from.filename)
     }
@@ -229,9 +229,9 @@ function getRow(key: string, value: any, index: number, reactKey: string) {
 }
 
 function isEdgeList(
-  elementList: Graph.INode[] | Graph.IEdge[]
-): elementList is Graph.IEdge[] {
-  return (elementList[0] as Graph.IEdge).from !== undefined
+  elementList: GraphType.INode[] | GraphType.IEdge[]
+): elementList is GraphType.IEdge[] {
+  return (elementList[0] as GraphType.IEdge).from !== undefined
 }
 
 function getRowKey(id: string, key: string) {

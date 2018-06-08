@@ -1,7 +1,8 @@
 import * as vis from 'vis'
-import { Graph, State } from 'godeptypes'
+import { State } from 'godeptypes'
 import * as _ from 'lodash'
 import { remote } from 'electron'
+import * as Type from './Type'
 import DataSet from './DataSet'
 import Store from '../Store'
 import { showInfo, hideNode, expand, select, deselect } from '../actions'
@@ -52,8 +53,8 @@ let hovered: IHoveredElement
 let releaseParams: any = {}
 
 class VisNetwork {
-  private nodes: vis.DataSet<Graph.INode> = new vis.DataSet([])
-  private edges: vis.DataSet<Graph.IEdge> = new vis.DataSet([])
+  private nodes: vis.DataSet<Type.INode> = new vis.DataSet([])
+  private edges: vis.DataSet<Type.IEdge> = new vis.DataSet([])
   private visNetwork: vis.Network
 
   public init(mountHTML: HTMLElement) {
@@ -113,7 +114,7 @@ class VisNetwork {
   }
 }
 
-function styleEdge(edge: Graph.IEdge) {
+function styleEdge(edge: Type.IEdge) {
   if (edge.meta.type === EdgeType.COMP) {
     edge.color = { color: '#292D34' }
     edge.arrows = {

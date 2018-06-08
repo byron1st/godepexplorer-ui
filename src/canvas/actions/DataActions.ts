@@ -1,4 +1,5 @@
-import { State, Graph } from 'godeptypes'
+import { State } from 'godeptypes'
+import * as GraphType from '../graph/Type'
 
 export enum DataActionTypeKey {
   INIT_SIDEBARDATA = 'INIT_SIDEBARDATA',
@@ -13,11 +14,11 @@ export enum DataActionTypeKey {
 
 interface IInitSideBarDataAction {
   type: DataActionTypeKey.INIT_SIDEBARDATA
-  payload: Graph.IListGraph
+  payload: GraphType.IListGraph
 }
 
 export function initSideBarData(
-  initSideBarState: Graph.IListGraph
+  initSideBarState: GraphType.IListGraph
 ): IInitSideBarDataAction {
   return {
     type: DataActionTypeKey.INIT_SIDEBARDATA,

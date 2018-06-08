@@ -1,7 +1,8 @@
 import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { State, Graph } from 'godeptypes'
+import { State } from 'godeptypes'
+import * as GraphType from '../../graph/Type'
 import {
   changeEdgeVisible,
   changeNodeVisible,
@@ -37,11 +38,11 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
   }
 
   public render() {
-    const nodeList: Graph.INode[] = this.props.infoPanelData.nodeList.map(id =>
-      DataSet.getNode(id)
+    const nodeList: GraphType.INode[] = this.props.infoPanelData.nodeList.map(
+      id => DataSet.getNode(id)
     )
-    const edgeList: Graph.IEdge[] = this.props.infoPanelData.edgeList.map(id =>
-      DataSet.getEdge(id)
+    const edgeList: GraphType.IEdge[] = this.props.infoPanelData.edgeList.map(
+      id => DataSet.getEdge(id)
     )
 
     return (

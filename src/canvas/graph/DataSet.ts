@@ -1,9 +1,18 @@
-import { IGraphDataSet, Graph } from 'godeptypes'
+import * as Type from './Type'
+
+interface IElementSet<T> {
+  [id: string]: T
+}
+
+export interface IGraphDataSet {
+  nodeSet: IElementSet<Type.INode>
+  edgeSet: IElementSet<Type.IEdge>
+}
 
 class DataSet {
   private dataSet: IGraphDataSet = { nodeSet: {}, edgeSet: {} }
 
-  public init(graph: Graph.IListGraph) {
+  public init(graph: Type.IListGraph) {
     graph.nodes.forEach(node => {
       this.dataSet.nodeSet[node.id] = node
     })
@@ -29,11 +38,11 @@ class DataSet {
   }
 
   public getVisibleElements(nodeIDList: string[]) {
-    const nodeList: Graph.INode[] = nodeIDList.map(nodeID =>
+    const nodeList: Type.INode[] = nodeIDList.map(nodeID =>
       this.getNode(nodeID)
     )
 
-    const edgeList: Graph.IEdge[] = Object.values(this.dataSet.edgeSet).filter(
+    const edgeList: Type.IEdge[] = Object.values(this.dataSet.edgeSet).filter(
       edge => nodeIDList.includes(edge.from) && nodeIDList.includes(edge.to)
     )
 
