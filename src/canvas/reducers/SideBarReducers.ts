@@ -17,7 +17,9 @@ const INITIAL_STATE: State.ISideBarState = {
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case DataActionTypeKey.INIT_SIDEBARDATA:
-      const newGraph = DataSet.init(action.payload)
+      DataSet.init(action.payload)
+
+      const newGraph = buildSideBarData(action.payload)
       VisNetwork.show(getVisibleList(newGraph))
 
       return {
@@ -151,4 +153,41 @@ function getNodeIDListFilteredByPkgType(
     nodeIDList,
     nodeID => DataSet.getNode(nodeID).meta.pkgType === pkgType
   )
+}
+
+function buildSideBarData(graph: Graph.IListGraph): State.ISideBarData {
+  const sideBarState: State.ISideBarData = {
+    nor: {
+      visibleList: [],
+      invisibleList: []
+    },
+    ext: {
+      visibleList: [],
+      invisibleList: []
+    },
+    std: {
+      visibleList: [],
+      invisibleList: []
+    }
+  }
+
+  graph.nodes.forEach(node => {
+    switch (node.meta.pkgType) {
+      case PkgType.NOR:
+        sideBarState.nor.visibleList.push(node.id)
+        break
+      case PkgType.EXT:
+        sideBarState.ext.invisibleList.push(node.id)
+        break
+      case PkgType.STD:
+        sideBarState.std.invisibleList.push(node.id)
+        break
+    }
+  })
+
+  sideBarState.nor.visibleList.sort(sortByPkgPath.bind(this))
+  sideBarState.ext.invisibleList.sort(sortByPkgPath.bind(this))
+  sideBarState.std.invisibleList.sort(sortByPkgPath.bind(this))
+
+  return sideBarState
 }
