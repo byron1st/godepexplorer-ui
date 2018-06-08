@@ -1,6 +1,5 @@
-import { getType } from 'typesafe-actions'
 import { State } from 'godeptypes'
-import { UIAction, uiActions } from '../Actions'
+import { UIActionTypeKey, UIAction } from '../actions'
 
 const INITIAL_STATE: State.IUIState = {
   infoPanelHeight: 300,
@@ -14,19 +13,19 @@ const INITIAL_STATE: State.IUIState = {
 
 export function uiReducers(state = INITIAL_STATE, action: UIAction) {
   switch (action.type) {
-    case getType(uiActions.updateWidth):
+    case UIActionTypeKey.UPDATE_WIDTH:
       return { ...state, sideBarWidth: action.payload }
-    case getType(uiActions.updateHeight):
+    case UIActionTypeKey.UPDATE_HEIGHT:
       return { ...state, infoPanelHeight: action.payload }
-    case getType(uiActions.changeNodeVisible):
+    case UIActionTypeKey.CHANGE_NODE_VISIBLE:
       return { ...state, isNodeVisible: !state.isNodeVisible }
-    case getType(uiActions.changeEdgeVisible):
+    case UIActionTypeKey.CHANGE_EDGE_VISIBLE:
       return { ...state, isEdgeVisible: !state.isEdgeVisible }
-    case getType(uiActions.turnOnLoadingIndicator):
+    case UIActionTypeKey.TURNON_LOADING_INDICATOR:
       return { ...state, loadingPath: action.payload, isLoading: true }
-    case getType(uiActions.turnOffLoadingIndicator):
+    case UIActionTypeKey.TURNOFF_LOADING_INDICATOR:
       return { ...state, loadingPath: '', isLoading: false }
-    case getType(uiActions.togglePkgImported):
+    case UIActionTypeKey.TOGGLE_PKG_IMPORTED:
       return { ...state, pkgImported: !state.pkgImported }
     default:
       return state

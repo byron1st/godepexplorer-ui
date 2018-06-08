@@ -2,7 +2,11 @@ import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { State, Graph } from 'godeptypes'
-import { uiActions } from '../../Actions'
+import {
+  changeEdgeVisible,
+  changeNodeVisible,
+  updateHeight
+} from '../../actions'
 import InfoTableContainer from './InfoTableContainer'
 import DataSet from '../../graph/DataSet'
 
@@ -120,13 +124,13 @@ function mapStateToProps(state: State.IRootState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     changeEdgeVisible: () => {
-      dispatch(uiActions.changeEdgeVisible())
+      dispatch(changeEdgeVisible())
     },
     changeNodeVisible: () => {
-      dispatch(uiActions.changeNodeVisible())
+      dispatch(changeNodeVisible())
     },
     updateHeight: (newHeight: number) => {
-      dispatch(uiActions.updateHeight(newHeight))
+      dispatch(updateHeight(newHeight))
     }
   }
 }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { State } from 'godeptypes'
 import fontawesome from '@fortawesome/fontawesome'
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
-import { uiActions } from '../../Actions'
+import { turnOnLoadingIndicator } from '../../actions'
 import * as IPC from '../../ipc'
 
 interface IMenuListProps {
@@ -126,7 +126,7 @@ function mapStateToProps(state: State.IRootState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     turnOnLoadingIndicator: (packagePath: string) => {
-      dispatch(uiActions.turnOnLoadingIndicator(packagePath))
+      dispatch(turnOnLoadingIndicator(packagePath))
     }
   }
 }

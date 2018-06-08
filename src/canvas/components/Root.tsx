@@ -1,10 +1,10 @@
 import { ipcRenderer } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Graph, State } from 'godeptypes'
+import { Graph } from 'godeptypes'
 import * as IPCType from '../../IPCTypes'
-import { uiActions, dataActions } from '../Actions'
-import DataSet from '../graph/DataSet'
+import { dataActions } from '../Actions_deprecated'
+import { turnOffLoadingIndicator, togglePkgImported } from '../actions'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
 import MenuBar from './menuBar/MenuBar'
@@ -47,12 +47,11 @@ class Root extends React.Component<IRootProps> {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    turnOffLoadingIndicator: () =>
-      dispatch(uiActions.turnOffLoadingIndicator()),
+    turnOffLoadingIndicator: () => dispatch(turnOffLoadingIndicator()),
     initSideBarData: (initSideBarState: Graph.IListGraph) => {
       dispatch(dataActions.initSideBarData(initSideBarState))
     },
-    togglePkgImported: () => dispatch(uiActions.togglePkgImported())
+    togglePkgImported: () => dispatch(togglePkgImported())
   }
 }
 

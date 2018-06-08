@@ -1,7 +1,7 @@
 import { getType } from 'typesafe-actions'
 import * as _ from 'lodash'
 import { State } from 'godeptypes'
-import { DataAction, dataActions } from '../Actions'
+import { DataAction, dataActions } from '../Actions_deprecated'
 
 const INITIAL_STATE: State.ISelectedState = {
   nodeList: [],

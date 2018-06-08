@@ -1,7 +1,7 @@
 import { getType } from 'typesafe-actions'
 import * as _ from 'lodash'
 import { State, Graph } from 'godeptypes'
-import { DataAction, dataActions } from '../Actions'
+import { DataAction, dataActions } from '../Actions_deprecated'
 import DataSet from '../graph/DataSet'
 import VisNetwork from '../graph/VisNetwork'
 import { PkgType } from '../enums'

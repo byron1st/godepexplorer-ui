@@ -4,7 +4,7 @@ import * as _ from 'lodash'
 import { remote } from 'electron'
 import DataSet from './DataSet'
 import Store from '../Store'
-import { dataActions } from '../Actions'
+import { dataActions } from '../Actions_deprecated'
 import { EdgeType } from '../enums'
 
 enum ElemType {

@@ -2,7 +2,7 @@ import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { State } from 'godeptypes'
-import { uiActions } from '../../Actions'
+import { updateWidth } from '../../actions'
 import SideBarList from './SideBarList'
 import ViewConfig from './ViewConfig'
 
@@ -109,7 +109,7 @@ function mapStateToProps(state: State.IRootState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     updateWidth: (newWidth: number) => {
-      dispatch(uiActions.updateWidth(newWidth))
+      dispatch(updateWidth(newWidth))
     }
   }
 }

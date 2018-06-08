@@ -2,8 +2,8 @@ import { remote } from 'electron'
 import * as React from 'react'
 import * as _ from 'lodash'
 import { connect } from 'react-redux'
-import { State, Graph } from 'godeptypes'
-import { dataActions } from '../../Actions'
+import { State } from 'godeptypes'
+import { dataActions } from '../../Actions_deprecated'
 import DataSet from '../../graph/DataSet'
 
 interface ISideBarListItemProps {
