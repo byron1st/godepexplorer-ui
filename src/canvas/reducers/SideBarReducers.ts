@@ -18,11 +18,12 @@ const INITIAL_STATE: State.ISideBarState = {
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case getType(dataActions.initSideBarData):
-      VisNetwork.show(getVisibleList(action.payload))
+      const newGraph = DataSet.init(action.payload)
+      VisNetwork.show(getVisibleList(newGraph))
 
       return {
         ...INITIAL_STATE,
-        data: action.payload
+        data: newGraph
       }
     case getType(dataActions.showNode):
       VisNetwork.show(action.payload.id)

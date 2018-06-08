@@ -12,7 +12,7 @@ import SideBar from './sideBar/SideBar'
 
 interface IRootProps {
   turnOffLoadingIndicator: () => any
-  initSideBarData: (initSideBarState: State.ISideBarData) => any
+  initSideBarData: (initSideBarState: Graph.IListGraph) => any
   togglePkgImported: () => any
 }
 
@@ -26,7 +26,7 @@ class Root extends React.Component<IRootProps> {
         this.props.turnOffLoadingIndicator()
 
         if (newGraph) {
-          this.props.initSideBarData(DataSet.init(newGraph))
+          this.props.initSideBarData(newGraph)
           this.props.togglePkgImported()
         }
       }
@@ -49,7 +49,7 @@ function mapDispatchToProps(dispatch: any) {
   return {
     turnOffLoadingIndicator: () =>
       dispatch(uiActions.turnOffLoadingIndicator()),
-    initSideBarData: (initSideBarState: State.ISideBarData) => {
+    initSideBarData: (initSideBarState: Graph.IListGraph) => {
       dispatch(dataActions.initSideBarData(initSideBarState))
     },
     togglePkgImported: () => dispatch(uiActions.togglePkgImported())
