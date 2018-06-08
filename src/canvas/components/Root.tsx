@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import * as IPCType from '../../IPCTypes'
+import { IPCGetDep } from '../../IPCType'
 import * as GraphType from '../graph/Type'
 import {
   turnOffLoadingIndicator,
@@ -24,7 +24,7 @@ class Root extends React.Component<IRootProps> {
     super(props)
 
     ipcRenderer.on(
-      IPCType.GetDepOfPkg.Response,
+      IPCGetDep.Response,
       (event: any, newGraph: GraphType.IListGraph) => {
         this.props.turnOffLoadingIndicator()
 

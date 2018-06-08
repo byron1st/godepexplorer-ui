@@ -4,7 +4,6 @@ import * as GraphType from '../graph/Type'
 import { DataActionTypeKey, DataAction } from '../actions'
 import DataSet from '../graph/DataSet'
 import VisNetwork from '../graph/VisNetwork'
-import { PkgType } from '../enums'
 
 const INITIAL_STATE: ISideBarState = {
   ignoreStd: true, // TODO: Specific to godepexplorer
@@ -30,7 +29,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
     case DataActionTypeKey.SHOW_NODE:
       VisNetwork.show(action.payload.id)
 
-      if (action.payload.type === PkgType.STD && state.ignoreStd) {
+      if (action.payload.type === GraphType.PkgType.STD && state.ignoreStd) {
         return state
       }
 
@@ -127,7 +126,10 @@ function expandNode(nodeID: string, state: ISideBarState) {
     ? state.data.std
     : show(
         state.data.std,
-        getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.STD)
+        getNodeIDListFilteredByPkgType(
+          connectedNodeIDList,
+          GraphType.PkgType.STD
+        )
       )
 
   return {
@@ -135,11 +137,17 @@ function expandNode(nodeID: string, state: ISideBarState) {
     data: {
       nor: show(
         state.data.nor,
-        getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.NOR)
+        getNodeIDListFilteredByPkgType(
+          connectedNodeIDList,
+          GraphType.PkgType.NOR
+        )
       ),
       ext: show(
         state.data.ext,
-        getNodeIDListFilteredByPkgType(connectedNodeIDList, PkgType.EXT)
+        getNodeIDListFilteredByPkgType(
+          connectedNodeIDList,
+          GraphType.PkgType.EXT
+        )
       ),
       std: stdSet
     }
@@ -174,13 +182,13 @@ function buildSideBarData(graph: GraphType.IListGraph): ISideBarData {
 
   graph.nodes.forEach(node => {
     switch (node.meta.pkgType) {
-      case PkgType.NOR:
+      case GraphType.PkgType.NOR:
         sideBarState.nor.visibleList.push(node.id)
         break
-      case PkgType.EXT:
+      case GraphType.PkgType.EXT:
         sideBarState.ext.invisibleList.push(node.id)
         break
-      case PkgType.STD:
+      case GraphType.PkgType.STD:
         sideBarState.std.invisibleList.push(node.id)
         break
     }

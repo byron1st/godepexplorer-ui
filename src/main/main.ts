@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
 import { execFile } from 'child_process'
-import * as IPCType from '../IPCTypes'
+import { IPCGetDep } from '../IPCType'
 import * as util from './util'
 import * as fs from 'fs'
 
@@ -106,7 +106,7 @@ function openNoGodepexplorerMessage() {
 }
 
 function initializeIPC() {
-  ipcMain.on(IPCType.GetDepOfPkg.Request, sendRequestToGodepexplorer)
+  ipcMain.on(IPCGetDep.Request, sendRequestToGodepexplorer)
 }
 
 function sendRequestToGodepexplorer(event: any, pkgName: string) {
@@ -125,12 +125,12 @@ function getResponseHandler(event: any, depPath: string) {
   return (error: Error | null, stdout: string, stderr: string): void => {
     if (error) {
       dialog.showErrorBox('Error during executing godepexplorer', stderr)
-      event.sender.send(IPCType.GetDepOfPkg.Response)
+      event.sender.send(IPCGetDep.Response)
       return
     }
 
     const graph = JSON.parse(fs.readFileSync(depPath, 'utf-8'))
-    event.sender.send(IPCType.GetDepOfPkg.Response, graph)
+    event.sender.send(IPCGetDep.Response, graph)
   }
 }
 

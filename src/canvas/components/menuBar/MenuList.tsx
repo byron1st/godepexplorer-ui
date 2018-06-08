@@ -1,11 +1,11 @@
-import { remote } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import fontawesome from '@fortawesome/fontawesome'
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import * as StateType from '../../reducers/Type'
 import { turnOnLoadingIndicator } from '../../actions'
-import * as IPC from '../../ipc'
+import { IPCGetDep } from '../../../IPCType'
 
 interface IMenuListProps {
   loadingPath: string
@@ -90,7 +90,8 @@ class MenuList extends React.Component<IMenuListProps> {
           const packagePath = extractRootPath(filepaths[0])
           if (packagePath) {
             this.props.turnOnLoadingIndicator(packagePath)
-            IPC.sendDepReq(packagePath)
+            // IPC.sendDepReq(packagePath)
+            ipcRenderer.send(IPCGetDep.Request, packagePath)
           }
         }
       }

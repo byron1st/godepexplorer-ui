@@ -6,7 +6,6 @@ import * as StateType from '../reducers/Type'
 import DataSet from './DataSet'
 import Store from '../reducers'
 import { showInfo, hideNode, expand, select, deselect } from '../actions'
-import { EdgeType } from '../enums'
 
 enum ElemType {
   node,
@@ -115,7 +114,7 @@ class VisNetwork {
 }
 
 function styleEdge(edge: Type.IEdge) {
-  if (edge.meta.type === EdgeType.COMP) {
+  if (edge.meta.type === Type.EdgeType.COMP) {
     edge.color = { color: '#292D34' }
     edge.arrows = {
       from: {
@@ -124,7 +123,7 @@ function styleEdge(edge: Type.IEdge) {
         scaleFactor: 0.5
       }
     }
-  } else if (edge.meta.type === EdgeType.REL) {
+  } else if (edge.meta.type === Type.EdgeType.REL) {
     edge.arrows = 'to'
   }
 

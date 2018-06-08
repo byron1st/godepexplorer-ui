@@ -21,9 +21,16 @@ export interface IEdge extends vis.Edge {
   meta: IEdgeMeta
 }
 
-export type PkgType = 'nor' | 'ext' | 'std'
+export enum EdgeType {
+  COMP = 0,
+  REL
+}
 
-export type EdgeType = 0 | 1
+export enum PkgType {
+  NOR = 'nor',
+  EXT = 'ext',
+  STD = 'std'
+}
 
 interface INodeMeta {
   [key: string]: string | PkgType | { [id: string]: boolean }
