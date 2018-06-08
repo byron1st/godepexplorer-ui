@@ -1,12 +1,12 @@
 import * as _ from 'lodash'
-import { State } from 'godeptypes'
+import { ISideBarState, ISideBarDataSet, ISideBarData } from './Type'
 import * as GraphType from '../graph/Type'
 import { DataActionTypeKey, DataAction } from '../actions'
 import DataSet from '../graph/DataSet'
 import VisNetwork from '../graph/VisNetwork'
 import { PkgType } from '../enums'
 
-const INITIAL_STATE: State.ISideBarState = {
+const INITIAL_STATE: ISideBarState = {
   ignoreStd: true, // TODO: Specific to godepexplorer
   data: {
     nor: { visibleList: [], invisibleList: [] },
@@ -72,14 +72,14 @@ export default (state = INITIAL_STATE, action: DataAction) => {
   }
 }
 
-function hide(dataSet: State.ISideBarDataSet, id: string) {
+function hide(dataSet: ISideBarDataSet, id: string) {
   return {
     visibleList: _.without(dataSet.visibleList, id),
     invisibleList: _.union(dataSet.invisibleList, [id]).sort(sortByPkgPath)
   }
 }
 
-function show(dataSet: State.ISideBarDataSet, id: string | string[]) {
+function show(dataSet: ISideBarDataSet, id: string | string[]) {
   return Array.isArray(id)
     ? {
         visibleList: _.union(dataSet.visibleList, id).sort(sortByPkgPath),
@@ -91,7 +91,7 @@ function show(dataSet: State.ISideBarDataSet, id: string | string[]) {
       }
 }
 
-function getVisibleList(dataSet: State.ISideBarData) {
+function getVisibleList(dataSet: ISideBarData) {
   return _.concat(
     dataSet.nor.visibleList,
     dataSet.ext.visibleList,
@@ -110,7 +110,7 @@ function sortByPkgPath(prev: string, next: string) {
 }
 
 // TODO: Specific to godepexplorer
-function expandNode(nodeID: string, state: State.ISideBarState) {
+function expandNode(nodeID: string, state: ISideBarState) {
   const node = DataSet.getNode(nodeID)
   const connectedNodeIDList = _.concat(
     _.map(
@@ -156,8 +156,8 @@ function getNodeIDListFilteredByPkgType(
   )
 }
 
-function buildSideBarData(graph: GraphType.IListGraph): State.ISideBarData {
-  const sideBarState: State.ISideBarData = {
+function buildSideBarData(graph: GraphType.IListGraph): ISideBarData {
+  const sideBarState: ISideBarData = {
     nor: {
       visibleList: [],
       invisibleList: []

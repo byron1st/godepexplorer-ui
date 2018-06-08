@@ -1,8 +1,8 @@
 import * as vis from 'vis'
-import { State } from 'godeptypes'
 import * as _ from 'lodash'
 import { remote } from 'electron'
 import * as Type from './Type'
+import * as StateType from '../reducers/Type'
 import DataSet from './DataSet'
 import Store from '../reducers'
 import { showInfo, hideNode, expand, select, deselect } from '../actions'
@@ -100,7 +100,7 @@ class VisNetwork {
       : this.edges.remove(DataSet.selectNode(id).edgeList)
   }
 
-  public setSelection(selected: State.ISelectedState) {
+  public setSelection(selected: StateType.ISelectedState) {
     this.visNetwork.setSelection({
       nodes: _.filter(
         selected.nodeList,
@@ -145,7 +145,7 @@ function getRelatedNodeIDs(edgeID: string) {
 }
 
 function click(params: any) {
-  const selected: State.ISelectedState = {
+  const selected: StateType.ISelectedState = {
     nodeList: params.nodes,
     edgeList: params.edges
   }

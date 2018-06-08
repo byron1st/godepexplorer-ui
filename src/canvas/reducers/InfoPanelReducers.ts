@@ -1,7 +1,7 @@
-import { State } from 'godeptypes'
 import { DataAction, DataActionTypeKey } from '../actions'
+import { ISelectedState } from './Type'
 
-const INITIAL_STATE: State.ISelectedState = {
+const INITIAL_STATE: ISelectedState = {
   nodeList: [],
   edgeList: []
 }

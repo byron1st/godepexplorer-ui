@@ -1,7 +1,7 @@
 import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { State } from 'godeptypes'
+import * as StateType from '../../reducers/Type'
 import * as GraphType from '../../graph/Type'
 import {
   changeEdgeVisible,
@@ -16,7 +16,7 @@ interface IInfoPanelProps {
   isNodeVisible: boolean
   isEdgeVisible: boolean
   sideBarWidth: number
-  infoPanelData: State.ISelectedState
+  infoPanelData: StateType.ISelectedState
   updateHeight: (newHeight: number) => any
   changeNodeVisible: () => any
   changeEdgeVisible: () => any
@@ -112,7 +112,7 @@ const resizeEnabled = {
   topRight: false
 }
 
-function mapStateToProps(state: State.IRootState) {
+function mapStateToProps(state: StateType.IRootState) {
   return {
     height: state.ui.infoPanelHeight,
     isEdgeVisible: state.ui.isEdgeVisible,

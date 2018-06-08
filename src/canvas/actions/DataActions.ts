@@ -1,4 +1,4 @@
-import { State } from 'godeptypes'
+import * as StateType from '../reducers/Type'
 import * as GraphType from '../graph/Type'
 
 export enum DataActionTypeKey {
@@ -52,10 +52,10 @@ export function hideNode(id: string, type: string): IHideNodeAction {
 
 interface ISelectAction {
   type: DataActionTypeKey.SELECT
-  payload: State.ISelectedState
+  payload: StateType.ISelectedState
 }
 
-export function select(selected: State.ISelectedState): ISelectAction {
+export function select(selected: StateType.ISelectedState): ISelectAction {
   return {
     type: DataActionTypeKey.SELECT,
     payload: selected
@@ -64,10 +64,12 @@ export function select(selected: State.ISelectedState): ISelectAction {
 
 interface IDeselectAction {
   type: DataActionTypeKey.DESELECT
-  payload: State.ISelectedState
+  payload: StateType.ISelectedState
 }
 
-export function deselect(deselected: State.ISelectedState): IDeselectAction {
+export function deselect(
+  deselected: StateType.ISelectedState
+): IDeselectAction {
   return {
     type: DataActionTypeKey.DESELECT,
     payload: deselected
@@ -98,10 +100,12 @@ export function toggleIgnoreStd(): IToggleIgnoreStdAction {
 
 interface IShowInfoAction {
   type: DataActionTypeKey.SHOW_INFO
-  payload: State.ISelectedState
+  payload: StateType.ISelectedState
 }
 
-export function showInfo(infoPanelData: State.ISelectedState): IShowInfoAction {
+export function showInfo(
+  infoPanelData: StateType.ISelectedState
+): IShowInfoAction {
   return {
     type: DataActionTypeKey.SHOW_INFO,
     payload: infoPanelData

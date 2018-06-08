@@ -1,8 +1,8 @@
 import * as _ from 'lodash'
-import { State } from 'godeptypes'
+import { ISelectedState } from './Type'
 import { DataAction, DataActionTypeKey } from '../actions'
 
-const INITIAL_STATE: State.ISelectedState = {
+const INITIAL_STATE: ISelectedState = {
   nodeList: [],
   edgeList: []
 }

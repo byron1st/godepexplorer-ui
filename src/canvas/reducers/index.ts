@@ -1,9 +1,9 @@
 import { combineReducers, createStore } from 'redux'
-import { State } from 'godeptypes'
+import { IRootState } from './Type'
 import { uiReducers } from './UIReducers'
 import { dataReducers } from './DataReducers'
 
-const rootReducers = combineReducers<State.IRootState>({
+const rootReducers = combineReducers<IRootState>({
   ui: uiReducers,
   data: dataReducers
 })

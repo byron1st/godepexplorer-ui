@@ -1,7 +1,7 @@
-import { State } from 'godeptypes'
+import { IUIState } from './Type'
 import { UIActionTypeKey, UIAction } from '../actions'
 
-const INITIAL_STATE: State.IUIState = {
+const INITIAL_STATE: IUIState = {
   infoPanelHeight: 300,
   isEdgeVisible: true,
   isLoading: false,

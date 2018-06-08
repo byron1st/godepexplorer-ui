@@ -2,7 +2,7 @@ import { remote } from 'electron'
 import * as React from 'react'
 import * as _ from 'lodash'
 import { connect } from 'react-redux'
-import { State } from 'godeptypes'
+import * as StateType from '../../reducers/Type'
 import * as actions from '../../actions'
 import DataSet from '../../graph/DataSet'
 
@@ -12,12 +12,12 @@ interface ISideBarListItemProps {
   enclosingList: string[]
   isVisible: boolean
   isSelected: boolean
-  selected: State.ISelectedState
-  select: (selected: State.ISelectedState) => any
-  deselect: (deselected: State.ISelectedState) => any
+  selected: StateType.ISelectedState
+  select: (selected: StateType.ISelectedState) => any
+  deselect: (deselected: StateType.ISelectedState) => any
   showNode: (id: string, type: string) => any
   hideNode: (id: string, type: string) => any
-  showInfo: (infoPanelData: State.ISelectedState) => any
+  showInfo: (infoPanelData: StateType.ISelectedState) => any
 }
 
 class SideBarListItem extends React.Component<ISideBarListItemProps> {
@@ -98,7 +98,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     id: string,
     showNode: (id: string, type: string) => any,
     hideNode: (id: string, type: string) => any,
-    showInfo: (infoPanelData: State.ISelectedState) => any
+    showInfo: (infoPanelData: StateType.ISelectedState) => any
   ) {
     const selectedNodeList = this.props.selected.nodeList
     // TODO: meta.pkgType 부분.
@@ -157,7 +157,7 @@ function getClosestIndex(
   return -1
 }
 
-function mapStateToProps(state: State.IRootState) {
+function mapStateToProps(state: StateType.IRootState) {
   return {
     selected: state.data.selected
   }
@@ -165,10 +165,10 @@ function mapStateToProps(state: State.IRootState) {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    select: (selected: State.ISelectedState) => {
+    select: (selected: StateType.ISelectedState) => {
       dispatch(actions.select(selected))
     },
-    deselect: (deselected: State.ISelectedState) => {
+    deselect: (deselected: StateType.ISelectedState) => {
       dispatch(actions.deselect(deselected))
     },
     showNode: (id: string, type: string) => {
@@ -177,7 +177,7 @@ function mapDispatchToProps(dispatch: any) {
     hideNode: (id: string, type: string) => {
       dispatch(actions.hideNode(id, type))
     },
-    showInfo: (infoPanelData: State.ISelectedState) => {
+    showInfo: (infoPanelData: StateType.ISelectedState) => {
       dispatch(actions.showInfo(infoPanelData))
     }
   }

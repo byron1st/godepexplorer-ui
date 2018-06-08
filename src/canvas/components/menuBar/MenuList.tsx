@@ -1,9 +1,9 @@
 import { remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { State } from 'godeptypes'
 import fontawesome from '@fortawesome/fontawesome'
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
+import * as StateType from '../../reducers/Type'
 import { turnOnLoadingIndicator } from '../../actions'
 import * as IPC from '../../ipc'
 
@@ -115,7 +115,7 @@ function extractRootPath(filePath: string) {
   }
 }
 
-function mapStateToProps(state: State.IRootState) {
+function mapStateToProps(state: StateType.IRootState) {
   return {
     isLoading: state.ui.isLoading,
     loadingPath: state.ui.loadingPath,

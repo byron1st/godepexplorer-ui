@@ -1,15 +1,15 @@
 import Resizable from 're-resizable'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { State } from 'godeptypes'
+import * as StateType from '../../reducers/Type'
 import { updateWidth } from '../../actions'
 import SideBarList from './SideBarList'
 import ViewConfig from './ViewConfig'
 
 interface ISideBarProps {
   width: number
-  sideBarData: State.ISideBarState
-  selected: State.ISelectedState
+  sideBarData: StateType.ISideBarState
+  selected: StateType.ISelectedState
   updateWidth: (newWidth: number) => any
 }
 
@@ -98,7 +98,7 @@ const resizeEnabled = {
   topRight: false
 }
 
-function mapStateToProps(state: State.IRootState) {
+function mapStateToProps(state: StateType.IRootState) {
   return {
     width: state.ui.sideBarWidth,
     sideBarData: state.data.sideBarData,

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { State } from 'godeptypes'
+import * as StateType from '../../reducers/Type'
 import { toggleIgnoreStd } from '../../actions'
 import UnaryViewConfig from './UnaryViewConfig'
 
@@ -23,7 +23,7 @@ class ViewConfig extends React.Component<IViewConfigProps> {
   }
 }
 
-function mapStateToProps(state: State.IRootState) {
+function mapStateToProps(state: StateType.IRootState) {
   return {
     ignoreStd: state.data.sideBarData.ignoreStd
   }

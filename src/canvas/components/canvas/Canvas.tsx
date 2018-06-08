@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { State } from 'godeptypes'
+import * as StateType from '../../reducers/Type'
 import VisNetwork from '../../graph/VisNetwork'
 
 interface ICanvasProps {
-  selected: State.ISelectedState
+  selected: StateType.ISelectedState
 }
 
 const VisNetworkCompID = 'vis-canvas'
@@ -40,7 +40,7 @@ const style = {
   }
 }
 
-function mapStateToProps(state: State.IRootState) {
+function mapStateToProps(state: StateType.IRootState) {
   return {
     selected: state.data.selected
   }
