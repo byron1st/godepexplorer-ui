@@ -117,17 +117,21 @@ function sendRequestToGodepexplorer(event: any, pkgName: string) {
   execFile(
     'godepexplorer',
     ['extract', pkgName, '--output', depPath],
-    (error, stdout, stderr) => {
-      if (error) {
-        dialog.showErrorBox('Error during executing godepexplorer', stderr)
-        event.sender.send(IPCType.GetDepOfPkg.Response)
-        return
-      }
-
-      const graph = JSON.parse(fs.readFileSync(depPath, 'utf-8'))
-      event.sender.send(IPCType.GetDepOfPkg.Response, graph)
-    }
+    getResponseHandler(event, depPath)
   )
+}
+
+function getResponseHandler(event: any, depPath: string) {
+  return (error: Error | null, stdout: string, stderr: string): void => {
+    if (error) {
+      dialog.showErrorBox('Error during executing godepexplorer', stderr)
+      event.sender.send(IPCType.GetDepOfPkg.Response)
+      return
+    }
+
+    const graph = JSON.parse(fs.readFileSync(depPath, 'utf-8'))
+    event.sender.send(IPCType.GetDepOfPkg.Response, graph)
+  }
 }
 
 // Running scripts
