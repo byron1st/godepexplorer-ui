@@ -113,7 +113,7 @@ function sendRequestToGodepexplorer(event: any, pkgName: string) {
   const depPath = path.join(app.getPath('appData'), app.getName(), 'dep.json')
   fs.closeSync(fs.openSync(depPath, 'w'))
 
-  // supported algorithm is only static for now.
+  // TODO: Add more algorithm in addition to static
   execFile(
     'godepexplorer',
     ['extract', pkgName, '--output', depPath],
