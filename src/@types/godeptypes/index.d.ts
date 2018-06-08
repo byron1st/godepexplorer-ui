@@ -99,17 +99,6 @@ declare module 'godeptypes' {
     }
   }
 
-  namespace Network {
-    export interface IRequest {
-      pkgName: string
-    }
-
-    export interface IResponse {
-      pkgName: string
-      graph: Graph.IListGraph
-    }
-  }
-
   interface IElementSet<T> {
     [id: string]: T
   }
