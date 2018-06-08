@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as _ from 'lodash'
 import { connect } from 'react-redux'
 import { State } from 'godeptypes'
-import { dataActions } from '../../Actions_deprecated'
+import * as actions from '../../actions'
 import DataSet from '../../graph/DataSet'
 
 interface ISideBarListItemProps {
@@ -166,19 +166,19 @@ function mapStateToProps(state: State.IRootState) {
 function mapDispatchToProps(dispatch: any) {
   return {
     select: (selected: State.ISelectedState) => {
-      dispatch(dataActions.select(selected))
+      dispatch(actions.select(selected))
     },
     deselect: (deselected: State.ISelectedState) => {
-      dispatch(dataActions.deselect(deselected))
+      dispatch(actions.deselect(deselected))
     },
     showNode: (id: string, type: string) => {
-      dispatch(dataActions.showNode(id, type))
+      dispatch(actions.showNode(id, type))
     },
     hideNode: (id: string, type: string) => {
-      dispatch(dataActions.hideNode(id, type))
+      dispatch(actions.hideNode(id, type))
     },
     showInfo: (infoPanelData: State.ISelectedState) => {
-      dispatch(dataActions.showInfo(infoPanelData))
+      dispatch(actions.showInfo(infoPanelData))
     }
   }
 }

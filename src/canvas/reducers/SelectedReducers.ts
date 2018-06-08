@@ -1,7 +1,6 @@
-import { getType } from 'typesafe-actions'
 import * as _ from 'lodash'
 import { State } from 'godeptypes'
-import { DataAction, dataActions } from '../Actions_deprecated'
+import { DataAction, DataActionTypeKey } from '../actions'
 
 const INITIAL_STATE: State.ISelectedState = {
   nodeList: [],
@@ -10,18 +9,18 @@ const INITIAL_STATE: State.ISelectedState = {
 
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
-    case getType(dataActions.select):
+    case DataActionTypeKey.SELECT:
       return {
         nodeList: _.union(state.nodeList, action.payload.nodeList),
         edgeList: _.union(state.edgeList, action.payload.edgeList)
       }
-    case getType(dataActions.deselect):
+    case DataActionTypeKey.DESELECT:
       return {
         nodeList: _.difference(state.nodeList, action.payload.nodeList),
         edgeList: _.difference(state.edgeList, action.payload.edgeList)
       }
-    case getType(dataActions.showNode):
-    case getType(dataActions.hideNode):
+    case DataActionTypeKey.SHOW_NODE:
+    case DataActionTypeKey.HIDE_NODE:
       return INITIAL_STATE
     default:
       return state

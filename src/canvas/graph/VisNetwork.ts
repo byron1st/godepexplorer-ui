@@ -4,7 +4,7 @@ import * as _ from 'lodash'
 import { remote } from 'electron'
 import DataSet from './DataSet'
 import Store from '../Store'
-import { dataActions } from '../Actions_deprecated'
+import { showInfo, hideNode, expand, select, deselect } from '../actions'
 import { EdgeType } from '../enums'
 
 enum ElemType {
@@ -150,7 +150,7 @@ function click(params: any) {
   }
 
   if (selected.nodeList.length !== 0 || selected.edgeList.length !== 0) {
-    Store.dispatch(dataActions.select(selected))
+    Store.dispatch(select(selected))
   }
 }
 
@@ -160,11 +160,9 @@ function openContextMenu() {
       label: 'show info',
       click() {
         if (hovered.type === ElemType.node) {
-          Store.dispatch(dataActions.showInfo(DataSet.selectNode(hovered.ID)))
+          Store.dispatch(showInfo(DataSet.selectNode(hovered.ID)))
         } else if (hovered.type === ElemType.edge) {
-          Store.dispatch(
-            dataActions.showInfo({ nodeList: [], edgeList: [hovered.ID] })
-          )
+          Store.dispatch(showInfo({ nodeList: [], edgeList: [hovered.ID] }))
         }
       }
     }
@@ -175,10 +173,7 @@ function openContextMenu() {
       label: 'hide',
       click() {
         Store.dispatch(
-          dataActions.hideNode(
-            hovered.ID,
-            DataSet.getNode(hovered.ID).meta.pkgType
-          )
+          hideNode(hovered.ID, DataSet.getNode(hovered.ID).meta.pkgType)
         )
       }
     })
@@ -186,7 +181,7 @@ function openContextMenu() {
     menuTemplate.unshift({
       label: 'expand',
       click() {
-        Store.dispatch(dataActions.expand(hovered.ID))
+        Store.dispatch(expand(hovered.ID))
       }
     })
   }
@@ -199,7 +194,7 @@ function deselectNode(params: any) {
   if (params.nodes.length === 0) {
     _.forEach(releaseParams.nodes, nodeID =>
       Store.dispatch(
-        dataActions.deselect({
+        deselect({
           nodeList: [nodeID],
           edgeList: getRelatedEdgeIDs(nodeID)
         })
@@ -212,7 +207,7 @@ function deselectEdge(params: any) {
   if (params.edges.length === 0) {
     _.forEach(releaseParams.edges, edgeID =>
       Store.dispatch(
-        dataActions.deselect({
+        deselect({
           nodeList: getRelatedNodeIDs(edgeID),
           edgeList: [edgeID]
         })

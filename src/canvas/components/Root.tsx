@@ -3,8 +3,11 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Graph } from 'godeptypes'
 import * as IPCType from '../../IPCTypes'
-import { dataActions } from '../Actions_deprecated'
-import { turnOffLoadingIndicator, togglePkgImported } from '../actions'
+import {
+  turnOffLoadingIndicator,
+  togglePkgImported,
+  initSideBarData
+} from '../actions'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
 import MenuBar from './menuBar/MenuBar'
@@ -49,7 +52,7 @@ function mapDispatchToProps(dispatch: any) {
   return {
     turnOffLoadingIndicator: () => dispatch(turnOffLoadingIndicator()),
     initSideBarData: (initSideBarState: Graph.IListGraph) => {
-      dispatch(dataActions.initSideBarData(initSideBarState))
+      dispatch(initSideBarData(initSideBarState))
     },
     togglePkgImported: () => dispatch(togglePkgImported())
   }

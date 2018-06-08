@@ -1,7 +1,6 @@
-import { getType } from 'typesafe-actions'
 import * as _ from 'lodash'
 import { State, Graph } from 'godeptypes'
-import { DataAction, dataActions } from '../Actions_deprecated'
+import { DataActionTypeKey, DataAction } from '../actions'
 import DataSet from '../graph/DataSet'
 import VisNetwork from '../graph/VisNetwork'
 import { PkgType } from '../enums'
@@ -17,7 +16,7 @@ const INITIAL_STATE: State.ISideBarState = {
 
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
-    case getType(dataActions.initSideBarData):
+    case DataActionTypeKey.INIT_SIDEBARDATA:
       const newGraph = DataSet.init(action.payload)
       VisNetwork.show(getVisibleList(newGraph))
 
@@ -25,7 +24,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
         ...INITIAL_STATE,
         data: newGraph
       }
-    case getType(dataActions.showNode):
+    case DataActionTypeKey.SHOW_NODE:
       VisNetwork.show(action.payload.id)
 
       if (action.payload.type === PkgType.STD && state.ignoreStd) {
@@ -42,7 +41,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           )
         }
       }
-    case getType(dataActions.hideNode):
+    case DataActionTypeKey.HIDE_NODE:
       VisNetwork.hide(action.payload.id)
 
       return {
@@ -55,12 +54,12 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           )
         }
       }
-    case getType(dataActions.expand):
+    case DataActionTypeKey.EXPAND:
       const updatedState = expandNode(action.payload, state)
       VisNetwork.show(getVisibleList(updatedState.data))
 
       return updatedState
-    case getType(dataActions.toggleIgnoreStd):
+    case DataActionTypeKey.TOGGLE_IGNORE_STD:
       return {
         ...state,
         ignoreStd: !state.ignoreStd

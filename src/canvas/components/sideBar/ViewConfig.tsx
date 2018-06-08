@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { State } from 'godeptypes'
-import { dataActions } from '../../Actions_deprecated'
+import { toggleIgnoreStd } from '../../actions'
 import UnaryViewConfig from './UnaryViewConfig'
 
 interface IViewConfigProps {
@@ -31,7 +31,7 @@ function mapStateToProps(state: State.IRootState) {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    toggleIgnoreStd: () => dispatch(dataActions.toggleIgnoreStd())
+    toggleIgnoreStd: () => dispatch(toggleIgnoreStd())
   }
 }
 
