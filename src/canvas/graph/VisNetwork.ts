@@ -4,7 +4,7 @@ import * as _ from 'lodash'
 import { remote } from 'electron'
 import * as Type from './Type'
 import DataSet from './DataSet'
-import Store from '../Store'
+import Store from '../reducers'
 import { showInfo, hideNode, expand, select, deselect } from '../actions'
 import { EdgeType } from '../enums'
 
