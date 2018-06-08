@@ -3,12 +3,13 @@ import { getReturnOfExpression } from 'utility-types'
 import { State, Graph } from 'godeptypes'
 
 export const dataActions = {
-  initSideBarData: createAction('INIT_SIDEBARDATA', (
-    initSideBarState: Graph.IListGraph /*State.ISideBarData*/
-  ) => ({
-    type: 'INIT_SIDEBARDATA',
-    payload: initSideBarState
-  })),
+  initSideBarData: createAction(
+    'INIT_SIDEBARDATA',
+    (initSideBarState: Graph.IListGraph) => ({
+      type: 'INIT_SIDEBARDATA',
+      payload: initSideBarState
+    })
+  ),
   showNode: createAction('SHOW_NODE', (id: string, type: string) => ({
     type: 'SHOW_NODE',
     payload: { id, type }
