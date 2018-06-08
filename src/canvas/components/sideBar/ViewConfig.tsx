@@ -25,7 +25,7 @@ class ViewConfig extends React.Component<IViewConfigProps> {
 
 function mapStateToProps(state: StateType.IRootState) {
   return {
-    ignoreStd: state.data.sideBarData.ignoreStd
+    ignoreStd: state.data.graphData.ignoreStd
   }
 }
 

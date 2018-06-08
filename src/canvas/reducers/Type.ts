@@ -15,7 +15,7 @@ export interface IUIState {
 
 export interface IDataState {
   readonly selected: ISelectedState
-  readonly sideBarData: ISideBarState
+  readonly graphData: IGraphState
   readonly infoPanelData: ISelectedState
 }
 
@@ -24,17 +24,17 @@ export interface ISelectedState {
   readonly edgeList: string[]
 }
 
-export interface ISideBarData {
-  readonly [type: string]: ISideBarDataSet
-}
-
 // key values are matched with PkgType.
-export interface ISideBarState {
+export interface IGraphState {
   readonly ignoreStd: boolean
   readonly data: ISideBarData
 }
 
-export interface ISideBarDataSet {
+export interface ISideBarData {
+  readonly [type: string]: ISideBarTypeData
+}
+
+export interface ISideBarTypeData {
   readonly visibleList: string[]
   readonly invisibleList: string[]
 }

@@ -8,7 +8,7 @@ import ViewConfig from './ViewConfig'
 
 interface ISideBarProps {
   width: number
-  sideBarData: StateType.ISideBarState
+  graphData: StateType.IGraphState
   selected: StateType.ISelectedState
   updateWidth: (newWidth: number) => any
 }
@@ -45,20 +45,20 @@ class SideBar extends React.Component<ISideBarProps> {
           {/* ************ */}
           <SideBarList
             header="Normal packages"
-            visibleList={this.props.sideBarData.data.nor.visibleList}
-            invisibleList={this.props.sideBarData.data.nor.invisibleList}
+            visibleList={this.props.graphData.data.nor.visibleList}
+            invisibleList={this.props.graphData.data.nor.invisibleList}
             selectedSet={selectedSet}
           />
           <SideBarList
             header="External packages"
-            visibleList={this.props.sideBarData.data.ext.visibleList}
-            invisibleList={this.props.sideBarData.data.ext.invisibleList}
+            visibleList={this.props.graphData.data.ext.visibleList}
+            invisibleList={this.props.graphData.data.ext.invisibleList}
             selectedSet={selectedSet}
           />
           <SideBarList
             header="Standard packages"
-            visibleList={this.props.sideBarData.data.std.visibleList}
-            invisibleList={this.props.sideBarData.data.std.invisibleList}
+            visibleList={this.props.graphData.data.std.visibleList}
+            invisibleList={this.props.graphData.data.std.invisibleList}
             selectedSet={selectedSet}
           />
         </div>
@@ -101,7 +101,7 @@ const resizeEnabled = {
 function mapStateToProps(state: StateType.IRootState) {
   return {
     width: state.ui.sideBarWidth,
-    sideBarData: state.data.sideBarData,
+    graphData: state.data.graphData,
     selected: state.data.selected
   }
 }

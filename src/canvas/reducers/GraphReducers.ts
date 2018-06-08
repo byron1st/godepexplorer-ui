@@ -1,11 +1,11 @@
 import * as _ from 'lodash'
-import { ISideBarState, ISideBarDataSet, ISideBarData } from './Type'
+import { IGraphState, ISideBarTypeData, ISideBarData } from './Type'
 import * as GraphType from '../graph/Type'
 import { DataActionTypeKey, DataAction } from '../actions'
 import DataSet from '../graph/DataSet'
 import VisNetwork from '../graph/VisNetwork'
 
-const INITIAL_STATE: ISideBarState = {
+const INITIAL_STATE: IGraphState = {
   ignoreStd: true, // TODO: Specific to godepexplorer
   data: {
     nor: { visibleList: [], invisibleList: [] },
@@ -71,14 +71,14 @@ export default (state = INITIAL_STATE, action: DataAction) => {
   }
 }
 
-function hide(dataSet: ISideBarDataSet, id: string) {
+function hide(dataSet: ISideBarTypeData, id: string) {
   return {
     visibleList: _.without(dataSet.visibleList, id),
     invisibleList: _.union(dataSet.invisibleList, [id]).sort(sortByPkgPath)
   }
 }
 
-function show(dataSet: ISideBarDataSet, id: string | string[]) {
+function show(dataSet: ISideBarTypeData, id: string | string[]) {
   return Array.isArray(id)
     ? {
         visibleList: _.union(dataSet.visibleList, id).sort(sortByPkgPath),
@@ -109,7 +109,7 @@ function sortByPkgPath(prev: string, next: string) {
 }
 
 // TODO: Specific to godepexplorer
-function expandNode(nodeID: string, state: ISideBarState) {
+function expandNode(nodeID: string, state: IGraphState) {
   const node = DataSet.getNode(nodeID)
   const connectedNodeIDList = _.concat(
     _.map(
