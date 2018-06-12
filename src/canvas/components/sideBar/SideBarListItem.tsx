@@ -31,16 +31,16 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
   public render() {
     return (
       <div
+        // @ts-ignore
+        // "WebkitUserSelect"이 string 타입을 가질 수 없다고 ts-error를 발생시킴.
+        // 하지만 가질 수 있음.
         onClick={this.click}
         onContextMenu={this.openContextMenu}
-        style={style.item}
+        style={
+          this.props.isSelected ? style.selectedItem : style.unselectedItem
+        }
       >
-        <a
-          href="#"
-          style={
-            this.props.isSelected ? style.selectedText : style.unselectedText
-          }
-        >
+        <a href="#" style={style.text}>
           {DataSet.getNode(this.props.id).label}
         </a>
       </div>
@@ -101,8 +101,6 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     showInfo: (infoPanelData: StateType.ISelectedState) => any
   ) {
     const selectedNodeList = this.props.selectedNodeList
-    // TODO: meta.pkgType 부분.
-    // pkgType을 base로 쓸 거면, meta가 아니라 상위에 존재할 필요 있음.
     return [
       {
         label: 'Show',
@@ -131,15 +129,19 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
 }
 
 const style = {
-  item: {
+  selectedItem: {
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    WebkitUserSelect: 'none',
+    backgroundColor: 'black'
   },
-  unselectedText: {
+  unselectedItem: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    WebkitUserSelect: 'none'
+  },
+  text: {
     color: 'white'
-  },
-  selectedText: {
-    color: '#18A8CD'
   }
 }
 
