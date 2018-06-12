@@ -133,7 +133,7 @@ const style = {
     paddingTop: 0,
     paddingBottom: 0,
     WebkitUserSelect: 'none',
-    backgroundColor: 'black'
+    backgroundColor: '#FFC748'
   },
   unselectedItem: {
     paddingTop: 0,
