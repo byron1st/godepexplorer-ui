@@ -13,13 +13,8 @@ const INITIAL_STATE: IGraphState = {
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case DataActionTypeKey.ADD_NEW_GRAPH:
-      // DataSet.init(action.payload)
       DataSet.addGraph(action.payload)
 
-      // const nodeList = extractSideBarTypeDataFromINodeList(
-      //   action.payload.nodes,
-      //   state.ignoreStd
-      // )
       const nodeList = DataSet.getSideBarTypeData(
         state.nodeList,
         state.ignoreStd
