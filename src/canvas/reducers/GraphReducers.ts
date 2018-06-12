@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import { IGraphState, ISideBarTypeData } from './Type'
+import { IGraphState, ISideBarTypeData, ISideBarListItemData } from './Type'
 import * as GraphType from '../graph/Type'
 import { DataActionTypeKey, DataAction } from '../actions'
 import DataSet from '../graph/DataSet'
@@ -7,22 +7,25 @@ import VisNetwork from '../graph/VisNetwork'
 
 const INITIAL_STATE: IGraphState = {
   ignoreStd: true,
+  sideBarListData: [],
   nodeList: { visibleList: [], invisibleList: [] }
 }
 
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case DataActionTypeKey.ADD_NEW_GRAPH:
-      DataSet.addGraph(action.payload)
+      DataSet.addGraph(action.payload, state.ignoreStd)
 
       const nodeList = DataSet.getSideBarTypeData(
         state.nodeList,
         state.ignoreStd
       )
-      VisNetwork.show(nodeList.visibleList)
+      // VisNetwork.show(nodeList.visibleList)
+      VisNetwork.show(DataSet.getVisibleNodeIDList())
 
       return {
         ...INITIAL_STATE,
+        sideBarListData: DataSet.getSideBarListData(),
         nodeList: {
           visibleList: nodeList.visibleList,
           invisibleList: nodeList.invisibleList
@@ -30,6 +33,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       }
     case DataActionTypeKey.SHOW_NODE:
       VisNetwork.show(action.payload.id)
+      DataSet.show(action.payload.id)
 
       if (action.payload.type === GraphType.PkgType.STD && state.ignoreStd) {
         return state
@@ -37,13 +41,24 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 
       return {
         ignoreStd: state.ignoreStd,
+        sideBarListData: _.map(
+          state.sideBarListData,
+          (item: ISideBarListItemData) =>
+            item.id === action.payload.id ? { ...item, isVisible: true } : item
+        ),
         nodeList: show(state.nodeList, action.payload.id)
       }
     case DataActionTypeKey.HIDE_NODE:
       VisNetwork.hide(action.payload.id)
+      DataSet.hide(action.payload.id)
 
       return {
         ignoreStd: state.ignoreStd,
+        sideBarListData: _.map(
+          state.sideBarListData,
+          (item: ISideBarListItemData) =>
+            item.id === action.payload.id ? { ...item, isVisible: false } : item
+        ),
         nodeList: hide(state.nodeList, action.payload.id)
       }
     case DataActionTypeKey.EXPAND:
@@ -105,6 +120,22 @@ function expandNode(nodeID: string, state: IGraphState) {
 
   return {
     ignoreStd: state.ignoreStd,
+    sideBarListData: state.ignoreStd
+      ? _.map(
+          state.sideBarListData,
+          (item: ISideBarListItemData) =>
+            _.includes(newlyShownNodeIDList, item.id) &&
+            item.type !== GraphType.PkgType.STD
+              ? { ...item, isVisible: true }
+              : item
+        )
+      : _.map(
+          state.sideBarListData,
+          (item: ISideBarListItemData) =>
+            _.includes(newlyShownNodeIDList, item.id)
+              ? { ...item, isVisible: true }
+              : item
+        ),
     nodeList: state.ignoreStd
       ? show(
           state.nodeList,

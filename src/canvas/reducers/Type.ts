@@ -1,3 +1,5 @@
+import { PkgType } from '../graph/Type'
+
 export interface IRootState {
   readonly ui: IUIState
   readonly data: IDataState
@@ -26,7 +28,16 @@ export interface ISelectedState {
 
 export interface IGraphState {
   readonly ignoreStd: boolean
+  readonly sideBarListData: ISideBarListItemData[]
   readonly nodeList: ISideBarTypeData
+}
+
+export interface ISideBarListItemData {
+  readonly id: string
+  readonly label: string
+  readonly path: string
+  readonly type: PkgType
+  readonly isVisible: boolean
 }
 
 export interface ISideBarTypeData {

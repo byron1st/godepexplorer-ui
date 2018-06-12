@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 import * as Type from './Type'
-import { ISideBarTypeData } from '../reducers/Type'
+import { ISideBarTypeData, ISideBarListItemData } from '../reducers/Type'
 
 interface IElementSet<T> {
   [id: string]: T
@@ -14,12 +14,15 @@ export interface IGraphDataSet {
 class DataSet {
   private dataSet: IGraphDataSet = { nodeSet: {}, edgeSet: {} }
 
-  public addGraph(graph: Type.IListGraph) {
+  public addGraph(graph: Type.IListGraph, ignoreStd: boolean) {
     graph.nodes.forEach(node => {
       const existingNode = this.dataSet.nodeSet[node.id]
-      this.dataSet.nodeSet[node.id] = existingNode
-        ? this.resolveNode(existingNode, node)
-        : node
+      if (existingNode) {
+        this.dataSet.nodeSet[node.id] = this.resolveNode(existingNode, node)
+      } else {
+        node.isVisible = !ignoreStd || node.type !== Type.PkgType.STD
+        this.dataSet.nodeSet[node.id] = node
+      }
     })
 
     graph.edges.forEach(edge => {
@@ -28,47 +31,6 @@ class DataSet {
         ? this.resolveEdge(existingEdge, edge)
         : edge
     })
-  }
-
-  public resolveNode(
-    existingNode: Type.INode,
-    currentNode: Type.INode
-  ): Type.INode {
-    const updatedNode = _.cloneDeep(existingNode)
-    // Type이 EXT 일 경우 NOR로 변경
-    if (
-      updatedNode.type === Type.PkgType.EXT &&
-      currentNode.type === Type.PkgType.NOR
-    ) {
-      updatedNode.type = Type.PkgType.NOR
-      updatedNode.meta.pkgType = Type.PkgType.NOR
-    }
-
-    // sinkEdgeIDSet 병합
-    _.keys(currentNode.meta.sinkEdgeIDSet).forEach((edgeID: string) => {
-      updatedNode.meta.sinkEdgeIDSet[edgeID] = true
-    })
-
-    // sourceEdgeIDSet 병합
-    _.keys(currentNode.meta.sourceEdgeIDSet).forEach((edgeID: string) => {
-      updatedNode.meta.sourceEdgeIDSet[edgeID] = true
-    })
-
-    return updatedNode
-  }
-
-  public resolveEdge(
-    existingEdge: Type.IEdge,
-    currentEdge: Type.IEdge
-  ): Type.IEdge {
-    const updatedEdge = _.cloneDeep(existingEdge)
-
-    // depAtFuncSet 병합
-    _.keys(currentEdge.meta.depAtFuncSet).forEach((id: string) => {
-      updatedEdge.meta.depAtFuncSet[id] = currentEdge.meta.depAtFuncSet[id]
-    })
-
-    return updatedEdge
   }
 
   public getSideBarTypeData(
@@ -111,6 +73,20 @@ class DataSet {
     }
   }
 
+  public getSideBarListData(): ISideBarListItemData[] {
+    return _.values(this.dataSet.nodeSet).map(node => ({
+      id: node.id,
+      type: node.type as Type.PkgType,
+      label: node.label,
+      path: node.meta.pkgPath,
+      isVisible: node.isVisible
+    }))
+  }
+
+  public getVisibleNodeIDList(): string[] {
+    return _.keys(this.dataSet.nodeSet).filter(id => this.getNode(id).isVisible)
+  }
+
   public getVisibleElements(nodeIDList: string[]) {
     const nodeList: Type.INode[] = nodeIDList.map(nodeID =>
       this.getNode(nodeID)
@@ -121,6 +97,55 @@ class DataSet {
     )
 
     return { nodeList, edgeList }
+  }
+
+  public show(id: string) {
+    this.getNode(id).isVisible = true
+  }
+
+  public hide(id: string) {
+    this.getNode(id).isVisible = false
+  }
+
+  private resolveNode(
+    existingNode: Type.INode,
+    currentNode: Type.INode
+  ): Type.INode {
+    const updatedNode = _.cloneDeep(existingNode)
+    // Type이 EXT 일 경우 NOR로 변경
+    if (
+      updatedNode.type === Type.PkgType.EXT &&
+      currentNode.type === Type.PkgType.NOR
+    ) {
+      updatedNode.type = Type.PkgType.NOR
+      updatedNode.meta.pkgType = Type.PkgType.NOR
+    }
+
+    // sinkEdgeIDSet 병합
+    _.keys(currentNode.meta.sinkEdgeIDSet).forEach((edgeID: string) => {
+      updatedNode.meta.sinkEdgeIDSet[edgeID] = true
+    })
+
+    // sourceEdgeIDSet 병합
+    _.keys(currentNode.meta.sourceEdgeIDSet).forEach((edgeID: string) => {
+      updatedNode.meta.sourceEdgeIDSet[edgeID] = true
+    })
+
+    return updatedNode
+  }
+
+  private resolveEdge(
+    existingEdge: Type.IEdge,
+    currentEdge: Type.IEdge
+  ): Type.IEdge {
+    const updatedEdge = _.cloneDeep(existingEdge)
+
+    // depAtFuncSet 병합
+    _.keys(currentEdge.meta.depAtFuncSet).forEach((id: string) => {
+      updatedEdge.meta.depAtFuncSet[id] = currentEdge.meta.depAtFuncSet[id]
+    })
+
+    return updatedEdge
   }
 
   private sortByPkgPath(prev: string, next: string) {

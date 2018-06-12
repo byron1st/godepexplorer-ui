@@ -9,6 +9,7 @@ export interface INode extends vis.Node {
   id: string
   label: string
   type: string
+  isVisible?: boolean
   meta: INodeMeta
 }
 
