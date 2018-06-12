@@ -29,7 +29,6 @@ export interface ISelectedState {
 export interface IGraphState {
   readonly ignoreStd: boolean
   readonly sideBarListData: ISideBarListItemData[]
-  readonly nodeList: ISideBarTypeData
 }
 
 export interface ISideBarListItemData {

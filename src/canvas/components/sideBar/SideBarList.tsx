@@ -1,10 +1,10 @@
 import * as React from 'react'
 import SideBarListItem from './SideBarListItem'
+import { ISideBarListItemData } from '../../reducers/Type'
 
 interface ISideBarListProps {
   header: string
-  visibleList: string[]
-  invisibleList: string[]
+  listData: ISideBarListItemData[]
   selectedSet: { [key: string]: boolean }
   selectedNodeList: string[]
 }
@@ -12,29 +12,16 @@ interface ISideBarListProps {
 export default (props: ISideBarListProps) => (
   <div style={style.container}>
     <h4>{props.header}</h4>
-    {/* TODO: Visibile, Invisible. 이건 공통 요소로 놔둬도 될듯? */}
-    <h6>Visible Nodes</h6>
-    {props.visibleList.map((id, index, visibleList) => (
+    {props.listData.map((item, index, list) => (
       <SideBarListItem
-        id={id}
+        id={item.id}
         index={index}
-        enclosingList={visibleList}
-        isVisible={true}
-        isSelected={props.selectedSet[id] ? true : false}
+        enclosingList={list.map(listItem => listItem.id)}
+        isVisible={item.isVisible}
+        isSelected={props.selectedSet[item.id] ? true : false}
+        type={item.type}
         selectedNodeList={props.selectedNodeList}
-        key={`${id}-sidebarbutton`}
-      />
-    ))}
-    <h6>Invisible Nodes</h6>
-    {props.invisibleList.map((id, index, invisibleList) => (
-      <SideBarListItem
-        id={id}
-        index={index}
-        enclosingList={invisibleList}
-        isVisible={false}
-        isSelected={props.selectedSet[id] ? true : false}
-        selectedNodeList={props.selectedNodeList}
-        key={`${id}-sidebarbutton`}
+        key={`${item.id}-sidebarbutton`}
       />
     ))}
   </div>

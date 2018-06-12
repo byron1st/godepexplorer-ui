@@ -33,29 +33,6 @@ class DataSet {
     })
   }
 
-  public getSideBarTypeData(
-    currentState: ISideBarTypeData,
-    ignoreStd: boolean
-  ): ISideBarTypeData {
-    const newState = _.cloneDeep(currentState)
-    _.keys(this.dataSet.nodeSet).forEach((nodeID: string) => {
-      if (
-        !_.includes(currentState.visibleList, nodeID) &&
-        !_.includes(currentState.invisibleList, nodeID)
-      ) {
-        if (ignoreStd && this.getNode(nodeID).type === Type.PkgType.STD) {
-          newState.invisibleList.push(nodeID)
-        } else {
-          newState.visibleList.push(nodeID)
-        }
-      }
-    })
-
-    newState.visibleList.sort(this.sortByPkgPath.bind(this))
-    newState.invisibleList.sort(this.sortByPkgPath.bind(this))
-    return newState
-  }
-
   public getNode(id: string) {
     return this.dataSet.nodeSet[id]
   }
@@ -74,13 +51,15 @@ class DataSet {
   }
 
   public getSideBarListData(): ISideBarListItemData[] {
-    return _.values(this.dataSet.nodeSet).map(node => ({
-      id: node.id,
-      type: node.type as Type.PkgType,
-      label: node.label,
-      path: node.meta.pkgPath,
-      isVisible: node.isVisible
-    }))
+    return _.values(this.dataSet.nodeSet)
+      .map(node => ({
+        id: node.id,
+        type: node.type as Type.PkgType,
+        label: node.label,
+        path: node.meta.pkgPath,
+        isVisible: node.isVisible
+      }))
+      .sort(sortSideBarDataByTypeAndPath)
   }
 
   public getVisibleNodeIDList(): string[] {
@@ -99,12 +78,12 @@ class DataSet {
     return { nodeList, edgeList }
   }
 
-  public show(id: string) {
-    this.getNode(id).isVisible = true
+  public show(id: string | string[]) {
+    this.toggleVisibility(id, true)
   }
 
-  public hide(id: string) {
-    this.getNode(id).isVisible = false
+  public hide(id: string | string[]) {
+    this.toggleVisibility(id, false)
   }
 
   private resolveNode(
@@ -148,12 +127,37 @@ class DataSet {
     return updatedEdge
   }
 
-  private sortByPkgPath(prev: string, next: string) {
-    if (this.getNode(prev).meta.pkgPath <= this.getNode(next).meta.pkgPath) {
-      return -1
+  private toggleVisibility(id: string | string[], isVisible: boolean) {
+    if (Array.isArray(id)) {
+      for (const eachID of id) {
+        this.getNode(eachID).isVisible = isVisible
+      }
     } else {
-      return 1
+      this.getNode(id as string).isVisible = isVisible
     }
+  }
+}
+
+function sortSideBarDataByTypeAndPath(
+  prev: ISideBarListItemData,
+  next: ISideBarListItemData
+) {
+  if (prev.type !== next.type) {
+    if (prev.type === Type.PkgType.NOR) {
+      return -1
+    }
+
+    if (prev.type === Type.PkgType.EXT && next.type === Type.PkgType.STD) {
+      return -1
+    }
+
+    return 1
+  }
+
+  if (prev.path <= next.path) {
+    return -1
+  } else {
+    return 1
   }
 }
 

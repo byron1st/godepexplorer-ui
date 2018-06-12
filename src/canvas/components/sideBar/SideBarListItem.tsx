@@ -2,9 +2,12 @@ import { remote } from 'electron'
 import * as React from 'react'
 import * as _ from 'lodash'
 import { connect } from 'react-redux'
+import fontawesome from '@fortawesome/fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/fontawesome-free-solid'
 import * as StateType from '../../reducers/Type'
 import * as actions from '../../actions'
 import DataSet from '../../graph/DataSet'
+import { PkgType } from '../../graph/Type'
 
 interface ISideBarListItemProps {
   id: string
@@ -13,6 +16,7 @@ interface ISideBarListItemProps {
   isVisible: boolean
   isSelected: boolean
   selectedNodeList: string[]
+  type: PkgType
   select: (selected: StateType.ISelectedState) => any
   deselect: (deselected: StateType.ISelectedState) => any
   showNode: (id: string, type: string) => any
@@ -20,12 +24,23 @@ interface ISideBarListItemProps {
   showInfo: (infoPanelData: StateType.ISelectedState) => any
 }
 
+const faEyeIcon = fontawesome.icon(faEye)
+const faEyeSlashIcon = fontawesome.icon(faEyeSlash)
+
 class SideBarListItem extends React.Component<ISideBarListItemProps> {
   constructor(props: ISideBarListItemProps) {
     super(props)
 
     this.openContextMenu = this.openContextMenu.bind(this)
     this.click = this.click.bind(this)
+  }
+
+  public componentDidMount() {
+    this.addEyeIcon()
+  }
+
+  public componentDidUpdate() {
+    this.addEyeIcon()
   }
 
   public render() {
@@ -40,7 +55,8 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
           this.props.isSelected ? style.selectedItem : style.unselectedItem
         }
       >
-        <a href="#" style={style.text}>
+        <a href="#" style={style.text[this.props.type]}>
+          <span id={`visible-icon-${this.props.id}`} />{' '}
           {DataSet.getNode(this.props.id).label}
         </a>
       </div>
@@ -126,6 +142,15 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
       }
     ]
   }
+
+  private addEyeIcon() {
+    // @ts-ignore
+    const iconSpan = document.getElementById(`visible-icon-${this.props.id}`)
+
+    iconSpan.innerHTML = this.props.isVisible
+      ? `${faEyeIcon.html[0]}`
+      : `${faEyeSlashIcon.html[0]}`
+  }
 }
 
 const style = {
@@ -141,7 +166,15 @@ const style = {
     WebkitUserSelect: 'none'
   },
   text: {
-    color: 'white'
+    nor: {
+      color: '#8BD8F1'
+    },
+    ext: {
+      color: '#DFEBF7'
+    },
+    std: {
+      color: '#789BAE'
+    }
   }
 }
 

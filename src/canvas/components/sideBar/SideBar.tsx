@@ -16,95 +16,9 @@ interface ISideBarProps {
   updateWidth: (newWidth: number) => any
 }
 
-interface ISideBarState {
-  nor: StateType.ISideBarTypeData
-  ext: StateType.ISideBarTypeData
-  std: StateType.ISideBarTypeData
-  prevNodeList: StateType.ISideBarTypeData
-}
-
-class SideBar extends React.Component<ISideBarProps, ISideBarState> {
-  public static getDerivedStateFromProps(
-    nextProps: ISideBarProps,
-    prevState: ISideBarState
-  ): ISideBarState {
-    const prevNodeList = prevState.prevNodeList
-    const nextNodeList = nextProps.graphData.nodeList
-
-    if (prevNodeList) {
-      if (isSameNodeList(prevNodeList, nextNodeList)) {
-        return null
-      } else {
-        return SideBar.setNewSideBar(nextProps.graphData.nodeList)
-      }
-    } else {
-      return SideBar.setNewSideBar(nextProps.graphData.nodeList)
-    }
-  }
-
-  private static setNewSideBar(
-    nextNodeList: StateType.ISideBarTypeData
-  ): ISideBarState {
-    const sideBarNextState: ISideBarState = {
-      nor: { visibleList: [], invisibleList: [] },
-      ext: { visibleList: [], invisibleList: [] },
-      std: { visibleList: [], invisibleList: [] },
-      prevNodeList: { visibleList: [], invisibleList: [] }
-    }
-
-    nextNodeList.visibleList.forEach(nodeID => {
-      const type = DataSet.getNode(nodeID).type
-      switch (type) {
-        case PkgType.NOR:
-          sideBarNextState.nor.visibleList.push(nodeID)
-          break
-        case PkgType.EXT:
-          sideBarNextState.ext.visibleList.push(nodeID)
-          break
-        case PkgType.STD:
-          sideBarNextState.std.visibleList.push(nodeID)
-          break
-      }
-    })
-
-    nextNodeList.invisibleList.forEach(nodeID => {
-      const type = DataSet.getNode(nodeID).type
-      switch (type) {
-        case PkgType.NOR:
-          sideBarNextState.nor.invisibleList.push(nodeID)
-          break
-        case PkgType.EXT:
-          sideBarNextState.ext.invisibleList.push(nodeID)
-          break
-        case PkgType.STD:
-          sideBarNextState.std.invisibleList.push(nodeID)
-          break
-      }
-    })
-
-    const sortByPkgPath = (prev: string, next: string) =>
-      DataSet.getNode(prev).meta.pkgPath <= DataSet.getNode(next).meta.pkgPath
-        ? -1
-        : 1
-
-    _.values(sideBarNextState).forEach(typeLists =>
-      _.values(typeLists).forEach(list => list.sort(sortByPkgPath))
-    )
-
-    sideBarNextState.prevNodeList = nextNodeList
-
-    return sideBarNextState
-  }
-
+class SideBar extends React.Component<ISideBarProps> {
   constructor(props: ISideBarProps) {
     super(props)
-
-    this.state = {
-      nor: { visibleList: [], invisibleList: [] },
-      ext: { visibleList: [], invisibleList: [] },
-      std: { visibleList: [], invisibleList: [] },
-      prevNodeList: { visibleList: [], invisibleList: [] }
-    }
 
     this.updateWidth = this.updateWidth.bind(this)
   }
@@ -131,23 +45,8 @@ class SideBar extends React.Component<ISideBarProps, ISideBarState> {
         <div style={{ ...style.ContentContainer, overflow: 'auto' }}>
           <ViewConfig />
           <SideBarList
-            header="Normal packages"
-            visibleList={this.state.nor.visibleList}
-            invisibleList={this.state.nor.invisibleList}
-            selectedSet={selectedSet}
-            selectedNodeList={this.props.selected.nodeList}
-          />
-          <SideBarList
-            header="External packages"
-            visibleList={this.state.ext.visibleList}
-            invisibleList={this.state.ext.invisibleList}
-            selectedSet={selectedSet}
-            selectedNodeList={this.props.selected.nodeList}
-          />
-          <SideBarList
-            header="Standard packages"
-            visibleList={this.state.std.visibleList}
-            invisibleList={this.state.std.invisibleList}
+            header="Packages"
+            listData={this.props.graphData.sideBarListData}
             selectedSet={selectedSet}
             selectedNodeList={this.props.selected.nodeList}
           />

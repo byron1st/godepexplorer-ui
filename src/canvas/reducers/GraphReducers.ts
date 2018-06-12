@@ -7,37 +7,22 @@ import VisNetwork from '../graph/VisNetwork'
 
 const INITIAL_STATE: IGraphState = {
   ignoreStd: true,
-  sideBarListData: [],
-  nodeList: { visibleList: [], invisibleList: [] }
+  sideBarListData: []
 }
 
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case DataActionTypeKey.ADD_NEW_GRAPH:
       DataSet.addGraph(action.payload, state.ignoreStd)
-
-      const nodeList = DataSet.getSideBarTypeData(
-        state.nodeList,
-        state.ignoreStd
-      )
-      // VisNetwork.show(nodeList.visibleList)
       VisNetwork.show(DataSet.getVisibleNodeIDList())
 
       return {
         ...INITIAL_STATE,
-        sideBarListData: DataSet.getSideBarListData(),
-        nodeList: {
-          visibleList: nodeList.visibleList,
-          invisibleList: nodeList.invisibleList
-        }
+        sideBarListData: DataSet.getSideBarListData()
       }
     case DataActionTypeKey.SHOW_NODE:
       VisNetwork.show(action.payload.id)
       DataSet.show(action.payload.id)
-
-      if (action.payload.type === GraphType.PkgType.STD && state.ignoreStd) {
-        return state
-      }
 
       return {
         ignoreStd: state.ignoreStd,
@@ -45,8 +30,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           state.sideBarListData,
           (item: ISideBarListItemData) =>
             item.id === action.payload.id ? { ...item, isVisible: true } : item
-        ),
-        nodeList: show(state.nodeList, action.payload.id)
+        )
       }
     case DataActionTypeKey.HIDE_NODE:
       VisNetwork.hide(action.payload.id)
@@ -58,12 +42,10 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           state.sideBarListData,
           (item: ISideBarListItemData) =>
             item.id === action.payload.id ? { ...item, isVisible: false } : item
-        ),
-        nodeList: hide(state.nodeList, action.payload.id)
+        )
       }
     case DataActionTypeKey.EXPAND:
       const updatedState = expandNode(action.payload, state)
-      VisNetwork.show(updatedState.nodeList.visibleList)
 
       return updatedState
     case DataActionTypeKey.TOGGLE_IGNORE_STD:
@@ -118,6 +100,9 @@ function expandNode(nodeID: string, state: IGraphState) {
     )
   )
 
+  DataSet.show(newlyShownNodeIDList)
+  VisNetwork.show(DataSet.getVisibleNodeIDList())
+
   return {
     ignoreStd: state.ignoreStd,
     sideBarListData: state.ignoreStd
@@ -135,16 +120,7 @@ function expandNode(nodeID: string, state: IGraphState) {
             _.includes(newlyShownNodeIDList, item.id)
               ? { ...item, isVisible: true }
               : item
-        ),
-    nodeList: state.ignoreStd
-      ? show(
-          state.nodeList,
-          _.filter(
-            newlyShownNodeIDList,
-            id => DataSet.getNode(id).type !== GraphType.PkgType.STD
-          )
         )
-      : show(state.nodeList, newlyShownNodeIDList)
   }
 }
 
