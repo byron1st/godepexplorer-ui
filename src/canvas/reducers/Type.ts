@@ -27,6 +27,7 @@ export interface ISelectedState {
 // key values are matched with PkgType.
 export interface IGraphState {
   readonly ignoreStd: boolean
+  readonly nodeList: ISideBarTypeData
   readonly data: ISideBarData
 }
 

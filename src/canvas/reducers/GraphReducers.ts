@@ -6,7 +6,8 @@ import DataSet from '../graph/DataSet'
 import VisNetwork from '../graph/VisNetwork'
 
 const INITIAL_STATE: IGraphState = {
-  ignoreStd: true, // TODO: Specific to godepexplorer
+  ignoreStd: true,
+  nodeList: { visibleList: [], invisibleList: [] },
   data: {
     nor: { visibleList: [], invisibleList: [] },
     ext: { visibleList: [], invisibleList: [] },
@@ -20,10 +21,15 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       DataSet.init(action.payload)
 
       const newGraph = buildSideBarData(action.payload)
-      VisNetwork.show(getVisibleList(newGraph))
+      const allVisibleNodeList = getVisibleList(newGraph)
+      VisNetwork.show(allVisibleNodeList)
 
       return {
         ...INITIAL_STATE,
+        nodeList: {
+          visibleList: allVisibleNodeList,
+          invisibleList: getInvisibleList(newGraph)
+        },
         data: newGraph
       }
     case DataActionTypeKey.SHOW_NODE:
@@ -35,6 +41,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 
       return {
         ignoreStd: state.ignoreStd,
+        nodeList: show(state.nodeList, action.payload.id),
         data: {
           ...state.data,
           [action.payload.type]: show(
@@ -48,6 +55,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 
       return {
         ignoreStd: state.ignoreStd,
+        nodeList: hide(state.nodeList, action.payload.id),
         data: {
           ...state.data,
           [action.payload.type]: hide(
@@ -98,6 +106,14 @@ function getVisibleList(dataSet: ISideBarData) {
   )
 }
 
+function getInvisibleList(dataSet: ISideBarData) {
+  return _.concat(
+    dataSet.nor.invisibleList,
+    dataSet.ext.invisibleList,
+    dataSet.std.invisibleList
+  )
+}
+
 function sortByPkgPath(prev: string, next: string) {
   if (
     DataSet.getNode(prev).meta.pkgPath <= DataSet.getNode(next).meta.pkgPath
@@ -108,7 +124,6 @@ function sortByPkgPath(prev: string, next: string) {
   }
 }
 
-// TODO: Specific to godepexplorer
 function expandNode(nodeID: string, state: IGraphState) {
   const node = DataSet.getNode(nodeID)
   const connectedNodeIDList = _.concat(
@@ -132,8 +147,17 @@ function expandNode(nodeID: string, state: IGraphState) {
         )
       )
 
+  const newlyShownNodeIDList = connectedNodeIDList
+  if (state.ignoreStd) {
+    _.remove(
+      newlyShownNodeIDList,
+      id => DataSet.getNode(id).type === GraphType.PkgType.STD
+    )
+  }
+
   return {
     ignoreStd: state.ignoreStd,
+    nodeList: show(state.nodeList, newlyShownNodeIDList),
     data: {
       nor: show(
         state.data.nor,
