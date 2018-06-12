@@ -40,6 +40,12 @@ class MenuList extends React.Component<IMenuListProps> {
         key="menu-list-key"
       >
         <div className="navbar-nav">
+          <a
+            className="nav-item nav-link"
+            onClick={this.openSelectDirectoryDialog}
+          >
+            Import
+          </a>
           {this.props.pkgImported ? (
             <a
               className="nav-item nav-link"
@@ -47,14 +53,7 @@ class MenuList extends React.Component<IMenuListProps> {
             >
               Reset
             </a>
-          ) : (
-            <a
-              className="nav-item nav-link"
-              onClick={this.openSelectDirectoryDialog}
-            >
-              Import
-            </a>
-          )}
+          ) : null}
         </div>
       </div>,
       <span

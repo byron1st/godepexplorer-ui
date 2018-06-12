@@ -6,7 +6,7 @@ import * as GraphType from '../graph/Type'
 import {
   turnOffLoadingIndicator,
   togglePkgImported,
-  initSideBarData
+  addNewGraph
 } from '../actions'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
@@ -15,7 +15,7 @@ import SideBar from './sideBar/SideBar'
 
 interface IRootProps {
   turnOffLoadingIndicator: () => any
-  initSideBarData: (initSideBarState: GraphType.IListGraph) => any
+  addNewGraph: (newGraph: GraphType.IListGraph) => any
   togglePkgImported: () => any
 }
 
@@ -29,7 +29,7 @@ class Root extends React.Component<IRootProps> {
         this.props.turnOffLoadingIndicator()
 
         if (newGraph) {
-          this.props.initSideBarData(newGraph)
+          this.props.addNewGraph(newGraph)
           this.props.togglePkgImported()
         }
       }
@@ -51,8 +51,8 @@ class Root extends React.Component<IRootProps> {
 function mapDispatchToProps(dispatch: any) {
   return {
     turnOffLoadingIndicator: () => dispatch(turnOffLoadingIndicator()),
-    initSideBarData: (initSideBarState: GraphType.IListGraph) => {
-      dispatch(initSideBarData(initSideBarState))
+    addNewGraph: (newGraph: GraphType.IListGraph) => {
+      dispatch(addNewGraph(newGraph))
     },
     togglePkgImported: () => dispatch(togglePkgImported())
   }

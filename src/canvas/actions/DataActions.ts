@@ -2,7 +2,7 @@ import * as StateType from '../reducers/Type'
 import * as GraphType from '../graph/Type'
 
 export enum DataActionTypeKey {
-  INIT_SIDEBARDATA = 'INIT_SIDEBARDATA',
+  ADD_NEW_GRAPH = 'ADD_NEW_GRAPH',
   SHOW_NODE = 'SHOW_NODE',
   HIDE_NODE = 'HIDE_NODE',
   SELECT = 'SELECT',
@@ -13,16 +13,16 @@ export enum DataActionTypeKey {
 }
 
 interface IInitSideBarDataAction {
-  type: DataActionTypeKey.INIT_SIDEBARDATA
+  type: DataActionTypeKey.ADD_NEW_GRAPH
   payload: GraphType.IListGraph
 }
 
-export function initSideBarData(
-  initSideBarState: GraphType.IListGraph
+export function addNewGraph(
+  newGraph: GraphType.IListGraph
 ): IInitSideBarDataAction {
   return {
-    type: DataActionTypeKey.INIT_SIDEBARDATA,
-    payload: initSideBarState
+    type: DataActionTypeKey.ADD_NEW_GRAPH,
+    payload: newGraph
   }
 }
 
