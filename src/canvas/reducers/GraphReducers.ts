@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import { IGraphState, ISideBarTypeData, ISideBarData } from './Type'
+import { IGraphState, ISideBarTypeData } from './Type'
 import * as GraphType from '../graph/Type'
 import { DataActionTypeKey, DataAction } from '../actions'
 import DataSet from '../graph/DataSet'
@@ -7,12 +7,7 @@ import VisNetwork from '../graph/VisNetwork'
 
 const INITIAL_STATE: IGraphState = {
   ignoreStd: true,
-  nodeList: { visibleList: [], invisibleList: [] },
-  data: {
-    nor: { visibleList: [], invisibleList: [] },
-    ext: { visibleList: [], invisibleList: [] },
-    std: { visibleList: [], invisibleList: [] }
-  }
+  nodeList: { visibleList: [], invisibleList: [] }
 }
 
 export default (state = INITIAL_STATE, action: DataAction) => {
@@ -20,17 +15,18 @@ export default (state = INITIAL_STATE, action: DataAction) => {
     case DataActionTypeKey.INIT_SIDEBARDATA:
       DataSet.init(action.payload)
 
-      const newGraph = buildSideBarData(action.payload)
-      const allVisibleNodeList = getVisibleList(newGraph)
-      VisNetwork.show(allVisibleNodeList)
+      const nodeList = extractSideBarTypeDataFromINodeList(
+        action.payload.nodes,
+        state.ignoreStd
+      )
+      VisNetwork.show(nodeList.visibleList)
 
       return {
         ...INITIAL_STATE,
         nodeList: {
-          visibleList: allVisibleNodeList,
-          invisibleList: getInvisibleList(newGraph)
-        },
-        data: newGraph
+          visibleList: nodeList.visibleList,
+          invisibleList: nodeList.invisibleList
+        }
       }
     case DataActionTypeKey.SHOW_NODE:
       VisNetwork.show(action.payload.id)
@@ -41,32 +37,18 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 
       return {
         ignoreStd: state.ignoreStd,
-        nodeList: show(state.nodeList, action.payload.id),
-        data: {
-          ...state.data,
-          [action.payload.type]: show(
-            state.data[action.payload.type],
-            action.payload.id
-          )
-        }
+        nodeList: show(state.nodeList, action.payload.id)
       }
     case DataActionTypeKey.HIDE_NODE:
       VisNetwork.hide(action.payload.id)
 
       return {
         ignoreStd: state.ignoreStd,
-        nodeList: hide(state.nodeList, action.payload.id),
-        data: {
-          ...state.data,
-          [action.payload.type]: hide(
-            state.data[action.payload.type],
-            action.payload.id
-          )
-        }
+        nodeList: hide(state.nodeList, action.payload.id)
       }
     case DataActionTypeKey.EXPAND:
       const updatedState = expandNode(action.payload, state)
-      VisNetwork.show(getVisibleList(updatedState.data))
+      VisNetwork.show(updatedState.nodeList.visibleList)
 
       return updatedState
     case DataActionTypeKey.TOGGLE_IGNORE_STD:
@@ -98,22 +80,6 @@ function show(dataSet: ISideBarTypeData, id: string | string[]) {
       }
 }
 
-function getVisibleList(dataSet: ISideBarData) {
-  return _.concat(
-    dataSet.nor.visibleList,
-    dataSet.ext.visibleList,
-    dataSet.std.visibleList
-  )
-}
-
-function getInvisibleList(dataSet: ISideBarData) {
-  return _.concat(
-    dataSet.nor.invisibleList,
-    dataSet.ext.invisibleList,
-    dataSet.std.invisibleList
-  )
-}
-
 function sortByPkgPath(prev: string, next: string) {
   if (
     DataSet.getNode(prev).meta.pkgPath <= DataSet.getNode(next).meta.pkgPath
@@ -126,7 +92,7 @@ function sortByPkgPath(prev: string, next: string) {
 
 function expandNode(nodeID: string, state: IGraphState) {
   const node = DataSet.getNode(nodeID)
-  const connectedNodeIDList = _.concat(
+  const newlyShownNodeIDList = _.concat(
     _.map(
       _.keys(node.meta.sinkEdgeIDSet),
       edgeID => DataSet.getEdge(edgeID).from
@@ -137,44 +103,17 @@ function expandNode(nodeID: string, state: IGraphState) {
     )
   )
 
-  const stdSet = state.ignoreStd
-    ? state.data.std
-    : show(
-        state.data.std,
-        getNodeIDListFilteredByPkgType(
-          connectedNodeIDList,
-          GraphType.PkgType.STD
-        )
-      )
-
-  const newlyShownNodeIDList = connectedNodeIDList
-  if (state.ignoreStd) {
-    _.remove(
-      newlyShownNodeIDList,
-      id => DataSet.getNode(id).type === GraphType.PkgType.STD
-    )
-  }
-
   return {
     ignoreStd: state.ignoreStd,
-    nodeList: show(state.nodeList, newlyShownNodeIDList),
-    data: {
-      nor: show(
-        state.data.nor,
-        getNodeIDListFilteredByPkgType(
-          connectedNodeIDList,
-          GraphType.PkgType.NOR
+    nodeList: state.ignoreStd
+      ? show(
+          state.nodeList,
+          _.filter(
+            newlyShownNodeIDList,
+            id => DataSet.getNode(id).type !== GraphType.PkgType.STD
+          )
         )
-      ),
-      ext: show(
-        state.data.ext,
-        getNodeIDListFilteredByPkgType(
-          connectedNodeIDList,
-          GraphType.PkgType.EXT
-        )
-      ),
-      std: stdSet
-    }
+      : show(state.nodeList, newlyShownNodeIDList)
   }
 }
 
@@ -188,39 +127,19 @@ function getNodeIDListFilteredByPkgType(
   )
 }
 
-function buildSideBarData(graph: GraphType.IListGraph): ISideBarData {
-  const sideBarState: ISideBarData = {
-    nor: {
-      visibleList: [],
-      invisibleList: []
+function extractSideBarTypeDataFromINodeList(
+  nodeList: GraphType.INode[],
+  ignoreStd: boolean
+): ISideBarTypeData {
+  return _.reduce(
+    nodeList,
+    (accumulated: ISideBarTypeData, currentNode: GraphType.INode) => {
+      ignoreStd && currentNode.type === GraphType.PkgType.STD
+        ? accumulated.invisibleList.push(currentNode.id)
+        : accumulated.visibleList.push(currentNode.id)
+
+      return accumulated
     },
-    ext: {
-      visibleList: [],
-      invisibleList: []
-    },
-    std: {
-      visibleList: [],
-      invisibleList: []
-    }
-  }
-
-  graph.nodes.forEach(node => {
-    switch (node.meta.pkgType) {
-      case GraphType.PkgType.NOR:
-        sideBarState.nor.visibleList.push(node.id)
-        break
-      case GraphType.PkgType.EXT:
-        sideBarState.ext.invisibleList.push(node.id)
-        break
-      case GraphType.PkgType.STD:
-        sideBarState.std.invisibleList.push(node.id)
-        break
-    }
-  })
-
-  sideBarState.nor.visibleList.sort(sortByPkgPath.bind(this))
-  sideBarState.ext.invisibleList.sort(sortByPkgPath.bind(this))
-  sideBarState.std.invisibleList.sort(sortByPkgPath.bind(this))
-
-  return sideBarState
+    { visibleList: [], invisibleList: [] }
+  )
 }

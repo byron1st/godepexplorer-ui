@@ -28,11 +28,6 @@ export interface ISelectedState {
 export interface IGraphState {
   readonly ignoreStd: boolean
   readonly nodeList: ISideBarTypeData
-  readonly data: ISideBarData
-}
-
-export interface ISideBarData {
-  readonly [type: string]: ISideBarTypeData
 }
 
 export interface ISideBarTypeData {
