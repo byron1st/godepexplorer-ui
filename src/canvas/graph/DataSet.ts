@@ -14,13 +14,19 @@ export interface IGraphDataSet {
 class DataSet {
   private dataSet: IGraphDataSet = { nodeSet: {}, edgeSet: {} }
 
-  public addGraph(graph: Type.IListGraph, ignoreStd: boolean) {
+  public addGraph(
+    graph: Type.IListGraph,
+    ignoreStd: boolean,
+    ignoreExt: boolean
+  ) {
     graph.nodes.forEach(node => {
       const existingNode = this.dataSet.nodeSet[node.id]
       if (existingNode) {
         this.dataSet.nodeSet[node.id] = this.resolveNode(existingNode, node)
       } else {
-        node.isVisible = !ignoreStd || node.type !== Type.PkgType.STD
+        node.isVisible =
+          (!ignoreStd || node.type !== Type.PkgType.STD) &&
+          (!ignoreExt || node.type !== Type.PkgType.EXT)
         this.dataSet.nodeSet[node.id] = node
       }
     })

@@ -14,11 +14,11 @@ const INITIAL_STATE: IGraphState = {
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case DataActionTypeKey.ADD_NEW_GRAPH:
-      DataSet.addGraph(action.payload, state.ignoreStd)
+      DataSet.addGraph(action.payload, state.ignoreStd, state.ignoreExt)
       VisNetwork.show(DataSet.getVisibleNodeIDList())
 
       return {
-        ...INITIAL_STATE,
+        ...state,
         sideBarListData: DataSet.getSideBarListData()
       }
     case DataActionTypeKey.SHOW_NODE:
@@ -26,7 +26,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       DataSet.show(action.payload.id)
 
       return {
-        ignoreStd: state.ignoreStd,
+        ...state,
         sideBarListData: _.map(
           state.sideBarListData,
           (item: ISideBarListItemData) =>
@@ -38,7 +38,7 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       DataSet.hide(action.payload.id)
 
       return {
-        ignoreStd: state.ignoreStd,
+        ...state,
         sideBarListData: _.map(
           state.sideBarListData,
           (item: ISideBarListItemData) =>
@@ -46,9 +46,25 @@ export default (state = INITIAL_STATE, action: DataAction) => {
         )
       }
     case DataActionTypeKey.EXPAND:
-      const updatedState = expandNode(action.payload, state)
+      const expandedNodeIDList = getExpandedNodeIDList(
+        action.payload,
+        state.ignoreStd,
+        state.ignoreExt
+      )
 
-      return updatedState
+      DataSet.show(expandedNodeIDList)
+      VisNetwork.show(DataSet.getVisibleNodeIDList())
+
+      return {
+        ...state,
+        sideBarListData: _.map(
+          state.sideBarListData,
+          (item: ISideBarListItemData) =>
+            _.includes(expandedNodeIDList, item.id)
+              ? { ...item, isVisible: true }
+              : item
+        )
+      }
     case DataActionTypeKey.TOGGLE_IGNORE_STD:
       return {
         ...state,
@@ -64,25 +80,6 @@ export default (state = INITIAL_STATE, action: DataAction) => {
   }
 }
 
-function hide(dataSet: ISideBarTypeData, id: string) {
-  return {
-    visibleList: _.without(dataSet.visibleList, id),
-    invisibleList: _.union(dataSet.invisibleList, [id]).sort(sortByPkgPath)
-  }
-}
-
-function show(dataSet: ISideBarTypeData, id: string | string[]) {
-  return Array.isArray(id)
-    ? {
-        visibleList: _.union(dataSet.visibleList, id).sort(sortByPkgPath),
-        invisibleList: _.difference(dataSet.invisibleList, id)
-      }
-    : {
-        visibleList: _.union(dataSet.visibleList, [id]).sort(sortByPkgPath),
-        invisibleList: _.without(dataSet.invisibleList, id)
-      }
-}
-
 function sortByPkgPath(prev: string, next: string) {
   if (
     DataSet.getNode(prev).meta.pkgPath <= DataSet.getNode(next).meta.pkgPath
@@ -93,9 +90,13 @@ function sortByPkgPath(prev: string, next: string) {
   }
 }
 
-function expandNode(nodeID: string, state: IGraphState) {
+function getExpandedNodeIDList(
+  nodeID: string,
+  ignoreStd: boolean,
+  ignoreExt: boolean
+): string[] {
   const node = DataSet.getNode(nodeID)
-  const newlyShownNodeIDList = _.concat(
+  const expandedNodeIDList = _.concat(
     _.map(
       _.keys(node.meta.sinkEdgeIDSet),
       edgeID => DataSet.getEdge(edgeID).from
@@ -106,53 +107,14 @@ function expandNode(nodeID: string, state: IGraphState) {
     )
   )
 
-  DataSet.show(newlyShownNodeIDList)
-  VisNetwork.show(DataSet.getVisibleNodeIDList())
-
-  return {
-    ignoreStd: state.ignoreStd,
-    sideBarListData: state.ignoreStd
-      ? _.map(
-          state.sideBarListData,
-          (item: ISideBarListItemData) =>
-            _.includes(newlyShownNodeIDList, item.id) &&
-            item.type !== GraphType.PkgType.STD
-              ? { ...item, isVisible: true }
-              : item
-        )
-      : _.map(
-          state.sideBarListData,
-          (item: ISideBarListItemData) =>
-            _.includes(newlyShownNodeIDList, item.id)
-              ? { ...item, isVisible: true }
-              : item
-        )
+  if (ignoreStd || ignoreExt) {
+    _.remove(expandedNodeIDList, (id: string) => {
+      return (
+        (ignoreStd && DataSet.getNode(id).type === GraphType.PkgType.STD) ||
+        (ignoreExt && DataSet.getNode(id).type === GraphType.PkgType.EXT)
+      )
+    })
   }
-}
 
-function getNodeIDListFilteredByPkgType(
-  nodeIDList: string[],
-  pkgType: GraphType.PkgType
-) {
-  return _.filter(
-    nodeIDList,
-    nodeID => DataSet.getNode(nodeID).meta.pkgType === pkgType
-  )
-}
-
-function extractSideBarTypeDataFromINodeList(
-  nodeList: GraphType.INode[],
-  ignoreStd: boolean
-): ISideBarTypeData {
-  return _.reduce(
-    nodeList,
-    (accumulated: ISideBarTypeData, currentNode: GraphType.INode) => {
-      ignoreStd && currentNode.type === GraphType.PkgType.STD
-        ? accumulated.invisibleList.push(currentNode.id)
-        : accumulated.visibleList.push(currentNode.id)
-
-      return accumulated
-    },
-    { visibleList: [], invisibleList: [] }
-  )
+  return expandedNodeIDList
 }
