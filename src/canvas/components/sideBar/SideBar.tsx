@@ -42,8 +42,8 @@ class SideBar extends React.Component<ISideBarProps> {
         minWidth={200}
         maxWidth={800}
       >
-        <div style={{ ...style.ContentContainer, overflow: 'auto' }}>
-          <ViewConfig />
+        <ViewConfig />
+        <div style={style.ContentContainer}>
           <SideBarList
             header="Packages"
             listData={this.props.graphData.sideBarListData}

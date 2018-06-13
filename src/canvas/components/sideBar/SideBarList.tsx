@@ -11,25 +11,37 @@ interface ISideBarListProps {
 
 export default (props: ISideBarListProps) => (
   <div style={style.container}>
-    <h4>{props.header}</h4>
-    {props.listData.map((item, index, list) => (
-      <SideBarListItem
-        id={item.id}
-        index={index}
-        enclosingList={list.map(listItem => listItem.id)}
-        isVisible={item.isVisible}
-        isSelected={props.selectedSet[item.id] ? true : false}
-        type={item.type}
-        selectedNodeList={props.selectedNodeList}
-        key={`${item.id}-sidebarbutton`}
-      />
-    ))}
+    <h5 style={style.header}>{props.header}</h5>
+    <div style={style.packageListContainer}>
+      {props.listData.map((item, index, list) => (
+        <SideBarListItem
+          id={item.id}
+          index={index}
+          enclosingList={list.map(listItem => listItem.id)}
+          isVisible={item.isVisible}
+          isSelected={props.selectedSet[item.id] ? true : false}
+          type={item.type}
+          selectedNodeList={props.selectedNodeList}
+          key={`${item.id}-sidebarbutton`}
+        />
+      ))}
+    </div>
   </div>
 )
 
 const style = {
   container: {
+    height: '100%',
     paddingTop: 10,
     paddingBottom: 10
+  },
+  header: {
+    color: 'white'
+  },
+  packageListContainer: {
+    height: '100%',
+    overflow: 'auto',
+    backgroundColor: '#DFEBF7',
+    borderRadius: '0.25rem'
   }
 }

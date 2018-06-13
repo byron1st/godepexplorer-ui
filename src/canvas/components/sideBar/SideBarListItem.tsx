@@ -169,12 +169,15 @@ const style = {
   },
   text: {
     nor: {
-      color: '#8BD8F1'
+      fontSize: 'small',
+      color: '#3A8EED'
     },
     ext: {
-      color: '#DFEBF7'
+      fontSize: 'small',
+      color: '#3D4E56'
     },
     std: {
+      fontSize: 'small',
       color: '#789BAE'
     }
   }

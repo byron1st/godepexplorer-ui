@@ -31,6 +31,6 @@ export default (props: IViewConfigItemProps) => (
 )
 
 const style = {
-  card: { margin: 5 },
+  card: { marginBottom: 5 },
   cardBody: { padding: 5 }
 }
