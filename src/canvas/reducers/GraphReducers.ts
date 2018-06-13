@@ -7,6 +7,7 @@ import VisNetwork from '../graph/VisNetwork'
 
 const INITIAL_STATE: IGraphState = {
   ignoreStd: true,
+  ignoreExt: true,
   sideBarListData: []
 }
 
@@ -52,6 +53,11 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       return {
         ...state,
         ignoreStd: !state.ignoreStd
+      }
+    case DataActionTypeKey.TOGGLE_IGNORE_EXT:
+      return {
+        ...state,
+        ignoreExt: !state.ignoreExt
       }
     default:
       return state

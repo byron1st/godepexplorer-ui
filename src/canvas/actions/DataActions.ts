@@ -9,6 +9,7 @@ export enum DataActionTypeKey {
   DESELECT = 'DESELECT',
   EXPAND = 'EXPAND',
   TOGGLE_IGNORE_STD = 'TOGGLE_IGNORE_STD',
+  TOGGLE_IGNORE_EXT = 'TOGGLE_IGNORE_EXT',
   SHOW_INFO = 'SHOW_INFO'
 }
 
@@ -98,6 +99,16 @@ export function toggleIgnoreStd(): IToggleIgnoreStdAction {
   }
 }
 
+interface IToggleIgnoreExtAction {
+  type: DataActionTypeKey.TOGGLE_IGNORE_EXT
+}
+
+export function toggleIgnoreExt(): IToggleIgnoreExtAction {
+  return {
+    type: DataActionTypeKey.TOGGLE_IGNORE_EXT
+  }
+}
+
 interface IShowInfoAction {
   type: DataActionTypeKey.SHOW_INFO
   payload: StateType.ISelectedState
@@ -120,4 +131,5 @@ export type DataAction =
   | IDeselectAction
   | IExpandAction
   | IToggleIgnoreStdAction
+  | IToggleIgnoreExtAction
   | IShowInfoAction

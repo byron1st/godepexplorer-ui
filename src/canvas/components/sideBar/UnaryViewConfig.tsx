@@ -12,7 +12,7 @@ export default (props: IViewConfigItemProps) => (
       <div className="card-text">
         <div className="d-flex justify-content-between">
           <div className="d-flex flex-column justify-content-center">
-            <div>Standard Lib</div>
+            <div>{props.header}</div>
           </div>
           <div>
             <div
