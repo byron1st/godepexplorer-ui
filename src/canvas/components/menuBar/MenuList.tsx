@@ -10,7 +10,6 @@ import { IPCGetDep } from '../../../IPCType'
 interface IMenuListProps {
   loadingPath: string
   isLoading: boolean
-  pkgImported: boolean
   turnOnLoadingIndicator: (packagePath: string) => any
 }
 
@@ -46,14 +45,12 @@ class MenuList extends React.Component<IMenuListProps> {
           >
             Import
           </a>
-          {this.props.pkgImported ? (
-            <a
-              className="nav-item nav-link"
-              onClick={this.openResetWarningDialog}
-            >
-              Reset
-            </a>
-          ) : null}
+          <a
+            className="nav-item nav-link"
+            onClick={this.openResetWarningDialog}
+          >
+            Reset
+          </a>
         </div>
       </div>,
       <span
@@ -118,8 +115,7 @@ function extractRootPath(filePath: string) {
 function mapStateToProps(state: StateType.IRootState) {
   return {
     isLoading: state.ui.isLoading,
-    loadingPath: state.ui.loadingPath,
-    pkgImported: state.ui.pkgImported
+    loadingPath: state.ui.loadingPath
   }
 }
 

@@ -7,8 +7,7 @@ const INITIAL_STATE: IUIState = {
   isLoading: false,
   isNodeVisible: true,
   loadingPath: '',
-  sideBarWidth: 300,
-  pkgImported: false
+  sideBarWidth: 300
 }
 
 export function uiReducers(state = INITIAL_STATE, action: UIAction) {
@@ -25,8 +24,6 @@ export function uiReducers(state = INITIAL_STATE, action: UIAction) {
       return { ...state, loadingPath: action.payload, isLoading: true }
     case UIActionTypeKey.TURNOFF_LOADING_INDICATOR:
       return { ...state, loadingPath: '', isLoading: false }
-    case UIActionTypeKey.TOGGLE_PKG_IMPORTED:
-      return { ...state, pkgImported: !state.pkgImported }
     default:
       return state
   }

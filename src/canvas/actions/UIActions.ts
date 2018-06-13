@@ -76,16 +76,6 @@ export function turnOffLoadingIndicator(): ITurnOffLoadingIndicatorAction {
   }
 }
 
-interface ITogglePkgImportedAction {
-  type: UIActionTypeKey.TOGGLE_PKG_IMPORTED
-}
-
-export function togglePkgImported(): ITogglePkgImportedAction {
-  return {
-    type: UIActionTypeKey.TOGGLE_PKG_IMPORTED
-  }
-}
-
 export type UIAction =
   | IUpdateWidthAction
   | IUpdateHeightAction
@@ -93,4 +83,3 @@ export type UIAction =
   | IChangeEdgeVisibleAction
   | ITurnOnLoadingIndicatorAction
   | ITurnOffLoadingIndicatorAction
-  | ITogglePkgImportedAction

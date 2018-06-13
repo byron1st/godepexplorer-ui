@@ -3,11 +3,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { IPCGetDep } from '../../IPCType'
 import * as GraphType from '../graph/Type'
-import {
-  turnOffLoadingIndicator,
-  togglePkgImported,
-  addNewGraph
-} from '../actions'
+import { turnOffLoadingIndicator, addNewGraph } from '../actions'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
 import MenuBar from './menuBar/MenuBar'
@@ -16,7 +12,6 @@ import SideBar from './sideBar/SideBar'
 interface IRootProps {
   turnOffLoadingIndicator: () => any
   addNewGraph: (newGraph: GraphType.IListGraph) => any
-  togglePkgImported: () => any
 }
 
 class Root extends React.Component<IRootProps> {
@@ -30,7 +25,6 @@ class Root extends React.Component<IRootProps> {
 
         if (newGraph) {
           this.props.addNewGraph(newGraph)
-          this.props.togglePkgImported()
         }
       }
     )
@@ -53,8 +47,7 @@ function mapDispatchToProps(dispatch: any) {
     turnOffLoadingIndicator: () => dispatch(turnOffLoadingIndicator()),
     addNewGraph: (newGraph: GraphType.IListGraph) => {
       dispatch(addNewGraph(newGraph))
-    },
-    togglePkgImported: () => dispatch(togglePkgImported())
+    }
   }
 }
 
