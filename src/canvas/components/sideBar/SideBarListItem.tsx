@@ -57,7 +57,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
       >
         <a href="#" style={style.text[this.props.type]}>
           <span id={`visible-icon-${this.props.id}`} />{' '}
-          {DataSet.getNode(this.props.id).label}
+          {DataSet.getNode(this.props.id).meta.pkgPath}
         </a>
       </div>
     )
@@ -157,12 +157,14 @@ const style = {
   selectedItem: {
     paddingTop: 0,
     paddingBottom: 0,
+    whiteSpace: 'nowrap',
     WebkitUserSelect: 'none',
     backgroundColor: '#FFC748'
   },
   unselectedItem: {
     paddingTop: 0,
     paddingBottom: 0,
+    whiteSpace: 'nowrap',
     WebkitUserSelect: 'none'
   },
   text: {
