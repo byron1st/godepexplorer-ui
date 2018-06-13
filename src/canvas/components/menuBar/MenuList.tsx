@@ -40,13 +40,17 @@ class MenuList extends React.Component<IMenuListProps> {
       >
         <div className="navbar-nav">
           <a
-            className="nav-item nav-link"
+            className={`nav-item nav-link ${
+              this.props.isLoading ? 'disabled' : ''
+            }`}
             onClick={this.openSelectDirectoryDialog}
           >
             Import
           </a>
           <a
-            className="nav-item nav-link"
+            className={`nav-item nav-link ${
+              this.props.isLoading ? 'disabled' : ''
+            }`}
             onClick={this.openResetWarningDialog}
           >
             Reset
@@ -62,36 +66,40 @@ class MenuList extends React.Component<IMenuListProps> {
   }
 
   private openResetWarningDialog() {
-    remote.dialog.showMessageBox(
-      {
-        type: 'warning',
-        buttons: ['Ok', 'Cancel'],
-        message: 'This will reset the current diagram. Do you want to proceed?'
-      },
-      (response: number) => {
-        if (response === 0) {
-          remote.getCurrentWebContents().reload()
+    if (!this.props.isLoading) {
+      remote.dialog.showMessageBox(
+        {
+          type: 'warning',
+          buttons: ['Ok', 'Cancel'],
+          message:
+            'This will reset the current diagram. Do you want to proceed?'
+        },
+        (response: number) => {
+          if (response === 0) {
+            remote.getCurrentWebContents().reload()
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   private openSelectDirectoryDialog() {
-    remote.dialog.showOpenDialog(
-      {
-        properties: ['openDirectory']
-      },
-      (filepaths: string[]) => {
-        if (filepaths) {
-          const packagePath = extractRootPath(filepaths[0])
-          if (packagePath) {
-            this.props.turnOnLoadingIndicator(packagePath)
-            // IPC.sendDepReq(packagePath)
-            ipcRenderer.send(IPCGetDep.Request, packagePath)
+    if (!this.props.isLoading) {
+      remote.dialog.showOpenDialog(
+        {
+          properties: ['openDirectory']
+        },
+        (filepaths: string[]) => {
+          if (filepaths) {
+            const packagePath = extractRootPath(filepaths[0])
+            if (packagePath) {
+              this.props.turnOnLoadingIndicator(packagePath)
+              ipcRenderer.send(IPCGetDep.Request, packagePath)
+            }
           }
         }
-      }
-    )
+      )
+    }
   }
 }
 
