@@ -111,15 +111,13 @@ export function toggleIgnoreExt(): IToggleIgnoreExtAction {
 
 interface IShowInfoAction {
   type: DataActionTypeKey.SHOW_INFO
-  payload: StateType.ISelectedState
+  payload: string
 }
 
-export function showInfo(
-  infoPanelData: StateType.ISelectedState
-): IShowInfoAction {
+export function showInfo(selectedID: string): IShowInfoAction {
   return {
     type: DataActionTypeKey.SHOW_INFO,
-    payload: infoPanelData
+    payload: selectedID
   }
 }
 

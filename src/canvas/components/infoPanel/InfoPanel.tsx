@@ -8,7 +8,7 @@ import {
   changeNodeVisible,
   updateHeight
 } from '../../actions'
-import InfoTableContainer from './InfoTableContainer'
+import Table from './infoTable/Loader'
 import DataSet from '../../graph/DataSet'
 
 interface IInfoPanelProps {
@@ -16,7 +16,7 @@ interface IInfoPanelProps {
   isNodeVisible: boolean
   isEdgeVisible: boolean
   sideBarWidth: number
-  infoPanelData: StateType.ISelectedState
+  infoPanelData: StateType.IInfoPanelData
   updateHeight: (newHeight: number) => any
   changeNodeVisible: () => any
   changeEdgeVisible: () => any
@@ -38,12 +38,12 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
   }
 
   public render() {
-    const nodeList: GraphType.INode[] = this.props.infoPanelData.nodeList.map(
-      id => DataSet.getNode(id)
-    )
-    const edgeList: GraphType.IEdge[] = this.props.infoPanelData.edgeList.map(
-      id => DataSet.getEdge(id)
-    )
+    // const nodeList: GraphType.INode[] = this.props.infoPanelData.nodeList.map(
+    //   id => DataSet.getNode(id)
+    // )
+    // const edgeList: GraphType.IEdge[] = this.props.infoPanelData.edgeList.map(
+    //   id => DataSet.getEdge(id)
+    // )
 
     return (
       <Resizable
@@ -59,20 +59,7 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
         maxHeight={800}
       >
         <div style={style.ContentContainer}>
-          <InfoTableContainer
-            elementList={nodeList}
-            header="Nodes"
-            isVisible={this.props.isNodeVisible}
-            isNode={true}
-            changeVisibility={this.props.changeNodeVisible}
-          />
-          <InfoTableContainer
-            elementList={edgeList}
-            header="Edges"
-            isVisible={this.props.isEdgeVisible}
-            isNode={false}
-            changeVisibility={this.props.changeEdgeVisible}
-          />
+          <Table data={this.props.infoPanelData} />
         </div>
       </Resizable>
     )

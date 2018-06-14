@@ -160,9 +160,9 @@ function openContextMenu() {
       label: 'show info',
       click() {
         if (hovered.type === ElemType.node) {
-          Store.dispatch(showInfo(DataSet.selectNode(hovered.ID)))
+          Store.dispatch(showInfo(hovered.ID))
         } else if (hovered.type === ElemType.edge) {
-          Store.dispatch(showInfo({ nodeList: [], edgeList: [hovered.ID] }))
+          Store.dispatch(showInfo(hovered.ID))
         }
       }
     }

@@ -1,9 +1,9 @@
 import * as React from 'react'
-import * as GraphType from '../../graph/Type'
+import * as StateType from '../../reducers/Type'
 import Table from './infoTable/Loader'
 
 interface IInfoTableProps {
-  elementList: GraphType.INode[] | GraphType.IEdge[]
+  data: StateType.IInfoPanelData
   header: string
   isVisible: boolean
   isNode: boolean
@@ -16,8 +16,6 @@ export default (props: IInfoTableProps) => (
       {props.header}
     </h5>
     <hr />
-    {props.isVisible ? (
-      <Table elementList={props.elementList} header={props.header} />
-    ) : null}
+    {props.isVisible ? <Table data={props.data} /> : null}
   </div>
 )

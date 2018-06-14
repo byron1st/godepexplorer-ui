@@ -1,4 +1,4 @@
-import { PkgType } from '../graph/Type'
+import { PkgType, IEdge, INode } from '../graph/Type'
 
 export interface IRootState {
   readonly ui: IUIState
@@ -17,7 +17,7 @@ export interface IUIState {
 export interface IDataState {
   readonly selected: ISelectedState
   readonly graphData: IGraphState
-  readonly infoPanelData: ISelectedState
+  readonly infoPanelData: IInfoPanelData
 }
 
 export interface ISelectedState {
@@ -29,6 +29,29 @@ export interface IGraphState {
   readonly ignoreStd: boolean
   readonly ignoreExt: boolean
   readonly sideBarListData: ISideBarListItemData[]
+}
+
+export enum InfoPanelDataKind {
+  NODE = 'node',
+  EDGE = 'edge'
+}
+
+export interface IInfoPanelData {
+  // common
+  readonly id: string
+  readonly kind: InfoPanelDataKind
+  readonly label: string
+
+  // Node
+  readonly pkgType?: string
+  readonly pkgPath?: string
+  readonly pkgDir?: string
+  readonly sinkEdgeIDList?: string[]
+  readonly sourceEdgeIDList?: string[]
+
+  // Edge
+  readonly sourcePkgID?: string
+  readonly targetPkgID?: string
 }
 
 export interface ISideBarListItemData {

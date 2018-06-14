@@ -21,7 +21,7 @@ interface ISideBarListItemProps {
   deselect: (deselected: StateType.ISelectedState) => any
   showNode: (id: string, type: string) => any
   hideNode: (id: string, type: string) => any
-  showInfo: (infoPanelData: StateType.ISelectedState) => any
+  showInfo: (selectedID: string) => any
 }
 
 const faEyeIcon = fontawesome.icon(faEye)
@@ -114,7 +114,7 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
     id: string,
     showNode: (id: string, type: string) => any,
     hideNode: (id: string, type: string) => any,
-    showInfo: (infoPanelData: StateType.ISelectedState) => any
+    showInfo: (selectedID: string) => any
   ) {
     const selectedNodeList = this.props.selectedNodeList
     return [
@@ -137,7 +137,8 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
       {
         label: 'Show Info',
         click() {
-          showInfo(DataSet.selectNode(id))
+          // showInfo(DataSet.selectNode(id))
+          showInfo(id)
         }
       }
     ]
@@ -211,8 +212,8 @@ function mapDispatchToProps(dispatch: any) {
     hideNode: (id: string, type: string) => {
       dispatch(actions.hideNode(id, type))
     },
-    showInfo: (infoPanelData: StateType.ISelectedState) => {
-      dispatch(actions.showInfo(infoPanelData))
+    showInfo: (selectedID: string) => {
+      dispatch(actions.showInfo(selectedID))
     }
   }
 }
