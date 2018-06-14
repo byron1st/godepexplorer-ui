@@ -32,7 +32,10 @@ class Root extends React.Component<IRootProps> {
 
   public render() {
     return (
-      <div style={{ width: 'inherit', height: 'inherit' }}>
+      // @ts-ignore
+      // "WebkitUserSelect"이 string 타입을 가질 수 없다고 ts-error를 발생시킴.
+      // 하지만 가질 수 있음.
+      <div style={style}>
         <SideBar />
         <MenuBar appTitle="GoDepExplorer UI" />
         <InfoPanel />
@@ -41,6 +44,8 @@ class Root extends React.Component<IRootProps> {
     )
   }
 }
+
+const style = { width: 'inherit', height: 'inherit', WebkitUserSelect: 'none' }
 
 function mapDispatchToProps(dispatch: any) {
   return {
