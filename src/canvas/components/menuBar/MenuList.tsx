@@ -20,6 +20,7 @@ class MenuList extends React.Component<IMenuListProps> {
     super(props)
 
     this.openSelectDirectoryDialog = this.openSelectDirectoryDialog.bind(this)
+    this.openResetWarningDialog = this.openResetWarningDialog.bind(this)
   }
 
   public componentDidUpdate() {
