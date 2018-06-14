@@ -8,7 +8,7 @@ import {
   changeNodeVisible,
   updateHeight
 } from '../../actions'
-import Table from './infoTable/Loader'
+import Table from './InfoTable'
 import DataSet from '../../graph/DataSet'
 
 interface IInfoPanelProps {

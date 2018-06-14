@@ -1,4 +1,4 @@
-import { PkgType, IEdge, INode } from '../graph/Type'
+import { PkgType, IEdge, INode, IDepAtFunc } from '../graph/Type'
 
 export interface IRootState {
   readonly ui: IUIState
@@ -52,6 +52,7 @@ export interface IInfoPanelData {
   // Edge
   readonly sourcePkgID?: string
   readonly targetPkgID?: string
+  readonly depAtFuncSet?: { [id: string]: IDepAtFunc }
 }
 
 export interface ISideBarListItemData {

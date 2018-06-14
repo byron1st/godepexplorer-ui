@@ -31,7 +31,8 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           label: `Edge: ${selectedEdge.id}`,
           kind: InfoPanelDataKind.EDGE,
           sourcePkgID: selectedEdge.from,
-          targetPkgID: selectedEdge.to
+          targetPkgID: selectedEdge.to,
+          depAtFuncSet: selectedEdge.meta.depAtFuncSet
         }
       }
 
